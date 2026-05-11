@@ -63,6 +63,21 @@ export type StudentProfile = {
   interest?: string;
 };
 
+export type TeamCandidate = {
+  id: string;
+  name: string;
+  grade: string;
+  schoolLevel?: "elementary" | "middle" | "high";
+  primaryCharacter: CharacterId;
+  secondaryCharacter?: CharacterId;
+  scores: AbilityScores;
+};
+
+export type Team = {
+  id: string;
+  members: TeamCandidate[];
+};
+
 export type StudentResult = {
   student: StudentProfile;
   result: {
