@@ -1,7 +1,7 @@
 // 개인 결과 리포트 페이지 (스토어 우선, 없으면 mock 폴백)
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AppHeader from "@/components/layout/AppHeader";
 import PageContainer from "@/components/layout/PageContainer";
@@ -18,15 +18,25 @@ import { getCharacter } from "@/lib/character-map";
 import { saveAsImage } from "@/lib/export-image";
 import { saveAsPdf } from "@/lib/export-pdf";
 import { useSurveyStore } from "@/store/useSurveyStore";
+import { useResultsStore } from "@/store/useResultsStore";
 
 export default function ResultPage() {
   const router = useRouter();
   const storeResult = useSurveyStore((s) => s.result);
   const reset = useSurveyStore((s) => s.reset);
+  const addResult = useResultsStore((s) => s.addResult);
 
   const reportRef = useRef<HTMLDivElement>(null);
+  const savedRef = useRef(false);
 
   const data = storeResult ?? mockResult;
+
+  useEffect(() => {
+    if (storeResult && !savedRef.current) {
+      addResult(storeResult);
+      savedRef.current = true;
+    }
+  }, [storeResult, addResult]);
   const { result } = data;
   const primary = getCharacter(result.primaryCharacter);
   const template = resultTemplates[result.primaryCharacter];
