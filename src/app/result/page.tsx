@@ -1,6 +1,7 @@
 // 개인 결과 리포트 페이지 (스토어 우선, 없으면 mock 폴백)
 "use client";
 
+import { useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import AppHeader from "@/components/layout/AppHeader";
 import PageContainer from "@/components/layout/PageContainer";
@@ -14,12 +15,16 @@ import ResultActionButtons from "@/components/result/ResultActionButtons";
 import { mockResult } from "@/data/mockResult";
 import { resultTemplates } from "@/data/resultTemplates";
 import { getCharacter } from "@/lib/character-map";
+import { saveAsImage } from "@/lib/export-image";
+import { saveAsPdf } from "@/lib/export-pdf";
 import { useSurveyStore } from "@/store/useSurveyStore";
 
 export default function ResultPage() {
   const router = useRouter();
   const storeResult = useSurveyStore((s) => s.result);
   const reset = useSurveyStore((s) => s.reset);
+
+  const reportRef = useRef<HTMLDivElement>(null);
 
   const data = storeResult ?? mockResult;
   const { result } = data;
@@ -32,10 +37,19 @@ export default function ResultPage() {
     router.push("/profile");
   }
 
+  const handleSaveImage = useCallback(() => {
+    if (reportRef.current) saveAsImage(reportRef.current);
+  }, []);
+
+  const handleSavePdf = useCallback(() => {
+    if (reportRef.current) saveAsPdf(reportRef.current);
+  }, []);
+
   return (
     <>
       <AppHeader />
       <PageContainer>
+        <div ref={reportRef}>
         <ResultHeader />
 
         <CharacterHeroCard character={primary} />
@@ -129,7 +143,13 @@ export default function ResultPage() {
           />
         </div>
 
-        <ResultActionButtons onRetake={handleRetake} />
+        </div>
+
+        <ResultActionButtons
+          onRetake={handleRetake}
+          onSaveImage={handleSaveImage}
+          onSavePdf={handleSavePdf}
+        />
       </PageContainer>
     </>
   );
