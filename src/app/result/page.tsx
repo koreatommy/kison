@@ -1,4 +1,7 @@
-// 개인 결과 리포트 페이지 (Mock 데이터 기반, Phase 2에서 실데이터 연결)
+// 개인 결과 리포트 페이지 (스토어 우선, 없으면 mock 폴백)
+"use client";
+
+import { useRouter } from "next/navigation";
 import AppHeader from "@/components/layout/AppHeader";
 import PageContainer from "@/components/layout/PageContainer";
 import ResultHeader from "@/components/result/ResultHeader";
@@ -11,12 +14,23 @@ import ResultActionButtons from "@/components/result/ResultActionButtons";
 import { mockResult } from "@/data/mockResult";
 import { resultTemplates } from "@/data/resultTemplates";
 import { getCharacter } from "@/lib/character-map";
+import { useSurveyStore } from "@/store/useSurveyStore";
 
 export default function ResultPage() {
-  const { result } = mockResult;
+  const router = useRouter();
+  const storeResult = useSurveyStore((s) => s.result);
+  const reset = useSurveyStore((s) => s.reset);
+
+  const data = storeResult ?? mockResult;
+  const { result } = data;
   const primary = getCharacter(result.primaryCharacter);
   const template = resultTemplates[result.primaryCharacter];
   const matchCharacters = template.bestMatches.map(getCharacter);
+
+  function handleRetake() {
+    reset();
+    router.push("/profile");
+  }
 
   return (
     <>
@@ -34,7 +48,43 @@ export default function ResultPage() {
           />
         </div>
 
-        {result.secondaryCharacter && (
+        {result.resultType === "mixed" && result.mixedCharacters && (
+          <div className="mt-6 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
+            <h4 className="mb-2 text-sm font-semibold text-zinc-700">
+              복합 성향
+            </h4>
+            <div className="flex flex-wrap gap-3">
+              {result.mixedCharacters.map((id) => {
+                const char = getCharacter(id);
+                return (
+                  <div key={id} className="flex items-center gap-2">
+                    <span
+                      className="inline-block h-3 w-3 rounded-full"
+                      style={{ backgroundColor: char.color.primary }}
+                    />
+                    <span className="text-sm font-medium text-zinc-800">
+                      {char.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {result.resultType === "balanced" && (
+          <div className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4 shadow-sm">
+            <h4 className="mb-1 text-sm font-semibold text-blue-700">
+              균형형 창업가
+            </h4>
+            <p className="text-sm text-blue-600">
+              모든 영역이 고르게 발달한 균형형 창업가예요! 어떤 역할이든 잘
+              해낼 수 있어요.
+            </p>
+          </div>
+        )}
+
+        {result.secondaryCharacter && result.resultType === "single" && (
           <div className="mt-6 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
             <h4 className="mb-2 text-sm font-semibold text-zinc-700">
               보조 성향
@@ -79,7 +129,7 @@ export default function ResultPage() {
           />
         </div>
 
-        <ResultActionButtons />
+        <ResultActionButtons onRetake={handleRetake} />
       </PageContainer>
     </>
   );
