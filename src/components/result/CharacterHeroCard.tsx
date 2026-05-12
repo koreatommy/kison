@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Character } from "@/types/result";
@@ -14,6 +14,7 @@ type Props = {
 
 export default function CharacterHeroCard({ character }: Props) {
   const theme = getCharacterTheme(character.id);
+  const reduceMotion = useReducedMotion();
   const [modalOpen, setModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -77,6 +78,49 @@ export default function CharacterHeroCard({ character }: Props) {
       </div>
     ) : null;
 
+  const frameVariants = reduceMotion
+    ? { rest: {}, hover: {}, tap: {} }
+    : {
+        rest: {
+          scale: 1,
+          y: 0,
+          rotate: 0,
+          boxShadow: "0 22px 44px -14px rgba(0, 0, 0, 0.35)",
+        },
+        hover: {
+          scale: 1.07,
+          y: -14,
+          rotate: -7,
+          boxShadow: `0 38px 76px -20px rgba(0, 0, 0, 0.45), 0 0 0 5px ${character.color.primary}59`,
+          transition: {
+            type: "spring" as const,
+            stiffness: 400,
+            damping: 18,
+          },
+        },
+        tap: {
+          scale: 0.94,
+          rotate: 0,
+          y: -4,
+          transition: { type: "spring" as const, stiffness: 520, damping: 24 },
+        },
+      };
+
+  const imgVariants = reduceMotion
+    ? { rest: {}, hover: {} }
+    : {
+        rest: { scale: 1, rotate: 0 },
+        hover: {
+          scale: 1.18,
+          rotate: 9,
+          transition: {
+            type: "spring" as const,
+            stiffness: 420,
+            damping: 16,
+          },
+        },
+      };
+
   return (
     <>
     <div className="relative overflow-hidden rounded-3xl shadow-2xl">
@@ -114,26 +158,37 @@ export default function CharacterHeroCard({ character }: Props) {
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 200, damping: 18, delay: 0.1 }}
-          className="relative h-44 w-44 sm:h-52 sm:w-52"
+          className="relative h-44 w-44 sm:h-52 sm:w-52 [perspective:520px]"
         >
           <div className="absolute inset-0 rounded-full bg-white/30 blur-xl" />
-          <button
+          <motion.button
             type="button"
             onClick={() => setModalOpen(true)}
             aria-haspopup="dialog"
             aria-expanded={modalOpen}
             aria-label={`${character.name} 이미지 크게 보기`}
-            className="relative h-full w-full overflow-hidden rounded-3xl bg-white/95 shadow-2xl shadow-black/20 outline-none ring-offset-2 ring-offset-transparent transition hover:brightness-[1.03] focus-visible:ring-2 focus-visible:ring-white/90"
+            variants={frameVariants}
+            initial="rest"
+            whileHover="hover"
+            whileTap="tap"
+            style={{ transformOrigin: "50% 85%" }}
+            className="relative h-full w-full overflow-hidden rounded-3xl bg-white/95 outline-none ring-offset-2 ring-offset-transparent focus-visible:ring-2 focus-visible:ring-white/90"
           >
-            <Image
-              src={character.imageUrl}
-              alt={character.name}
-              fill
-              priority
-              sizes="(max-width: 640px) 176px, 208px"
-              className="pointer-events-none object-cover object-center"
-            />
-          </button>
+            <motion.div
+              variants={imgVariants}
+              className="relative h-full w-full"
+              style={{ transformOrigin: "50% 85%" }}
+            >
+              <Image
+                src={character.imageUrl}
+                alt={character.name}
+                fill
+                priority
+                sizes="(max-width: 640px) 176px, 208px"
+                className="pointer-events-none object-cover object-center"
+              />
+            </motion.div>
+          </motion.button>
         </motion.div>
 
         <div className="text-center">
