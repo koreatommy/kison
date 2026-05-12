@@ -52,14 +52,14 @@ export default function CharacterHeroCard({ character }: Props) {
           className="relative h-44 w-44 sm:h-52 sm:w-52"
         >
           <div className="absolute inset-0 rounded-full bg-white/30 blur-xl" />
-          <div className="relative h-full w-full rounded-3xl bg-white/95 p-4 shadow-2xl shadow-black/20">
+          <div className="relative h-full w-full overflow-hidden rounded-3xl bg-white/95 shadow-2xl shadow-black/20">
             <Image
               src={character.imageUrl}
               alt={character.name}
               fill
               priority
               sizes="(max-width: 640px) 176px, 208px"
-              className="object-contain p-3"
+              className="object-cover object-center"
             />
           </div>
         </motion.div>
