@@ -26,6 +26,7 @@ export const useResultsStore = create<ResultsState & ResultsActions>()(
         const candidate: TeamCandidate = {
           id: `r-${Date.now()}-${idCounter++}`,
           name: result.student.name,
+          schoolName: result.student.schoolName,
           grade: result.student.grade,
           schoolLevel: result.student.schoolLevel,
           primaryCharacter: result.result.primaryCharacter,

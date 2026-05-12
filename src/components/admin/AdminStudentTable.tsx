@@ -21,6 +21,7 @@ export default function AdminStudentTable({ candidates }: Props) {
         <thead className="bg-zinc-50 text-left text-xs font-semibold uppercase text-zinc-500">
           <tr>
             <th className="px-4 py-3">이름</th>
+            <th className="px-4 py-3">학교</th>
             <th className="px-4 py-3">학년</th>
             <th className="px-4 py-3">대표 캐릭터</th>
             <th className="px-4 py-3">보조 성향</th>
@@ -41,6 +42,9 @@ export default function AdminStudentTable({ candidates }: Props) {
               <tr key={c.id} className="hover:bg-zinc-50">
                 <td className="px-4 py-3 font-medium text-zinc-800">
                   {c.name}
+                </td>
+                <td className="px-4 py-3 text-zinc-600">
+                  {c.schoolName ?? "—"}
                 </td>
                 <td className="px-4 py-3 text-zinc-600">{c.grade}</td>
                 <td className="px-4 py-3">

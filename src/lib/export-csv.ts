@@ -5,6 +5,7 @@ import { getCharacter } from "@/lib/character-map";
 export function downloadCsv(candidates: TeamCandidate[], filename = "kison-results.csv") {
   const headers = [
     "이름",
+    "학교",
     "학년",
     "학령",
     "대표 캐릭터",
@@ -24,6 +25,7 @@ export function downloadCsv(candidates: TeamCandidate[], filename = "kison-resul
       : null;
     return [
       c.name,
+      c.schoolName ?? "",
       c.grade,
       c.schoolLevel ?? "",
       primary.name,

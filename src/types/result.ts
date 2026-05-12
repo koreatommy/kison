@@ -56,18 +56,22 @@ export type Question = {
   options: QuestionOption[];
 };
 
+export type SchoolLevel = "elementary" | "middle" | "high";
+
 export type StudentProfile = {
   name: string;
+  schoolName?: string;
   grade: string;
-  schoolLevel?: "elementary" | "middle" | "high";
+  schoolLevel?: SchoolLevel;
   interest?: string;
 };
 
 export type TeamCandidate = {
   id: string;
   name: string;
+  schoolName?: string;
   grade: string;
-  schoolLevel?: "elementary" | "middle" | "high";
+  schoolLevel?: SchoolLevel;
   primaryCharacter: CharacterId;
   secondaryCharacter?: CharacterId;
   scores: AbilityScores;
