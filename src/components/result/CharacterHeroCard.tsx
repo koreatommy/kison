@@ -3,6 +3,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Character } from "@/types/result";
 import { getCharacterTheme } from "@/lib/character-theme";
 
@@ -12,8 +14,71 @@ type Props = {
 
 export default function CharacterHeroCard({ character }: Props) {
   const theme = getCharacterTheme(character.id);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const modalTitleId = useId();
+
+  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    const raf = requestAnimationFrame(() => closeBtnRef.current?.focus());
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+      cancelAnimationFrame(raf);
+    };
+  }, [modalOpen]);
+
+  const modal =
+    modalOpen && mounted ? (
+      <div
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/65 p-4 backdrop-blur-sm"
+        role="presentation"
+        onClick={() => setModalOpen(false)}
+      >
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={modalTitleId}
+          className="relative flex max-h-[92vh] max-w-[min(94vw,760px)] flex-col items-center gap-3 overflow-y-auto overscroll-contain rounded-3xl bg-white p-4 pb-5 shadow-2xl sm:p-6 sm:pb-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <p id={modalTitleId} className="sr-only">
+            {character.name} 캐릭터 이미지 크게 보기
+          </p>
+          <button
+            ref={closeBtnRef}
+            type="button"
+            onClick={() => setModalOpen(false)}
+            className="absolute right-3 top-3 z-10 rounded-full bg-zinc-900 px-3 py-1.5 text-xs font-black text-white shadow-md transition hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 sm:right-4 sm:top-4 sm:px-4 sm:text-sm"
+          >
+            닫기
+          </button>
+          <div className="relative mx-auto mt-10 aspect-[1086/1448] h-[min(78vh,860px)] max-w-full w-auto">
+            <Image
+              src={character.imageUrl}
+              alt={character.name}
+              fill
+              sizes="(max-width: 768px) 90vw, 760px"
+              className="rounded-2xl object-contain"
+            />
+          </div>
+          <p className="text-center text-sm font-black text-zinc-800">
+            {character.name}
+          </p>
+        </div>
+      </div>
+    ) : null;
 
   return (
+    <>
     <div className="relative overflow-hidden rounded-3xl shadow-2xl">
       <div
         className="absolute inset-0"
@@ -52,16 +117,23 @@ export default function CharacterHeroCard({ character }: Props) {
           className="relative h-44 w-44 sm:h-52 sm:w-52"
         >
           <div className="absolute inset-0 rounded-full bg-white/30 blur-xl" />
-          <div className="relative h-full w-full overflow-hidden rounded-3xl bg-white/95 shadow-2xl shadow-black/20">
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={modalOpen}
+            aria-label={`${character.name} 이미지 크게 보기`}
+            className="relative h-full w-full overflow-hidden rounded-3xl bg-white/95 shadow-2xl shadow-black/20 outline-none ring-offset-2 ring-offset-transparent transition hover:brightness-[1.03] focus-visible:ring-2 focus-visible:ring-white/90"
+          >
             <Image
               src={character.imageUrl}
               alt={character.name}
               fill
               priority
               sizes="(max-width: 640px) 176px, 208px"
-              className="object-cover object-center"
+              className="pointer-events-none object-cover object-center"
             />
-          </div>
+          </button>
         </motion.div>
 
         <div className="text-center">
@@ -103,5 +175,7 @@ export default function CharacterHeroCard({ character }: Props) {
         </div>
       </div>
     </div>
+    {modal ? createPortal(modal, document.body) : null}
+    </>
   );
 }
