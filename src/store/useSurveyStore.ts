@@ -58,12 +58,14 @@ export const useSurveyStore = create<SurveyState & SurveyActions>()(
         const { studentProfile, answers } = get();
         if (!studentProfile) return;
 
-        const validAnswers = answers.filter(
-          (a): a is QuestionOption => a !== null
-        );
-        if (validAnswers.length < 10) return;
+        if (
+          answers.length !== 10 ||
+          !answers.every((a): a is QuestionOption => a !== null)
+        ) {
+          return;
+        }
 
-        const result = calculateResult(studentProfile, validAnswers);
+        const result = calculateResult(studentProfile, answers);
         set({ result, isCompleted: true });
       },
 
