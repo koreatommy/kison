@@ -2,14 +2,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 import StepIndicator from "@/components/layout/StepIndicator";
 import SurveyProgress from "@/components/survey/SurveyProgress";
 import QuestionCard from "@/components/survey/QuestionCard";
-import { questions } from "@/data/questions";
+import { questions, QUESTION_COUNT } from "@/data/questions";
 import { useSurveyStore } from "@/store/useSurveyStore";
 import type { QuestionOption } from "@/types/result";
 
@@ -18,6 +18,7 @@ const AUTO_ADVANCE_MS = 420;
 
 export default function SurveyPage() {
   const router = useRouter();
+  const [surveyHydrated, setSurveyHydrated] = useState(false);
   const {
     studentProfile,
     currentIndex,
@@ -25,15 +26,31 @@ export default function SurveyPage() {
     selectAnswer,
     goNext,
     goPrev,
+    goToIndex,
+    finishSurvey,
   } = useSurveyStore();
 
   useEffect(() => {
+    const api = useSurveyStore.persist;
+    if (!api) {
+      setSurveyHydrated(true);
+      return;
+    }
+    if (api.hasHydrated()) {
+      setSurveyHydrated(true);
+      return;
+    }
+    return api.onFinishHydration(() => setSurveyHydrated(true));
+  }, []);
+
+  useEffect(() => {
+    if (!surveyHydrated) return;
     if (!studentProfile) {
       router.replace("/profile");
     }
-  }, [studentProfile, router]);
+  }, [surveyHydrated, studentProfile, router]);
 
-  if (!studentProfile) return null;
+  if (!surveyHydrated || !studentProfile) return null;
 
   const currentQuestion = questions[currentIndex];
   const currentAnswer = answers[currentIndex];
@@ -41,34 +58,38 @@ export default function SurveyPage() {
 
   function handleSelect(option: QuestionOption) {
     const answeredIndex = currentIndex;
-    const advanceFromLast = answeredIndex === questions.length - 1;
-
     selectAnswer(answeredIndex, option);
 
     setTimeout(() => {
-      const { answers: latestAnswers, complete: runComplete } =
-        useSurveyStore.getState();
+      if (useSurveyStore.getState().currentIndex !== answeredIndex) return;
 
-      if (advanceFromLast) {
-        if (latestAnswers.every((a) => a !== null)) {
-          runComplete();
-          router.push("/loading-result");
-        }
-      } else {
+      if (answeredIndex !== QUESTION_COUNT - 1) {
         goNext();
+        return;
+      }
+      if (useSurveyStore.getState().finishSurvey()) {
+        router.push("/loading-result");
       }
     }, AUTO_ADVANCE_MS);
   }
 
   function handleManualNext() {
-    const latestAnswers = useSurveyStore.getState().answers;
-    const everyAnswered = latestAnswers.every((a) => a !== null);
-
-    if (isLast && everyAnswered) {
-      useSurveyStore.getState().complete();
-      router.push("/loading-result");
-    } else {
+    if (!isLast) {
       goNext();
+      return;
+    }
+
+    if (finishSurvey()) {
+      router.push("/loading-result");
+      return;
+    }
+
+    const latest = useSurveyStore.getState().answers;
+    for (let i = 0; i < QUESTION_COUNT; i++) {
+      if (latest[i] === null || latest[i] === undefined) {
+        goToIndex(i);
+        return;
+      }
     }
   }
 
