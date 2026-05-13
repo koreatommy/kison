@@ -3,7 +3,7 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import type { Character } from "@/types/result";
 import { getCharacterTheme } from "@/lib/character-theme";
@@ -16,11 +16,13 @@ export default function CharacterHeroCard({ character }: Props) {
   const theme = getCharacterTheme(character.id);
   const reduceMotion = useReducedMotion();
   const [modalOpen, setModalOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const modalTitleId = useId();
-
-  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!modalOpen) return;

@@ -33,11 +33,11 @@ export default function SurveyPage() {
   useEffect(() => {
     const api = useSurveyStore.persist;
     if (!api) {
-      setSurveyHydrated(true);
+      queueMicrotask(() => setSurveyHydrated(true));
       return;
     }
     if (api.hasHydrated()) {
-      setSurveyHydrated(true);
+      queueMicrotask(() => setSurveyHydrated(true));
       return;
     }
     return api.onFinishHydration(() => setSurveyHydrated(true));
