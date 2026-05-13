@@ -50,7 +50,7 @@ export default function CharacterHeroCard({ character }: Props) {
           role="dialog"
           aria-modal="true"
           aria-labelledby={modalTitleId}
-          className="relative flex max-h-[92vh] max-w-[min(94vw,760px)] flex-col items-center gap-3 overflow-y-auto overscroll-contain rounded-3xl bg-white p-4 pb-5 shadow-2xl sm:p-6 sm:pb-6"
+          className="relative box-border flex max-h-[92vh] w-[min(94vw,760px)] max-w-[min(94vw,760px)] shrink-0 flex-col items-stretch gap-3 overflow-y-auto overscroll-contain rounded-3xl bg-white p-4 pb-5 shadow-2xl sm:p-6 sm:pb-6"
           onClick={(e) => e.stopPropagation()}
         >
           <p id={modalTitleId} className="sr-only">
@@ -64,14 +64,16 @@ export default function CharacterHeroCard({ character }: Props) {
           >
             닫기
           </button>
-          <div className="relative mx-auto mt-10 aspect-[1086/1448] h-[min(78vh,860px)] max-w-full w-auto">
-            <Image
-              src={character.imageUrl}
-              alt={character.name}
-              fill
-              sizes="(max-width: 768px) 90vw, 760px"
-              className="rounded-2xl object-contain"
-            />
+          <div className="relative mx-auto mt-10 w-full max-w-full px-1">
+            <div className="relative mx-auto aspect-[1086/1448] w-full max-h-[min(78vh,860px)] max-w-[min(88vw,720px)]">
+              <Image
+                src={character.imageUrl}
+                alt={character.name}
+                fill
+                sizes="(max-width: 768px) 90vw, 720px"
+                className="rounded-2xl object-contain"
+              />
+            </div>
           </div>
           <p className="text-center text-sm font-black text-zinc-800">
             {character.name}
