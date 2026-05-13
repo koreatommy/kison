@@ -19,18 +19,20 @@ export default function QuestionCard({
 }: Props) {
   const shuffledOptions = useMemo(
     () => shuffleArray(question.options),
-    [question.id] // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [question.id]
   );
 
   return (
     <div>
-      <h3 className="mb-5 text-lg font-bold text-zinc-900">
+      <h2 className="mb-6 text-xl sm:text-2xl font-black text-zinc-900 leading-snug">
         {question.question}
-      </h3>
+      </h2>
       <div className="flex flex-col gap-3">
-        {shuffledOptions.map((option) => (
+        {shuffledOptions.map((option, i) => (
           <OptionButton
             key={option.id}
+            index={i}
             text={option.text}
             selected={selectedAnswer?.id === option.id}
             onClick={() => onSelect(option)}

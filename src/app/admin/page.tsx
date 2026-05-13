@@ -41,21 +41,25 @@ export default function AdminPage() {
       <PageContainer>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-zinc-900">관리자 대시보드</h2>
-            <p className="text-sm text-zinc-500">
-              총 {candidates.length}명의 학생 결과
+            <h2 className="text-2xl sm:text-3xl font-black text-zinc-900">
+              관리자 대시보드
+            </h2>
+            <p className="mt-1 text-sm font-bold text-zinc-500">
+              총{" "}
+              <span className="text-indigo-600">{candidates.length}명</span>의
+              학생 결과
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => downloadCsv(filtered)}
-              className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+              className="rounded-full border-2 border-zinc-200 bg-white px-4 py-2 text-sm font-extrabold text-zinc-700 transition-colors hover:border-indigo-300 hover:bg-indigo-50"
             >
               CSV 다운로드
             </button>
             <button
               onClick={() => setShowTeams(!showTeams)}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2 text-sm font-extrabold text-white shadow-lg shadow-indigo-300/40 transition-all hover:shadow-xl hover:scale-105 active:scale-95"
             >
               {showTeams ? "목록 보기" : "팀 자동 구성"}
             </button>
@@ -63,7 +67,7 @@ export default function AdminPage() {
               onClick={() => {
                 if (confirm("모든 결과를 초기화할까요?")) clearAll();
               }}
-              className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+              className="rounded-full border-2 border-red-200 bg-white px-4 py-2 text-sm font-extrabold text-red-600 transition-colors hover:bg-red-50"
             >
               초기화
             </button>
@@ -89,8 +93,8 @@ export default function AdminPage() {
           </div>
         ) : showTeams ? (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {teams.map((team) => (
-              <TeamCard key={team.id} team={team} />
+            {teams.map((team, i) => (
+              <TeamCard key={team.id} team={team} index={i} />
             ))}
           </div>
         ) : (

@@ -113,3 +113,6 @@ export const questions: Question[] = [
     ],
   },
 ];
+
+/** 설문 문항 수 (스토어·완료 검증과 동기화) */
+export const QUESTION_COUNT = questions.length;

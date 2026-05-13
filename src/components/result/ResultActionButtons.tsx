@@ -1,4 +1,4 @@
-// 결과 화면 하단 액션 버튼
+// 결과 화면 하단 액션 버튼 - 그라디언트 + 보조 버튼들
 "use client";
 
 type Props = {
@@ -13,25 +13,34 @@ export default function ResultActionButtons({
   onSavePdf,
 }: Props) {
   return (
-    <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+    <div className="mt-8 flex flex-col gap-3">
       <button
-        className="w-full rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 sm:w-auto"
+        type="button"
         onClick={onSaveImage}
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-4 text-base font-extrabold text-white shadow-xl shadow-indigo-300/40 transition-all hover:shadow-2xl hover:shadow-indigo-400/60 hover:scale-[1.02] active:scale-95"
       >
-        결과 이미지 저장
+        <span>📥</span>
+        <span>결과 이미지 저장</span>
       </button>
-      <button
-        className="w-full rounded-full border border-zinc-300 bg-white px-6 py-3 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50 sm:w-auto"
-        onClick={onSavePdf}
-      >
-        PDF 저장
-      </button>
-      <button
-        className="w-full rounded-full border border-zinc-300 bg-white px-6 py-3 text-sm font-semibold text-zinc-700 transition-colors hover:bg-zinc-50 sm:w-auto"
-        onClick={onRetake}
-      >
-        다시 검사하기
-      </button>
+
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={onSavePdf}
+          className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-zinc-200 bg-white py-3.5 text-sm font-extrabold text-zinc-700 transition-all hover:border-indigo-300 hover:bg-indigo-50 active:scale-95"
+        >
+          <span>📄</span>
+          <span>PDF 저장</span>
+        </button>
+        <button
+          type="button"
+          onClick={onRetake}
+          className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-zinc-200 bg-white py-3.5 text-sm font-extrabold text-zinc-700 transition-all hover:border-indigo-300 hover:bg-indigo-50 active:scale-95"
+        >
+          <span>🔄</span>
+          <span>다시 검사</span>
+        </button>
+      </div>
     </div>
   );
 }

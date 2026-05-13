@@ -1,4 +1,4 @@
-// 범용 리포트 카드 (강점, 성장 포인트, 추천 활동에 재사용)
+// 범용 리포트 카드 (강점, 성장 포인트, 추천 활동)
 type Props = {
   title: string;
   icon: string;
@@ -8,19 +8,28 @@ type Props = {
 
 export default function ReportCard({ title, icon, items, accentColor }: Props) {
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm">
-      <h4 className="mb-3 flex items-center gap-2 text-sm font-semibold text-zinc-700">
-        <span>{icon}</span>
-        {title}
-      </h4>
-      <ul className="flex flex-col gap-2">
+    <div className="rounded-3xl border border-white bg-white/90 backdrop-blur-sm p-5 shadow-xl shadow-indigo-100/60">
+      <div className="mb-4 flex items-center gap-3">
+        <span
+          className="flex h-10 w-10 items-center justify-center rounded-2xl text-xl"
+          style={{
+            backgroundColor: `${accentColor}1A`,
+          }}
+        >
+          {icon}
+        </span>
+        <h4 className="text-base font-black text-zinc-900">{title}</h4>
+      </div>
+      <ul className="flex flex-col gap-2.5">
         {items.map((item) => (
-          <li key={item} className="flex items-start gap-2 text-sm">
+          <li key={item} className="flex items-start gap-2.5 text-sm">
             <span
-              className="mt-1.5 block h-2 w-2 flex-shrink-0 rounded-full"
+              className="mt-1.5 block h-1.5 w-1.5 flex-shrink-0 rounded-full"
               style={{ backgroundColor: accentColor }}
             />
-            <span className="text-zinc-600">{item}</span>
+            <span className="font-semibold text-zinc-600 leading-relaxed">
+              {item}
+            </span>
           </li>
         ))}
       </ul>
