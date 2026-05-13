@@ -94,10 +94,10 @@ export default function SurveyPage() {
   }
 
   return (
-    <main className="relative flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-violet-50 via-white to-indigo-50">
+    <main className="relative flex min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto bg-gradient-to-b from-violet-50 via-white to-indigo-50">
       <BackgroundBlobs variant="indigo" />
 
-      <div className="relative z-10 mx-auto w-full max-w-xl px-5 py-6 sm:py-10">
+      <div className="relative z-10 mx-auto w-full min-w-0 max-w-xl px-5 py-6 sm:py-10">
         <div className="mb-6 flex items-center justify-between">
           <Link
             href="/profile"
@@ -113,13 +113,13 @@ export default function SurveyPage() {
 
         <SurveyProgress current={currentIndex} total={questions.length} />
 
-        <div className="rounded-3xl border border-white bg-white/85 backdrop-blur-sm p-5 sm:p-7 shadow-xl shadow-indigo-200/40 min-h-[420px]">
+        <div className="min-w-0 overflow-hidden rounded-3xl border border-white bg-white/85 backdrop-blur-sm p-5 sm:p-7 shadow-xl shadow-indigo-200/40 min-h-[420px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentQuestion.id}
-              initial={{ opacity: 0, x: 40 }}
+              initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
+              exit={{ opacity: 0, x: -16 }}
               transition={{ duration: 0.28, ease: "easeOut" }}
             >
               <QuestionCard

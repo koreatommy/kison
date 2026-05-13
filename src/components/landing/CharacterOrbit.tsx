@@ -26,7 +26,8 @@ export default function CharacterOrbit() {
 
       {characters.map((char, i) => {
         const angle = (i / characters.length) * 2 * Math.PI - Math.PI / 2;
-        const radius = 120;
+        /* 280px 컨테이너 반지름 140 — 아이콘 반폭(~32) 포함 시 궤도 반지름 100 이하여야 가로 넘침 방지 */
+        const radius = 100;
         const x = Math.cos(angle) * radius;
         const y = Math.sin(angle) * radius;
         const theme = getCharacterTheme(char.id);

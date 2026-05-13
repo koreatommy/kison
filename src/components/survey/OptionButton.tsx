@@ -18,7 +18,7 @@ export default function OptionButton({
     <button
       type="button"
       onClick={onClick}
-      className={`group w-full flex items-center gap-3 rounded-2xl border-2 px-4 py-4 text-left transition-all active:scale-[0.98] ${
+      className={`group flex min-w-0 w-full max-w-full items-center gap-3 rounded-2xl border-2 px-4 py-4 text-left transition-all active:scale-[0.98] ${
         selected
           ? "border-indigo-500 bg-gradient-to-r from-indigo-50 to-violet-50 shadow-lg shadow-indigo-200/40"
           : "border-zinc-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/50 hover:shadow-md"
@@ -34,7 +34,7 @@ export default function OptionButton({
         {selected ? "✓" : LABELS[index] ?? index + 1}
       </span>
       <span
-        className={`flex-1 text-sm sm:text-base font-bold leading-snug ${
+        className={`min-w-0 flex-1 break-words text-sm sm:text-base font-bold leading-snug ${
           selected ? "text-indigo-900" : "text-zinc-700"
         }`}
       >

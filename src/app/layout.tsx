@@ -1,6 +1,11 @@
 // KISON 청소년 창업 캐릭터 진단 웹서비스 루트 레이아웃
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "KISON 청소년 창업 캐릭터 진단",
@@ -18,8 +23,8 @@ export default async function RootLayout({
   await params;
 
   return (
-    <html lang="ko" className="h-full antialiased">
-      <body className="min-h-full flex flex-col font-sans bg-[var(--background)] text-[var(--foreground)]">
+    <html lang="ko" className="h-full min-w-0 antialiased">
+      <body className="min-h-full min-w-0 flex flex-col font-sans bg-[var(--background)] text-[var(--foreground)]">
         {children}
       </body>
     </html>
