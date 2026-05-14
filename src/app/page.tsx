@@ -1,8 +1,15 @@
 // KISON 시작 화면 — 풀스크린 그라디언트 히어로 + 캐릭터 오빗
+import type { Metadata } from "next";
 import Link from "next/link";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 import CharacterOrbit from "@/components/landing/CharacterOrbit";
 import { characters } from "@/data/characters";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 type HomeProps = {
   params: Promise<Record<string, string | string[] | undefined>>;
