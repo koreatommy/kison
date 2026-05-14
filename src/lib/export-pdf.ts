@@ -1,15 +1,26 @@
 // 결과 리포트를 PDF로 저장 (PNG 변환 → jsPDF 삽입)
 import { toPng } from "html-to-image";
 import { jsPDF } from "jspdf";
+import { applyCaptureFriendlyStyles } from "@/lib/prepare-dom-capture";
 
 export async function saveAsPdf(
   node: HTMLElement,
   filename = "kison-result.pdf"
 ) {
-  const dataUrl = await toPng(node, {
-    cacheBust: true,
-    pixelRatio: 2,
+  const restoreStyles = applyCaptureFriendlyStyles(node);
+  await new Promise<void>((resolve) => {
+    requestAnimationFrame(() => resolve());
   });
+
+  let dataUrl: string;
+  try {
+    dataUrl = await toPng(node, {
+      cacheBust: true,
+      pixelRatio: 2,
+    });
+  } finally {
+    restoreStyles();
+  }
 
   const img = new Image();
   img.src = dataUrl;
