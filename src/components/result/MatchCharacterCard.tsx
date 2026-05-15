@@ -1,5 +1,6 @@
 // 잘 맞는 팀원 캐릭터 카드 (궁합 캐릭터 2명 표시)
 import Image from "next/image";
+import { Handshake } from "lucide-react";
 import type { Character } from "@/types/result";
 import { getCharacterTheme } from "@/lib/character-theme";
 
@@ -11,8 +12,8 @@ export default function MatchCharacterCard({ matches }: Props) {
   return (
     <div className="rounded-3xl border border-white bg-white/90 backdrop-blur-sm p-5 shadow-xl shadow-indigo-100/60">
       <div className="mb-4 flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-50 text-xl">
-          🤝
+        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-pink-50 text-pink-600">
+          <Handshake className="size-5" strokeWidth={2.25} aria-hidden />
         </span>
         <h4 className="text-base font-black text-zinc-900">잘 맞는 팀원</h4>
       </div>

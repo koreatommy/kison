@@ -1,4 +1,6 @@
 // 진행 단계 인디케이터 (예: 1 ─ 2 ─ 3)
+import { Check } from "lucide-react";
+
 type Props = {
   steps: string[];
   current: number;
@@ -23,7 +25,11 @@ export default function StepIndicator({ steps, current }: Props) {
                       : "bg-zinc-100 text-zinc-400"
                 }`}
               >
-                {isDone ? "✓" : i + 1}
+                {isDone ? (
+                  <Check className="size-3.5" strokeWidth={3} aria-hidden />
+                ) : (
+                  i + 1
+                )}
               </span>
               <span
                 className={`hidden sm:inline text-xs font-bold uppercase tracking-wider ${

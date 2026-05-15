@@ -1,10 +1,12 @@
 // 10문항 설문 진행 화면 - 슬라이드 애니메이션 + 자동 진행
 "use client";
 
+import { SsgoiTransition } from "@ssgoi/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 import StepIndicator from "@/components/layout/StepIndicator";
 import SurveyProgress from "@/components/survey/SurveyProgress";
@@ -94,6 +96,7 @@ export default function SurveyPage() {
   }
 
   return (
+    <SsgoiTransition id="/survey">
     <main className="relative flex min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto bg-gradient-to-b from-violet-50 via-white to-indigo-50">
       <BackgroundBlobs variant="indigo" />
 
@@ -146,10 +149,16 @@ export default function SurveyPage() {
             disabled={!currentAnswer}
             className="flex-1 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 py-3 text-sm font-extrabold text-white shadow-lg shadow-indigo-300/40 transition-all hover:shadow-xl hover:shadow-indigo-300/60 hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:from-zinc-300 disabled:to-zinc-300 disabled:shadow-none"
           >
-            {isLast ? "결과 보기 →" : "다음"}
+            <span className="inline-flex items-center justify-center gap-1.5">
+              {isLast ? "결과 보기" : "다음"}
+              {isLast && (
+                <ArrowRight className="size-4" strokeWidth={2.5} aria-hidden />
+              )}
+            </span>
           </button>
         </div>
       </div>
     </main>
+    </SsgoiTransition>
   );
 }

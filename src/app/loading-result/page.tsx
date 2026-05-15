@@ -1,15 +1,21 @@
 // 결과 분석 중 로딩 화면 - 3-phase 드라마틱 연출 후 /result로 이동
 "use client";
 
+import { SsgoiTransition } from "@ssgoi/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { Search, Sparkles, Target, type LucideIcon } from "lucide-react";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 
-const PHASES = [
-  { emoji: "🔍", text: "답변을 분석하고 있어요", sub: "10개의 응답을 살펴보는 중..." },
-  { emoji: "🎯", text: "캐릭터를 매칭하고 있어요", sub: "너에게 가장 잘 맞는 캐릭터는?" },
-  { emoji: "✨", text: "캐릭터를 발견했어요!", sub: "곧 결과를 보여줄게요" },
+const PHASES: {
+  icon: LucideIcon;
+  text: string;
+  sub: string;
+}[] = [
+  { icon: Search, text: "답변을 분석하고 있어요", sub: "10개의 응답을 살펴보는 중..." },
+  { icon: Target, text: "캐릭터를 매칭하고 있어요", sub: "너에게 가장 잘 맞는 캐릭터는?" },
+  { icon: Sparkles, text: "캐릭터를 발견했어요!", sub: "곧 결과를 보여줄게요" },
 ];
 
 const PHASE_MS = 900;
@@ -35,8 +41,10 @@ export default function LoadingResultPage() {
   }, [router]);
 
   const current = PHASES[phase];
+  const PhaseIcon = current.icon;
 
   return (
+    <SsgoiTransition id="/loading-result">
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-100 via-violet-50 to-pink-100 p-6">
       <BackgroundBlobs variant="indigo" />
 
@@ -65,9 +73,9 @@ export default function LoadingResultPage() {
               animate={{ scale: 1, rotate: 0, opacity: 1 }}
               exit={{ scale: 0, rotate: 20, opacity: 0 }}
               transition={{ type: "spring", stiffness: 220, damping: 16 }}
-              className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-white text-5xl shadow-2xl shadow-indigo-300/50"
+              className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full bg-white text-indigo-600 shadow-2xl shadow-indigo-300/50"
             >
-              {current.emoji}
+              <PhaseIcon className="size-11" strokeWidth={2} aria-hidden />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -105,5 +113,6 @@ export default function LoadingResultPage() {
         </div>
       </div>
     </main>
+    </SsgoiTransition>
   );
 }

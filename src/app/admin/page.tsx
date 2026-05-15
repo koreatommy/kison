@@ -1,6 +1,7 @@
 // 관리자 대시보드 — 학생 결과 목록/필터/차트/팀구성/CSV
 "use client";
 
+import { SsgoiTransition } from "@ssgoi/react";
 import { useState, useMemo } from "react";
 import AppHeader from "@/components/layout/AppHeader";
 import PageContainer from "@/components/layout/PageContainer";
@@ -36,6 +37,7 @@ export default function AdminPage() {
   const uniqueGrades = [...new Set(candidates.map((c) => c.grade))];
 
   return (
+    <SsgoiTransition id="/admin">
     <>
       <AppHeader />
       <PageContainer>
@@ -105,5 +107,6 @@ export default function AdminPage() {
         )}
       </PageContainer>
     </>
+    </SsgoiTransition>
   );
 }

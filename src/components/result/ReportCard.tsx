@@ -1,22 +1,30 @@
 // 범용 리포트 카드 (강점, 성장 포인트, 추천 활동)
+import type { LucideIcon } from "lucide-react";
+
 type Props = {
   title: string;
-  icon: string;
+  icon: LucideIcon;
   items: string[];
   accentColor: string;
 };
 
-export default function ReportCard({ title, icon, items, accentColor }: Props) {
+export default function ReportCard({
+  title,
+  icon: Icon,
+  items,
+  accentColor,
+}: Props) {
   return (
     <div className="rounded-3xl border border-white bg-white/90 backdrop-blur-sm p-5 shadow-xl shadow-indigo-100/60">
       <div className="mb-4 flex items-center gap-3">
         <span
-          className="flex h-10 w-10 items-center justify-center rounded-2xl text-xl"
+          className="flex h-10 w-10 items-center justify-center rounded-2xl"
           style={{
             backgroundColor: `${accentColor}1A`,
+            color: accentColor,
           }}
         >
-          {icon}
+          <Icon className="size-5" strokeWidth={2.25} aria-hidden />
         </span>
         <h4 className="text-base font-black text-zinc-900">{title}</h4>
       </div>

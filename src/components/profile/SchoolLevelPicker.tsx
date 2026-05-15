@@ -1,18 +1,19 @@
-// 학령 선택 카드 (이모지 + 라벨)
+// 학령 선택 카드 (아이콘 + 라벨)
 "use client";
 
+import { Backpack, BookOpen, GraduationCap, type LucideIcon } from "lucide-react";
 import type { SchoolLevel } from "@/types/result";
 
 type Option = {
   value: SchoolLevel;
   label: string;
-  emoji: string;
+  icon: LucideIcon;
 };
 
 const OPTIONS: Option[] = [
-  { value: "elementary", label: "초등학생", emoji: "🎒" },
-  { value: "middle", label: "중학생", emoji: "📚" },
-  { value: "high", label: "고등학생", emoji: "🎓" },
+  { value: "elementary", label: "초등학생", icon: Backpack },
+  { value: "middle", label: "중학생", icon: BookOpen },
+  { value: "high", label: "고등학생", icon: GraduationCap },
 ];
 
 type Props = {
@@ -25,6 +26,7 @@ export default function SchoolLevelPicker({ value, onChange }: Props) {
     <div className="grid grid-cols-3 gap-2 sm:gap-3">
       {OPTIONS.map((opt) => {
         const selected = value === opt.value;
+        const Icon = opt.icon;
         return (
           <button
             key={opt.value}
@@ -36,7 +38,11 @@ export default function SchoolLevelPicker({ value, onChange }: Props) {
                 : "border-zinc-200 bg-white hover:border-indigo-300 hover:bg-indigo-50/40"
             }`}
           >
-            <span className="text-2xl sm:text-3xl">{opt.emoji}</span>
+            <Icon
+              className={`size-7 sm:size-8 ${selected ? "text-indigo-600" : "text-zinc-500"}`}
+              strokeWidth={2}
+              aria-hidden
+            />
             <span
               className={`text-xs sm:text-sm font-bold ${
                 selected ? "text-indigo-700" : "text-zinc-600"

@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import type { Character } from "@/types/result";
@@ -110,7 +111,7 @@ export default function CharacterHeroCard({ character }: Props) {
 
       <div className="relative flex flex-col items-center gap-5 p-6 sm:p-8 text-white">
         <div className="inline-flex items-center gap-2 rounded-full bg-white/25 backdrop-blur-sm px-3 py-1 text-[10px] sm:text-xs font-black uppercase tracking-widest">
-          <span>✨</span>
+          <Sparkles className="size-3.5" strokeWidth={2.5} aria-hidden />
           획득 캐릭터
         </div>
 

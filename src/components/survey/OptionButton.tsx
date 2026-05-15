@@ -1,4 +1,6 @@
 // 설문 선택지 버튼 - 큰 pill 카드 (선택 시 체크마크 + 컬러)
+import { Check } from "lucide-react";
+
 type Props = {
   text: string;
   selected: boolean;
@@ -31,7 +33,11 @@ export default function OptionButton({
             : "bg-zinc-100 text-zinc-500 group-hover:bg-indigo-100 group-hover:text-indigo-600"
         }`}
       >
-        {selected ? "✓" : LABELS[index] ?? index + 1}
+        {selected ? (
+          <Check className="size-4" strokeWidth={3} aria-hidden />
+        ) : (
+          LABELS[index] ?? index + 1
+        )}
       </span>
       <span
         className={`min-w-0 flex-1 break-words text-sm sm:text-base font-bold leading-snug ${

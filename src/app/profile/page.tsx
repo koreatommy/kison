@@ -1,9 +1,11 @@
 // 학생 정보 입력 화면 — 단계 인디케이터 + 카드 폼 + 학령 픽커
 "use client";
 
+import { SsgoiTransition } from "@ssgoi/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 import StepIndicator from "@/components/layout/StepIndicator";
 import SchoolLevelPicker from "@/components/profile/SchoolLevelPicker";
@@ -54,6 +56,7 @@ export default function ProfilePage() {
   }
 
   return (
+    <SsgoiTransition id="/profile">
     <main className="relative flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-pink-50">
       <BackgroundBlobs variant="indigo" />
 
@@ -160,10 +163,11 @@ export default function ProfilePage() {
             className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-4 text-base font-extrabold text-white shadow-lg shadow-indigo-300/40 transition-all hover:shadow-xl hover:shadow-indigo-300/60 hover:scale-[1.02] active:scale-95 disabled:cursor-not-allowed disabled:from-zinc-300 disabled:to-zinc-300 disabled:shadow-none disabled:hover:scale-100"
           >
             <span>설문 시작하기</span>
-            <span className="text-lg">→</span>
+            <ArrowRight className="size-5" strokeWidth={2.5} aria-hidden />
           </button>
         </form>
       </div>
     </main>
+    </SsgoiTransition>
   );
 }

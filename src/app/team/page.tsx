@@ -1,4 +1,6 @@
 // 팀 구성 결과 화면 (mock 데이터 기반)
+import { SsgoiTransition } from "@ssgoi/react";
+import { Handshake } from "lucide-react";
 import AppHeader from "@/components/layout/AppHeader";
 import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
 import TeamCard from "@/components/team/TeamCard";
@@ -17,6 +19,7 @@ export default async function TeamPage({ params, searchParams }: TeamPageProps) 
   const teams = buildTeams(mockTeamCandidates);
 
   return (
+    <SsgoiTransition id="/team">
     <>
       <AppHeader />
       <main className="relative flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-pink-50">
@@ -25,7 +28,7 @@ export default async function TeamPage({ params, searchParams }: TeamPageProps) 
         <div className="relative z-10 mx-auto w-full max-w-5xl px-4 py-8 sm:py-10">
           <div className="mb-8 text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-pink-100 to-indigo-100 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-pink-700">
-              <span>🤝</span>
+              <Handshake className="size-3.5" strokeWidth={2.5} aria-hidden />
               팀 빌더
             </div>
             <h1 className="mt-4 text-3xl sm:text-4xl font-black text-zinc-900 leading-tight">
@@ -48,5 +51,6 @@ export default async function TeamPage({ params, searchParams }: TeamPageProps) 
         </div>
       </main>
     </>
+    </SsgoiTransition>
   );
 }

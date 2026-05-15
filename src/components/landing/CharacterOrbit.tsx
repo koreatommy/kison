@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import { characters } from "@/data/characters";
 import { getCharacterTheme } from "@/lib/character-theme";
 
@@ -19,7 +20,7 @@ export default function CharacterOrbit() {
         className="absolute left-1/2 top-1/2 flex h-32 w-32 sm:h-40 sm:w-40 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 shadow-2xl shadow-violet-400/40"
       >
         <div className="flex flex-col items-center text-white">
-          <span className="text-3xl sm:text-4xl">✨</span>
+          <Sparkles className="size-8 sm:size-9" strokeWidth={2} aria-hidden />
           <span className="text-xs sm:text-sm font-black mt-1">KISON</span>
         </div>
       </motion.div>

@@ -36,10 +36,11 @@
 html {
   overflow-x: clip;
   max-width: 100%;
+  background: #000;
 }
 
 body {
-  background: var(--background);
+  background: #000;
   color: var(--foreground);
   font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 600;
@@ -93,6 +94,17 @@ body {
   }
 }
 
+@keyframes intro-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .animate-blob {
   animation: blob 14s ease-in-out infinite;
 }
@@ -140,4 +152,38 @@ body {
 .bg-grid-soft {
   background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.08) 1px, transparent 0);
   background-size: 24px 24px;
+}
+
+@keyframes mission-panel-in {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes mission-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes mission-blind-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-mission-blind {
+  animation: mission-blind-reveal 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mission-blind {
+    animation: reveal 0.35s ease-out both;
+  }
+
 }

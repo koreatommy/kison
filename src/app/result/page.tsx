@@ -1,6 +1,7 @@
 // 개인 결과 리포트 페이지 - 컨페티 + 히어로 + 차트 + 카드 그리드
 "use client";
 
+import { SsgoiTransition } from "@ssgoi/react";
 import { useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
@@ -12,6 +13,7 @@ import CharacterHeroCard from "@/components/result/CharacterHeroCard";
 import RadarChartCard from "@/components/result/RadarChartCard";
 import AbilityScoreList from "@/components/result/AbilityScoreList";
 import ReportCard from "@/components/result/ReportCard";
+import { Dumbbell, Sprout, Target } from "lucide-react";
 import MatchCharacterCard from "@/components/result/MatchCharacterCard";
 import ResultActionButtons from "@/components/result/ResultActionButtons";
 import { mockResult } from "@/data/mockResult";
@@ -66,6 +68,7 @@ export default function ResultPage() {
   }, []);
 
   return (
+    <SsgoiTransition id="/result">
     <>
       <Confetti colors={[theme.from, theme.to, "#FFFFFF"]} trigger={primary.id} />
       <AppHeader />
@@ -183,20 +186,20 @@ export default function ResultPage() {
             >
               <ReportCard
                 title="강점"
-                icon="💪"
+                icon={Dumbbell}
                 items={template.strengths}
                 accentColor={primary.color.primary}
               />
               <ReportCard
                 title="성장 포인트"
-                icon="🌱"
+                icon={Sprout}
                 items={template.growthPoints}
                 accentColor={primary.color.secondary}
               />
               <MatchCharacterCard matches={matchCharacters} />
               <ReportCard
                 title="추천 활동"
-                icon="🎯"
+                icon={Target}
                 items={template.recommendedActivities}
                 accentColor={primary.color.primary}
               />
@@ -211,5 +214,6 @@ export default function ResultPage() {
         </div>
       </main>
     </>
+    </SsgoiTransition>
   );
 }
