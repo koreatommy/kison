@@ -57,23 +57,35 @@ function FloatingMouseIcon() {
     </svg>
   );
 
-  const floater = (
-    <span className="inline-block animate-float">{icon}</span>
-  );
+  const tooltipClass =
+    "pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg border border-white/20 bg-zinc-950/95 px-3 py-2 text-sm font-bold text-white opacity-0 shadow-lg backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100";
 
   if (INTRO_ENTER_HREF) {
     return (
       <Link
         href={INTRO_ENTER_HREF}
-        className="inline-flex min-h-12 min-w-12 touch-manipulation animate-float items-center justify-center rounded-xl p-3 outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:min-h-14 sm:min-w-14 md:min-h-[3.5rem] md:min-w-[3.5rem]"
+        className="group relative inline-flex min-h-12 min-w-12 touch-manipulation animate-float items-center justify-center rounded-xl p-3 outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:min-h-14 sm:min-w-14 md:min-h-[3.5rem] md:min-w-[3.5rem]"
         aria-label="다음으로 이동"
       >
+        <span className={tooltipClass} role="tooltip">
+          시작합니다
+        </span>
         {icon}
       </Link>
     );
   }
 
-  return <div className="pointer-events-none">{floater}</div>;
+  return (
+    <div
+      tabIndex={0}
+      className="group relative inline-flex cursor-default rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+    >
+      <span className={tooltipClass} role="tooltip">
+        시작합니다
+      </span>
+      <span className="inline-block animate-float">{icon}</span>
+    </div>
+  );
 }
 
 export default async function Home({ params, searchParams }: HomeProps) {
