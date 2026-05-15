@@ -1,6 +1,7 @@
 // KISON 루트 인트로 — 풀스크린 배경 동영상 + 하단 플로팅 마우스 아이콘
 import type { Metadata } from "next";
 import Link from "next/link";
+import IntroBackgroundVideo from "@/components/intro/IntroBackgroundVideo";
 
 /** 나중에 경로를 넣으면 아이콘이 해당 페이지로 이동하는 링크가 됩니다. `null`이면 장식만 표시됩니다. */
 const INTRO_ENTER_HREF: string | null = null;
@@ -81,19 +82,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
 
   return (
     <main className="relative min-h-dvh w-full min-w-0 overflow-hidden overscroll-none bg-black">
-      <video
-        className="absolute inset-0 size-full object-contain object-center md:object-cover [-webkit-touch-callout:none]"
-        autoPlay
-        muted
-        playsInline
-        loop
-        preload="metadata"
-        controls={false}
-        disablePictureInPicture
-        aria-hidden
-      >
-        <source src="/intro.mp4" type="video/mp4" />
-      </video>
+      <IntroBackgroundVideo />
       <div
         className="pointer-events-none absolute inset-0 z-[1] bg-black/15"
         aria-hidden
@@ -108,7 +97,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
               THINK BIG
             </h1>
             <p className="mt-4 text-lg font-bold leading-snug text-white/90 sm:mt-5 sm:text-xl md:text-2xl md:leading-relaxed lg:text-[1.65rem] lg:leading-relaxed">
-              창업은 처음이지! 용기를 갖고 시작해 보세요~
+              창업은 처음이죠? 용기를 갖고 시작해 보세요~
             </p>
           </div>
         </div>
