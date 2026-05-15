@@ -7,6 +7,16 @@ export default function IntroBackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
+  // React의 muted prop 버그 우회 — 마운트 시 DOM에 즉시 적용
+  const setVideoRef = useCallback((node: HTMLVideoElement | null) => {
+    if (!node) return;
+    (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = node;
+    node.muted = true;
+    node.defaultMuted = true;
+    node.setAttribute("playsinline", "");
+    node.setAttribute("webkit-playsinline", "");
+  }, []);
+
   const toggleMute = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -15,30 +25,40 @@ export default function IntroBackgroundVideo() {
     video.muted = next;
     video.volume = next ? 0 : 1;
     setIsMuted(next);
+
+    // 사용자 제스처 시점에 재생 보장 (iOS autoplay 정책 대응)
+    if (video.paused) {
+      void video.play().catch(() => {});
+    }
   }, []);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    video.muted = true;
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "");
-
     const tryPlay = () => {
-      void video.play().catch(() => {
-        // 브라우저가 거부하면 loadeddata/canplay에서 재시도
-      });
+      if (!video.paused) return;
+      void video.play().catch(() => {});
     };
 
     tryPlay();
     video.addEventListener("loadeddata", tryPlay);
     video.addEventListener("canplay", tryPlay);
 
+    // 탭 전환 복귀 시 재시도
     const onVisibilityChange = () => {
       if (document.visibilityState === "visible") tryPlay();
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
+
+    // iOS에서 autoplay가 차단된 경우 첫 사용자 인터랙션으로 재생
+    const onFirstInteraction = () => {
+      if (video.paused) {
+        void video.play().catch(() => {});
+      }
+    };
+    document.addEventListener("touchstart", onFirstInteraction, { once: true, passive: true });
+    document.addEventListener("click", onFirstInteraction, { once: true });
 
     return () => {
       video.removeEventListener("loadeddata", tryPlay);
@@ -49,8 +69,9 @@ export default function IntroBackgroundVideo() {
 
   return (
     <>
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
-        ref={videoRef}
+        ref={setVideoRef}
         className="absolute inset-0 size-full object-contain object-center md:object-cover [-webkit-touch-callout:none]"
         autoPlay
         muted
