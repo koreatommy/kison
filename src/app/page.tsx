@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import IntroBackgroundVideo from "@/components/intro/IntroBackgroundVideo";
+import IntroTypingText from "@/components/intro/IntroTypingText";
 
 /** 나중에 경로를 넣으면 아이콘이 해당 페이지로 이동하는 링크가 됩니다. `null`이면 장식만 표시됩니다. */
 const INTRO_ENTER_HREF: string | null = null;
@@ -105,9 +106,7 @@ export default async function Home({ params, searchParams }: HomeProps) {
       <div className="relative z-10 flex min-h-dvh w-full min-w-0 flex-col">
         <div className="flex min-h-0 flex-1 items-center justify-end pr-[max(2rem,env(safe-area-inset-right,0px))] sm:pr-[max(3rem,env(safe-area-inset-right,0px))] md:pr-[max(4rem,env(safe-area-inset-right,0px))]">
           <div className="-translate-y-12 flex flex-col items-end text-right sm:-translate-y-14 md:-translate-y-16">
-            <h1 className="text-5xl font-black tracking-tight text-white sm:text-7xl md:text-8xl lg:text-9xl">
-              THINK BIG
-            </h1>
+            <IntroTypingText />
             <p className="mt-4 text-lg font-bold leading-snug text-white/90 sm:mt-5 sm:text-xl md:text-2xl md:leading-relaxed lg:text-[1.65rem] lg:leading-relaxed">
               창업은 처음이죠? 용기를 갖고 시작해 보세요~
             </p>
