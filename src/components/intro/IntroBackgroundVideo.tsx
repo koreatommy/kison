@@ -1,4 +1,4 @@
-// 인트로 배경 동영상 — 소리 재생 및 모바일 자동재생 정책 대응
+// 인트로 배경 동영상 — 히어로 섹션 방식(음소거 자동재생) + 소리 토글
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -6,105 +6,46 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export default function IntroBackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const needsUserUnmuteRef = useRef(false);
-  const autoplayMutedOnlyRef = useRef(false);
-  const hasTriedUnmutedRef = useRef(false);
-
-  const applyUnmute = useCallback(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = false;
-    video.volume = 1;
-    setIsMuted(false);
-    needsUserUnmuteRef.current = false;
-    autoplayMutedOnlyRef.current = false;
-
-    void video.play().catch(() => {
-      video.muted = true;
-      setIsMuted(true);
-      needsUserUnmuteRef.current = true;
-    });
-  }, []);
 
   const toggleMute = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (video.muted) {
-      applyUnmute();
-    } else {
-      video.muted = true;
-      setIsMuted(true);
-    }
-  }, [applyUnmute]);
+    const next = !video.muted;
+    video.muted = next;
+    video.volume = next ? 0 : 1;
+    setIsMuted(next);
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const tryPlay = async () => {
-      video.setAttribute("playsinline", "");
-      video.setAttribute("webkit-playsinline", "");
+    video.muted = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
 
-      if (!needsUserUnmuteRef.current && !autoplayMutedOnlyRef.current) {
-        if (!hasTriedUnmutedRef.current) {
-          hasTriedUnmutedRef.current = true;
-          video.muted = false;
-          video.volume = 1;
-
-          try {
-            await video.play();
-            setIsMuted(false);
-            return;
-          } catch {
-            autoplayMutedOnlyRef.current = true;
-          }
-        }
-      }
-
-      if (autoplayMutedOnlyRef.current || needsUserUnmuteRef.current) {
-        video.muted = true;
-        setIsMuted(true);
-        needsUserUnmuteRef.current = true;
-
-        try {
-          await video.play();
-        } catch {
-          // loadeddata/canplay에서 재시도
-        }
-      }
+    const tryPlay = () => {
+      void video.play().catch(() => {
+        // 브라우저가 거부하면 loadeddata/canplay에서 재시도
+      });
     };
 
-    void tryPlay();
-
+    tryPlay();
     video.addEventListener("loadeddata", tryPlay);
     video.addEventListener("canplay", tryPlay);
 
     const onVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        void tryPlay();
-      }
+      if (document.visibilityState === "visible") tryPlay();
     };
     document.addEventListener("visibilitychange", onVisibilityChange);
-
-    const unmuteOnFirstInteraction = () => {
-      if (!needsUserUnmuteRef.current) return;
-      applyUnmute();
-    };
-    document.addEventListener("touchstart", unmuteOnFirstInteraction, {
-      passive: true,
-    });
-    document.addEventListener("click", unmuteOnFirstInteraction);
 
     return () => {
       video.removeEventListener("loadeddata", tryPlay);
       video.removeEventListener("canplay", tryPlay);
       document.removeEventListener("visibilitychange", onVisibilityChange);
-      document.removeEventListener("touchstart", unmuteOnFirstInteraction);
-      document.removeEventListener("click", unmuteOnFirstInteraction);
     };
-  }, [applyUnmute]);
+  }, []);
 
   return (
     <>
@@ -112,7 +53,7 @@ export default function IntroBackgroundVideo() {
         ref={videoRef}
         className="absolute inset-0 size-full object-contain object-center md:object-cover [-webkit-touch-callout:none]"
         autoPlay
-        muted={isMuted}
+        muted
         playsInline
         loop
         preload="auto"
