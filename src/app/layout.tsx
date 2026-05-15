@@ -6,6 +6,7 @@ import { SITE_ORIGIN } from "@/lib/site";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 const siteDescription =

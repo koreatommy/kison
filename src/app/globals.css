@@ -101,6 +101,12 @@ body {
   animation: float 5s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+}
+
 .animate-pulse-glow {
   animation: pulseGlow 2.4s ease-in-out infinite;
 }

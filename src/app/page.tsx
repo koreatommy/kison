@@ -1,9 +1,9 @@
-// KISON 시작 화면 — 풀스크린 그라디언트 히어로 + 캐릭터 오빗
+// KISON 루트 인트로 — 풀스크린 배경 동영상 + 하단 플로팅 마우스 아이콘
 import type { Metadata } from "next";
 import Link from "next/link";
-import BackgroundBlobs from "@/components/layout/BackgroundBlobs";
-import CharacterOrbit from "@/components/landing/CharacterOrbit";
-import { characters } from "@/data/characters";
+
+/** 나중에 경로를 넣으면 아이콘이 해당 페이지로 이동하는 링크가 됩니다. `null`이면 장식만 표시됩니다. */
+const INTRO_ENTER_HREF: string | null = null;
 
 export const metadata: Metadata = {
   alternates: {
@@ -16,69 +16,104 @@ type HomeProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+function FloatingMouseIcon() {
+  const icon = (
+    <svg
+      className="h-12 w-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] sm:h-14 sm:w-9 md:h-[4.25rem] md:w-[2.75rem]"
+      viewBox="0 0 36 56"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+    >
+      <rect
+        x="7"
+        y="5"
+        width="22"
+        height="38"
+        rx="11"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <line
+        x1="18"
+        y1="5"
+        x2="18"
+        y2="17"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="18"
+        y1="24"
+        x2="18"
+        y2="32"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        opacity="0.45"
+      />
+    </svg>
+  );
+
+  const floater = (
+    <span className="inline-block animate-float">{icon}</span>
+  );
+
+  if (INTRO_ENTER_HREF) {
+    return (
+      <Link
+        href={INTRO_ENTER_HREF}
+        className="inline-flex min-h-12 min-w-12 touch-manipulation animate-float items-center justify-center rounded-xl p-3 outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:min-h-14 sm:min-w-14 md:min-h-[3.5rem] md:min-w-[3.5rem]"
+        aria-label="다음으로 이동"
+      >
+        {icon}
+      </Link>
+    );
+  }
+
+  return <div className="pointer-events-none">{floater}</div>;
+}
+
 export default async function Home({ params, searchParams }: HomeProps) {
   await params;
   await searchParams;
 
   return (
-    <main className="relative flex flex-1 flex-col overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-violet-50">
-      <BackgroundBlobs variant="indigo" />
+    <main className="relative min-h-dvh w-full min-w-0 overflow-hidden overscroll-none bg-black">
+      <video
+        className="absolute inset-0 size-full object-contain object-center md:object-cover [-webkit-touch-callout:none]"
+        autoPlay
+        muted
+        playsInline
+        loop
+        preload="metadata"
+        controls={false}
+        disablePictureInPicture
+        aria-hidden
+      >
+        <source src="/intro.mp4" type="video/mp4" />
+      </video>
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] bg-black/15"
+        aria-hidden
+      />
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-8 px-6 py-12 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white/70 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-indigo-600 backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
-          청소년 창업 캐릭터 진단
-        </div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-[2] w-1/2 bg-gradient-to-l from-black/90 via-black/70 to-transparent sm:w-[45%] md:w-[40%]" aria-hidden />
 
-        <div className="flex flex-col gap-3 max-w-2xl">
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-900 leading-[1.05]">
-            나의{" "}
-            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 bg-clip-text text-transparent">
-              창업 캐릭터
-            </span>
-            를 <br className="sm:hidden" />
-            찾아보자!
-          </h1>
-          <p className="text-base sm:text-lg font-semibold text-zinc-500">
-            10개의 질문으로 나만의 캐릭터를 발견하고
-            <br />팀에서 어떤 역할이 어울리는지 확인해 보세요
-          </p>
-        </div>
-
-        <CharacterOrbit />
-
-        <div className="flex flex-col items-center gap-4">
-          <Link
-            href="/profile"
-            className="group relative inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-10 py-4 text-lg font-extrabold text-white shadow-xl shadow-indigo-400/40 transition-all hover:shadow-2xl hover:shadow-indigo-400/60 hover:scale-105 active:scale-95"
-          >
-            <span>시작하기</span>
-            <span className="text-xl transition-transform group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
-
-          <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400">
-            <span>⏱</span>
-            <span>약 2-3분 소요</span>
-            <span className="mx-1">·</span>
-            <span>📱</span>
-            <span>모바일 최적화</span>
+      <div className="relative z-10 flex min-h-dvh w-full min-w-0 flex-col">
+        <div className="flex min-h-0 flex-1 items-center justify-end pr-[max(2rem,env(safe-area-inset-right,0px))] sm:pr-[max(3rem,env(safe-area-inset-right,0px))] md:pr-[max(4rem,env(safe-area-inset-right,0px))]">
+          <div className="-translate-y-12 flex flex-col items-end text-right sm:-translate-y-14 md:-translate-y-16">
+            <h1 className="text-5xl font-black tracking-tight text-white sm:text-7xl md:text-8xl lg:text-9xl">
+              THINK BIG
+            </h1>
+            <p className="mt-4 text-lg font-bold leading-snug text-white/90 sm:mt-5 sm:text-xl md:text-2xl md:leading-relaxed lg:text-[1.65rem] lg:leading-relaxed">
+              창업은 처음이지! 용기를 갖고 시작해 보세요~
+            </p>
           </div>
         </div>
-
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm">
-          {characters.map((c) => (
-            <div key={c.id} className="flex items-center gap-1.5">
-              <span
-                className="inline-block h-2.5 w-2.5 rounded-full"
-                style={{
-                  background: `linear-gradient(135deg, ${c.color.primary}, ${c.color.secondary})`,
-                }}
-              />
-              <span className="font-bold text-zinc-700">{c.name}</span>
-            </div>
-          ))}
+        <div className="flex justify-center pt-2 pl-[max(1.25rem,env(safe-area-inset-left,0px))] pr-[max(1.25rem,env(safe-area-inset-right,0px))] pb-[max(1.25rem,env(safe-area-inset-bottom,0px))] sm:pl-[max(2rem,env(safe-area-inset-left,0px))] sm:pr-[max(2rem,env(safe-area-inset-right,0px))] sm:pb-[max(1.75rem,env(safe-area-inset-bottom,0px))] md:pl-[max(2.5rem,env(safe-area-inset-left,0px))] md:pr-[max(2.5rem,env(safe-area-inset-right,0px))] md:pb-[max(2rem,env(safe-area-inset-bottom,0px))]">
+          <FloatingMouseIcon />
         </div>
       </div>
     </main>
