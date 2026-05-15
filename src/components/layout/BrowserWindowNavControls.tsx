@@ -1,128 +1,71 @@
 "use client";
 
-// macOS 트래픽 라이트 스타일 이전·현재·다음 페이지 내비게이션 버튼
+// 브라우저 크롬 좌측 홈·대시보드 바로가기 (호버 시 툴팁)
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Home, LayoutDashboard } from "lucide-react";
 
-export type BrowserWindowNavTarget = {
-  href: string;
-  label: string;
-};
+const iconBtn =
+  "group relative flex size-8 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-white/[0.08] hover:text-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-400/60 sm:size-9";
 
-export type BrowserWindowNavControlsProps = {
-  prev?: BrowserWindowNavTarget | null;
-  current: BrowserWindowNavTarget;
-  next?: BrowserWindowNavTarget | null;
-};
+const iconSize = "size-4 sm:size-[1.125rem]";
 
-/** macOS 트래픽 라이트 — 가시성 개선 (16px 원) */
-const controlBase =
-  "flex size-4 sm:size-5 shrink-0 items-center justify-center rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.32)] ring-1 ring-black/18";
-
-const iconActive = "text-[#1f1408]";
-const iconDisabled = "text-[#1f1408]/42";
-
-const iconSize = "size-2.5 sm:size-3";
-
-const tones = {
-  prev: {
-    bg: "bg-[#ff5f57]",
-    dim: "brightness-[0.82]",
-  },
-  current: {
-    bg: "bg-[#febc2e]",
-  },
-  next: {
-    bg: "bg-[#28c840]",
-    dim: "brightness-[0.82]",
-  },
-} as const;
-
-function NavControlLink({
+function NavIconLink({
   href,
   label,
-  tone,
+  tooltip,
+  isActive,
   children,
 }: {
   href: string;
   label: string;
-  tone: "prev" | "next";
+  tooltip: string;
+  isActive: boolean;
   children: ReactNode;
 }) {
-  const t = tones[tone];
-
   return (
     <Link
       href={href}
-      className={`${controlBase} ${t.bg} ${iconActive} transition-[filter,transform] duration-150 hover:brightness-110 active:scale-95`}
+      className={`${iconBtn} ${isActive ? "bg-white/[0.1] text-amber-300" : ""}`}
       aria-label={label}
+      aria-current={isActive ? "page" : undefined}
     >
       {children}
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute left-1/2 top-[calc(100%+6px)] z-50 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-[#2a2a2c] px-2.5 py-1.5 text-[11px] font-semibold text-zinc-200 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      >
+        {tooltip}
+      </span>
     </Link>
   );
 }
 
-function NavControlDisabled({
-  label,
-  tone,
-  children,
-}: {
-  label: string;
-  tone: "prev" | "next";
-  children: ReactNode;
-}) {
-  const t = tones[tone];
+export default function BrowserWindowNavControls() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const isDashboard = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
 
   return (
-    <span
-      className={`${controlBase} cursor-default ${t.bg} ${iconDisabled} ${t.dim}`}
-      aria-label={label}
-      aria-disabled="true"
-    >
-      {children}
-    </span>
-  );
-}
-
-export default function BrowserWindowNavControls({
-  prev,
-  current,
-  next,
-}: BrowserWindowNavControlsProps) {
-  return (
-    <nav
-      className="flex shrink-0 items-center gap-1.5"
-      aria-label="페이지 이동"
-    >
-      {prev ? (
-        <NavControlLink href={prev.href} label={prev.label} tone="prev">
-          <ChevronLeft className={iconSize} strokeWidth={3} aria-hidden />
-        </NavControlLink>
-      ) : (
-        <NavControlDisabled label="이전 페이지 없음" tone="prev">
-          <ChevronLeft className={iconSize} strokeWidth={3} aria-hidden />
-        </NavControlDisabled>
-      )}
-
-      <span
-        className={`${controlBase} ${tones.current.bg} ${iconActive}`}
-        aria-label={current.label}
-        aria-current="page"
-        title={current.label}
+    <nav className="flex shrink-0 items-center gap-1 sm:gap-1.5" aria-label="바로가기">
+      <NavIconLink
+        href="/"
+        label="홈으로 이동"
+        tooltip="인트로 페이지로 이동"
+        isActive={isHome}
       >
-        <span className="block size-1 rounded-full bg-current" aria-hidden />
-      </span>
+        <Home className={iconSize} strokeWidth={2.25} aria-hidden />
+      </NavIconLink>
 
-      {next ? (
-        <NavControlLink href={next.href} label={next.label} tone="next">
-          <ChevronRight className={iconSize} strokeWidth={3} aria-hidden />
-        </NavControlLink>
-      ) : (
-        <NavControlDisabled label="다음 페이지 없음" tone="next">
-          <ChevronRight className={iconSize} strokeWidth={3} aria-hidden />
-        </NavControlDisabled>
-      )}
+      <NavIconLink
+        href="/dashboard"
+        label="대시보드로 이동"
+        tooltip="대시보드로 이동"
+        isActive={isDashboard}
+      >
+        <LayoutDashboard className={iconSize} strokeWidth={2.25} aria-hidden />
+      </NavIconLink>
     </nav>
   );
 }

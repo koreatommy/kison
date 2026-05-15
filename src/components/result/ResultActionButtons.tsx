@@ -5,12 +5,14 @@ type Props = {
   onRetake?: () => void;
   onSaveImage?: () => void;
   onSavePdf?: () => void;
+  retakeLabel?: string;
 };
 
 export default function ResultActionButtons({
   onRetake,
   onSaveImage,
   onSavePdf,
+  retakeLabel = "다시 검사",
 }: Props) {
   return (
     <div className="mt-8 flex flex-col gap-3">
@@ -38,7 +40,7 @@ export default function ResultActionButtons({
           className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-zinc-200 bg-white py-3.5 text-sm font-extrabold text-zinc-700 transition-all hover:border-indigo-300 hover:bg-indigo-50 active:scale-95"
         >
           <span>🔄</span>
-          <span>다시 검사</span>
+          <span>{retakeLabel}</span>
         </button>
       </div>
     </div>

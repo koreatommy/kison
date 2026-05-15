@@ -6,6 +6,19 @@ export type MissionStep = {
   dotColor: string;
 };
 
+export type MissionSubItem = {
+  id: string;
+  label: string;
+  href?: string;
+};
+
+/** 1단계 미션 펼침 서브 메뉴 */
+export const MISSION_1_SUBMENU: MissionSubItem[] = [
+  { id: "lecture", label: "강의", href: "/dashboard/lecture" },
+  { id: "participate", label: "참여하기", href: "/dashboard/profile" },
+  { id: "evaluate", label: "평가", href: "/dashboard/quiz" },
+];
+
 export const MISSION_STEPS: MissionStep[] = [
   {
     id: 1,

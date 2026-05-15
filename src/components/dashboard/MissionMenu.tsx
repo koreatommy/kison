@@ -10,8 +10,9 @@ import {
   useState,
 } from "react";
 import Link from "next/link";
-import { Lock, Menu, X } from "lucide-react";
-import { MISSION_STEPS } from "@/lib/mission-steps";
+import { usePathname } from "next/navigation";
+import { ChevronDown, Lock, Menu, X } from "lucide-react";
+import { MISSION_1_SUBMENU, MISSION_STEPS } from "@/lib/mission-steps";
 
 const AUTO_OPEN_DELAY_MS = 400;
 const TABLET_BREAKPOINT = 640;
@@ -26,65 +27,139 @@ function MenuIcon({ open }: { open: boolean }) {
 const itemClass =
   "group flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left transition hover:bg-white/[0.06] active:bg-white/[0.1] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 sm:rounded-xl sm:px-2.5 sm:py-2.5 md:px-3 md:py-3";
 
+const subItemClass =
+  "block rounded-lg py-2 pl-9 pr-2 text-[13px] font-medium transition sm:rounded-xl sm:py-2.5 sm:pl-10 sm:text-sm md:pl-11";
+
+const subItemLinkClass = `${subItemClass} text-zinc-400 hover:bg-white/[0.06] hover:text-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60`;
+
+const subItemStaticClass = `${subItemClass} cursor-default text-zinc-600`;
+
 function MissionList({
   animateItems,
 }: {
   animateItems: boolean;
 }) {
+  const pathname = usePathname();
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+
+  const toggleExpand = (id: number) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
+  const closeExpand = () => setExpandedId(null);
+
   return (
     <ol className="space-y-0.5 sm:space-y-1">
-      {MISSION_STEPS.map((step, index) => (
-        <li
-          key={step.id}
-          className={animateItems ? "animate-mission-blind" : "opacity-0"}
-          style={
-            animateItems
-              ? { animationDelay: `${index * 45}ms` }
-              : undefined
-          }
-        >
-          {step.id === 1 ? (
-            <Link href="/dashboard/profile" className={itemClass}>
-              <span
-                className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
-                style={{ color: step.dotColor }}
+      {MISSION_STEPS.map((step, index) => {
+        const isExpanded = expandedId === step.id;
+
+        return (
+          <li
+            key={step.id}
+            className={animateItems ? "animate-mission-blind" : "opacity-0"}
+            style={
+              animateItems
+                ? { animationDelay: `${index * 45}ms` }
+                : undefined
+            }
+          >
+            {step.id === 1 ? (
+              <>
+                <button
+                  type="button"
+                  className={itemClass}
+                  aria-expanded={isExpanded}
+                  onClick={() => toggleExpand(step.id)}
+                >
+                  <span
+                    className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
+                    style={{ color: step.dotColor }}
+                  >
+                    {String(step.id).padStart(2, "0")}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[13px] font-semibold leading-[1.5] text-white group-hover:text-amber-50 sm:text-sm md:text-[0.9375rem]">
+                      {step.title}
+                    </span>
+                    <span className="mt-0.5 hidden font-sans text-[11px] font-normal leading-snug tracking-normal text-zinc-500 sm:block md:text-xs md:line-clamp-2">
+                      {step.subtitle}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    className={`size-4 shrink-0 text-zinc-500 transition-transform duration-200 ${
+                      isExpanded ? "rotate-180" : ""
+                    }`}
+                    strokeWidth={2.25}
+                    aria-hidden
+                  />
+                </button>
+                {isExpanded ? (
+                  <ul
+                    className="mt-0.5 space-y-0.5 border-l border-white/10 ml-5 pl-1 sm:ml-6 sm:pl-1.5"
+                    role="group"
+                    aria-label={`${step.title} 서브 메뉴`}
+                  >
+                    {MISSION_1_SUBMENU.map((sub) => {
+                      const isActive =
+                        sub.href != null &&
+                        (pathname === sub.href ||
+                          pathname.startsWith(`${sub.href}/`));
+
+                      return (
+                        <li key={sub.id}>
+                          {sub.href ? (
+                            <Link
+                              href={sub.href}
+                              className={`${subItemLinkClass} ${
+                                isActive
+                                  ? "bg-white/[0.08] font-semibold text-amber-200"
+                                  : ""
+                              }`}
+                              aria-current={isActive ? "page" : undefined}
+                            >
+                              {sub.label}
+                            </Link>
+                          ) : (
+                            <span className={subItemStaticClass}>
+                              {sub.label}
+                            </span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </>
+            ) : (
+              <button
+                type="button"
+                className={itemClass}
+                onClick={closeExpand}
               >
-                {String(step.id).padStart(2, "0")}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[13px] font-semibold leading-[1.5] text-white group-hover:text-amber-50 sm:text-sm md:text-[0.9375rem]">
-                  {step.title}
+                <span
+                  className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
+                  style={{ color: step.dotColor }}
+                >
+                  {String(step.id).padStart(2, "0")}
                 </span>
-                <span className="mt-0.5 hidden font-sans text-[11px] font-normal leading-snug tracking-normal text-zinc-500 sm:block md:text-xs md:line-clamp-2">
-                  {step.subtitle}
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13px] font-semibold leading-[1.5] text-white group-hover:text-amber-50 sm:text-sm md:text-[0.9375rem]">
+                    {step.title}
+                  </span>
+                  <span className="mt-0.5 hidden font-sans text-[11px] font-normal leading-snug tracking-normal text-zinc-500 sm:block md:text-xs md:line-clamp-2">
+                    {step.subtitle}
+                  </span>
                 </span>
-              </span>
-            </Link>
-          ) : (
-            <button type="button" className={itemClass}>
-              <span
-                className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
-                style={{ color: step.dotColor }}
-              >
-                {String(step.id).padStart(2, "0")}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[13px] font-semibold leading-[1.5] text-white group-hover:text-amber-50 sm:text-sm md:text-[0.9375rem]">
-                  {step.title}
-                </span>
-                <span className="mt-0.5 hidden font-sans text-[11px] font-normal leading-snug tracking-normal text-zinc-500 sm:block md:text-xs md:line-clamp-2">
-                  {step.subtitle}
-                </span>
-              </span>
-              <Lock
-                className="size-3.5 shrink-0 text-zinc-500 sm:size-4"
-                strokeWidth={2}
-                aria-label="잠김"
-              />
-            </button>
-          )}
-        </li>
-      ))}
+                <Lock
+                  className="size-3.5 shrink-0 text-zinc-500 sm:size-4"
+                  strokeWidth={2}
+                  aria-label="잠김"
+                />
+              </button>
+            )}
+          </li>
+        );
+      })}
     </ol>
   );
 }
