@@ -44,6 +44,19 @@ CLAUDE_MODEL=your_claude_model_id_here
 
 또는 화면에서 세션 전용 API Key를 직접 입력할 수 있습니다.
 
+`.env.example`를 참고해 `.env.local`을 만들 수 있습니다.
+
+### Vercel 배포 시 필수 설정
+
+`.env.local`은 Git에 포함되지 않습니다. Vercel 프로젝트에 아래 환경변수를 **Production·Preview**에 등록한 뒤 **재배포**해야 AI 기능이 동작합니다.
+
+| 변수 | 설명 |
+|------|------|
+| `ANTHROPIC_API_KEY` | Anthropic API 키 (서버 전용) |
+| `CLAUDE_MODEL` | 사용할 모델 ID (예: `claude-sonnet-4-6`) |
+
+환경변수만 추가해도 기존 배포에 자동 반영되지 않으므로, 등록 후 Redeploy 또는 `vercel deploy --prod`가 필요합니다.
+
 ### 사용 방법
 
 1. `npm install`

@@ -45,18 +45,20 @@ export function useClaudeTask<T>() {
           signal: controller.signal,
         });
 
+        const json: ClaudeResponse<T> = await res.json().catch(
+          () => ({ success: false } as ClaudeResponse<T>),
+        );
+
         if (!res.ok) {
           const fallback =
             res.status === 429
               ? "요청이 많아 지연되고 있어요. 잠시 후 다시 시도해 주세요."
-              : `AI 요청 실패 (${res.status})`;
+              : json.error ?? `AI 요청 실패 (${res.status})`;
           if (runIdRef.current === runId) {
             setError(fallback);
           }
           return null;
         }
-
-        const json: ClaudeResponse<T> = await res.json();
 
         if (!json.success || !json.data) {
           if (runIdRef.current === runId) {
