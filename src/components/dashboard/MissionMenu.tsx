@@ -25,7 +25,7 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const itemClass =
-  "group flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left transition hover:bg-white/[0.06] active:bg-white/[0.1] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 sm:rounded-xl sm:px-2.5 sm:py-2.5 md:px-3 md:py-3";
+  "group flex min-h-[3.2rem] w-full items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-left transition hover:bg-white/[0.06] active:bg-white/[0.1] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 sm:min-h-[3.4rem] sm:px-2.5 sm:py-2.5 md:px-3 md:py-3";
 
 const subItemClass =
   "block rounded-lg py-2 pl-9 pr-2 text-[13px] font-medium transition sm:rounded-xl sm:py-2.5 sm:pl-10 sm:text-sm md:pl-11";
@@ -49,7 +49,7 @@ function MissionList({
   const closeExpand = () => setExpandedId(null);
 
   return (
-    <ol className="space-y-0.5 sm:space-y-1">
+    <ol className="mt-2 space-y-1.5 sm:mt-2.5 sm:space-y-1.5 md:mt-3">
       {MISSION_STEPS.map((step, index) => {
         const isExpanded = expandedId === step.id;
 
@@ -214,7 +214,7 @@ export default function MissionMenuLayout({
   }, [closeMenu, isOpen]);
 
   const panelHeader = (
-    <header className="sticky top-0 z-10 shrink-0 border-b border-white/10 bg-[#1c1c1e]/95 px-3 pb-2.5 pt-3 pr-12 backdrop-blur-md sm:px-4 sm:pb-3 sm:pt-4 sm:pr-14">
+    <header className="sticky top-0 z-10 shrink-0 border-b border-white/10 bg-[#1c1c1e]/95 px-3 pb-3.5 pt-3.5 pr-12 backdrop-blur-md sm:px-4 sm:pb-4 sm:pt-4 sm:pr-14">
       <button
         type="button"
         onClick={closeMenu}
@@ -255,7 +255,7 @@ export default function MissionMenuLayout({
           >
             {panelHeader}
             <nav
-              className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-2"
+              className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-3 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-3 sm:py-3.5"
               aria-label="10단계 창업 미션"
             >
               <MissionList animateItems={animateItems} />
@@ -279,7 +279,7 @@ export default function MissionMenuLayout({
         >
           {panelHeader}
           <nav
-            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4"
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-3 pb-4 sm:px-3 sm:py-3.5 md:px-4 md:py-4"
             aria-label="10단계 창업 미션"
           >
             <MissionList animateItems={animateItems} />
