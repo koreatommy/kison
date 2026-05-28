@@ -58,7 +58,7 @@ function MissionList({
           <li
             key={step.id}
             className={
-              shouldAnimate ? "animate-mission-blind" : animateItems ? "opacity-100" : "opacity-0"
+              shouldAnimate ? "animate-mission-blind" : index === 0 || animateItems ? "opacity-100" : "opacity-0"
             }
             style={
               shouldAnimate
