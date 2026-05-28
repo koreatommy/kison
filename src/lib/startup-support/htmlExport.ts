@@ -18,6 +18,59 @@ function ul(items: string[]): string {
   return `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
 }
 
+function reportField(label: string, content: string): string {
+  return `<div class="report-field">
+<h3>${esc(label)}</h3>
+<div class="report-value">${content || "-"}</div>
+</div>`;
+}
+
+function reportProblemSection(problemInput: StartupSupportState["problemInput"], problemAnswers: StartupSupportState["problemAnswers"]): string {
+  return `${reportField("선택한 문제 분야", problemInput.selectedCategories.map(esc).join(", ") || "-")}
+${reportField("불편 상황", nl2br(problemInput.problemText) || "-")}
+<div class="report-subsection">
+<h3>문제 구체화 답변</h3>
+${reportQaList(problemAnswers)}
+</div>`;
+}
+
+function reportQaList(answers: StartupSupportState["problemAnswers"]): string {
+  if (!answers.length) return `<div class="report-value">-</div>`;
+  return `<div class="report-qa-list">${answers.map((a) => `<div class="report-qa-item">
+<p class="report-qa-question">${esc(a.question)}</p>
+<div class="report-qa-answer">${nl2br(a.answer) || "-"}</div>
+</div>`).join("")}</div>`;
+}
+
+const RESULT_CONTENT_STYLES = `
+.report-field { margin-bottom: 1.25rem; }
+.report-field h3,
+.report-subsection h3 {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: #6366f1; margin: 0 0 0.5rem;
+}
+.report-value {
+  font-size: 0.875rem; color: #18181b; line-height: 1.7;
+  background: #f9fafb; border-left: 3px solid #c7d2fe;
+  padding: 0.625rem 0.875rem; border-radius: 0 0.375rem 0.375rem 0;
+}
+.report-subsection { margin-top: 1.5rem; }
+.report-subsection h3 { margin-bottom: 0.75rem; }
+.report-qa-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.report-qa-item {
+  border: 1px solid #e4e4e7; border-radius: 0.5rem;
+  padding: 0.75rem 0.875rem; background: #fafafa;
+}
+.report-qa-question {
+  font-size: 0.8125rem; font-weight: 600; color: #3f3f46;
+  margin: 0 0 0.5rem; line-height: 1.5;
+}
+.report-qa-answer {
+  font-size: 0.875rem; color: #18181b; line-height: 1.7;
+  padding-left: 0.75rem; border-left: 2px solid #a5b4fc;
+}
+`;
+
 /** 화면 표시용 본문 HTML 반환 (프린트용 전체 문서와 분리) */
 export function generateResultBodyHtml(state: StartupSupportState): string {
   const { teamInfo, problemInput, problemAnswers, candidates, evaluations, shortlistedItems, finalSelection, finalDocument } = state;
@@ -41,12 +94,7 @@ ${teamInfo.members.map((m) => `<tr><td>${esc(m.school) || "-"}</td><td>${esc(m.g
 </table>
 
 <h2>2. 해결하고 싶은 문제</h2>
-<h3>선택한 문제 분야</h3>
-<p>${problemInput.selectedCategories.map(esc).join(", ") || "-"}</p>
-<h3>불편 상황</h3>
-<p>${nl2br(problemInput.problemText) || "-"}</p>
-<h3>문제 구체화 답변</h3>
-${problemAnswers.map((a) => `<p><strong>${esc(a.question)}</strong><br/>${nl2br(a.answer) || "-"}</p>`).join("")}
+${reportProblemSection(problemInput, problemAnswers)}
 
 <h2>3. AI 창업 아이템 후보</h2>
 <table>
@@ -173,6 +221,7 @@ th { background: #f3f4f6; font-weight: 700; text-align: left; }
 ul { padding-left: 20px; margin: 6px 0; }
 li { margin-bottom: 4px; font-size: 13px; }
 p { font-size: 13px; margin: 6px 0; }
+${RESULT_CONTENT_STYLES}
 .cover { text-align: center; padding: 60px 0 40px; }
 .cover h1 { border: none; font-size: 28px; }
 .page-break { break-before: page; }
@@ -202,12 +251,7 @@ ${teamInfo.members.map((m) => `<tr><td>${esc(m.school) || "-"}</td><td>${esc(m.g
 </table>
 
 <h2>2. 해결하고 싶은 문제</h2>
-<h3>선택한 문제 분야</h3>
-<p>${problemInput.selectedCategories.map(esc).join(", ") || "-"}</p>
-<h3>불편 상황</h3>
-<p>${nl2br(problemInput.problemText) || "-"}</p>
-<h3>문제 구체화 답변</h3>
-${problemAnswers.map((a) => `<p><strong>${esc(a.question)}</strong><br/>${nl2br(a.answer) || "-"}</p>`).join("")}
+${reportProblemSection(problemInput, problemAnswers)}
 
 <h2>3. AI 창업 아이템 후보</h2>
 <table>

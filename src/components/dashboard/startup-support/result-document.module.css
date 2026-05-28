@@ -46,13 +46,75 @@
   border-left: 4px solid #6366f1;
 }
 
-/* 하위 제목 (h3) */
+/* 하위 제목 (h3) — 일반 섹션 */
 .resultDocument h3 {
   font-size: 0.875rem;
   font-weight: 600;
   color: #3f3f46;
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
+}
+
+/* 2. 해결하고 싶은 문제 — 필드/질문답변 위계 */
+.resultDocument :global(.report-field) {
+  margin-bottom: 1.25rem;
+}
+
+.resultDocument :global(.report-field h3),
+.resultDocument :global(.report-subsection h3) {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6366f1;
+  margin: 0 0 0.5rem;
+}
+
+.resultDocument :global(.report-value) {
+  font-size: 0.875rem;
+  color: #18181b;
+  line-height: 1.7;
+  background: #f9fafb;
+  border-left: 3px solid #c7d2fe;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.resultDocument :global(.report-subsection) {
+  margin-top: 1.5rem;
+}
+
+.resultDocument :global(.report-subsection h3) {
+  margin-bottom: 0.75rem;
+}
+
+.resultDocument :global(.report-qa-list) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.resultDocument :global(.report-qa-item) {
+  border: 1px solid #e4e4e7;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  background: #fafafa;
+}
+
+.resultDocument :global(.report-qa-question) {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #3f3f46;
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.resultDocument :global(.report-qa-answer) {
+  font-size: 0.875rem;
+  color: #18181b;
+  line-height: 1.7;
+  padding-left: 0.75rem;
+  border-left: 2px solid #a5b4fc;
 }
 
 /* 테이블 */
