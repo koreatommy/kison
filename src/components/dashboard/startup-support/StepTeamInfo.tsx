@@ -40,7 +40,7 @@ export default function StepTeamInfo() {
               type="text"
               value={teamInfo.teamName}
               onChange={(e) => setTeamName(e.target.value)}
-              placeholder="예: ○○중 안전지킴이 창업팀 (보고서·신청서에 그대로 표시됩니다)"
+              placeholder='예: "부엉이 안전지킴이" (보고서, 신청서에 그대로 표시됩니다)'
               className={inputClass}
             />
           </InputGroup>
