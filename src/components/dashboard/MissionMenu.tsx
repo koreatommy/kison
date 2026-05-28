@@ -131,31 +131,43 @@ function MissionList({
                 ) : null}
               </>
             ) : (
-              <button
-                type="button"
-                className={itemClass}
-                onClick={closeExpand}
-              >
-                <span
-                  className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
-                  style={{ color: step.dotColor }}
+              <>
+                <button
+                  type="button"
+                  className={itemClass}
+                  onClick={closeExpand}
                 >
-                  {String(step.id).padStart(2, "0")}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[13px] font-semibold leading-[1.5] text-white group-hover:text-amber-50 sm:text-sm md:text-[0.9375rem]">
-                    {step.title}
+                  <span
+                    className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
+                    style={{ color: step.dotColor }}
+                  >
+                    {String(step.id).padStart(2, "0")}
                   </span>
-                  <span className="mt-0.5 hidden font-sans text-[11px] font-normal leading-snug tracking-normal text-zinc-500 sm:block md:text-xs md:line-clamp-2">
-                    {step.subtitle}
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-[13px] font-semibold leading-[1.5] text-white group-hover:text-amber-50 sm:text-sm md:text-[0.9375rem]">
+                      {step.title}
+                    </span>
+                    <span className="mt-0.5 hidden font-sans text-[11px] font-normal leading-snug tracking-normal text-zinc-500 sm:block md:text-xs md:line-clamp-2">
+                      {step.subtitle}
+                    </span>
                   </span>
-                </span>
-                <Lock
-                  className="size-3.5 shrink-0 text-zinc-500 sm:size-4"
-                  strokeWidth={2}
-                  aria-label="잠김"
-                />
-              </button>
+                  <Lock
+                    className="size-3.5 shrink-0 text-zinc-500 sm:size-4"
+                    strokeWidth={2}
+                    aria-label="잠김"
+                  />
+                </button>
+                {step.id === 10 ? (
+                  <div className="group mt-1.5 rounded-xl border border-amber-400/30 bg-gradient-to-r from-amber-500/15 to-orange-500/10 px-3 py-2.5 transition-all duration-300 hover:border-amber-300/80 hover:shadow-[0_0_20px_rgba(251,191,36,0.45),0_0_36px_rgba(251,146,60,0.22)]">
+                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-amber-300 transition-colors duration-300 group-hover:text-amber-100 sm:text-xs">
+                      AI 창업지원 플랫폼
+                    </p>
+                    <p className="mt-1 text-[11px] leading-snug text-zinc-200 transition-colors duration-300 group-hover:text-zinc-50 sm:text-xs">
+                      발표 자료부터 피칭 스크립트까지 AI로 빠르게 준비하세요.
+                    </p>
+                  </div>
+                ) : null}
+              </>
             )}
           </li>
         );
