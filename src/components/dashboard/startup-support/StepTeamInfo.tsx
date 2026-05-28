@@ -2,11 +2,17 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { characters } from "@/data/characters";
 import { useStartupSupportStore } from "@/store/useStartupSupportStore";
+import type { CharacterId } from "@/types/result";
+import CharacterRoleGallery from "./CharacterRoleGallery";
 import { StepHeader, InputGroup, WarningBox } from "./ui";
 
 const inputClass =
   "w-full rounded-xl border-2 border-zinc-200 bg-white px-3 py-2.5 text-sm font-semibold placeholder:text-zinc-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all";
+
+const selectClass =
+  "w-full rounded-xl border-2 border-zinc-200 bg-white px-3 py-2.5 text-sm font-semibold text-zinc-800 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all";
 
 export default function StepTeamInfo() {
   const teamInfo = useStartupSupportStore((s) => s.teamInfo);
@@ -14,6 +20,10 @@ export default function StepTeamInfo() {
   const addMember = useStartupSupportStore((s) => s.addMember);
   const removeMember = useStartupSupportStore((s) => s.removeMember);
   const updateMember = useStartupSupportStore((s) => s.updateMember);
+
+  const selectedCharacterIds = teamInfo.members
+    .map((m) => m.characterId)
+    .filter((id): id is CharacterId => Boolean(id));
 
   return (
     <div className="w-full">
@@ -52,11 +62,12 @@ export default function StepTeamInfo() {
             </button>
           </div>
 
-          <div className="mb-2 hidden grid-cols-[2rem_3fr_1fr_2fr_2rem] items-center gap-2 px-3 sm:grid">
+          <div className="mb-2 hidden grid-cols-[2rem_minmax(0,3fr)_minmax(0,1fr)_minmax(0,1.25fr)_minmax(0,1.5fr)_2rem] items-center gap-2 px-3 sm:grid">
             <span />
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">학교</span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">학년</span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">이름</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">담당 역할</span>
             <span />
           </div>
 
@@ -64,12 +75,12 @@ export default function StepTeamInfo() {
             {teamInfo.members.map((m, idx) => (
               <div
                 key={m.id}
-                className="grid grid-cols-[2rem_1fr_2rem] items-start gap-2 rounded-xl border border-zinc-100 bg-zinc-50/60 p-3 sm:grid-cols-[2rem_3fr_1fr_2fr_2rem]"
+                className="grid grid-cols-[2rem_1fr_2rem] items-start gap-2 rounded-xl border border-zinc-100 bg-zinc-50/60 p-3 sm:grid-cols-[2rem_minmax(0,3fr)_minmax(0,1fr)_minmax(0,1.25fr)_minmax(0,1.5fr)_2rem]"
               >
                 <span className="mt-2.5 text-center text-xs font-bold text-zinc-400">
                   {idx + 1}
                 </span>
-                <div className="grid grid-cols-3 gap-2 sm:contents">
+                <div className="grid grid-cols-1 gap-2 sm:contents">
                   <input
                     type="text"
                     value={m.school}
@@ -91,6 +102,19 @@ export default function StepTeamInfo() {
                     placeholder="예: 홍길동"
                     className={inputClass}
                   />
+                  <select
+                    value={m.characterId}
+                    onChange={(e) => updateMember(m.id, "characterId", e.target.value)}
+                    className={`${selectClass} ${!m.characterId ? "text-zinc-400" : ""}`}
+                    aria-label={`구성원 ${idx + 1} 담당 역할`}
+                  >
+                    <option value="">역할 선택</option>
+                    {characters.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name} ({c.role})
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 {teamInfo.members.length > 1 ? (
                   <button
@@ -107,10 +131,12 @@ export default function StepTeamInfo() {
               </div>
             ))}
           </div>
+
+          <CharacterRoleGallery selectedCharacterIds={selectedCharacterIds} />
         </div>
 
         <WarningBox variant="info">
-          신청서 양식의 &quot;동아리 현황&quot; 표에 사용됩니다. 대표자/지도교사 정보는 추후 직접 입력하세요.
+          신청서 양식의 &quot;동아리 현황&quot; 표에 사용됩니다. 담당 역할은 창업 캐릭터 5종 중에서 선택하며 최종 보고서에 반영됩니다.
         </WarningBox>
       </div>
     </div>

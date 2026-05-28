@@ -12,7 +12,10 @@ export function hasStartupSupportProgress(state: StartupSupportState): boolean {
   if (
     state.teamInfo.members.some(
       (member) =>
-        isFilled(member.name) || isFilled(member.school) || isFilled(member.grade),
+        isFilled(member.name) ||
+        isFilled(member.school) ||
+        isFilled(member.grade) ||
+        isFilled(member.characterId),
     )
   ) {
     return true;

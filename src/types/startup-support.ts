@@ -1,4 +1,5 @@
 // 창업 아이템 선정 워크플로우 도메인 타입 일원화
+import type { CharacterId } from "@/types/result";
 
 export type ProblemCategory =
   | "환경 문제"
@@ -18,6 +19,8 @@ export interface TeamMember {
   school: string;
   grade: string;
   name: string;
+  /** 창업 캐릭터 5종 중 선택 (미선택 시 빈 문자열) */
+  characterId: CharacterId | "";
 }
 
 export interface TeamInfo {

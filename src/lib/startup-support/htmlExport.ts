@@ -1,5 +1,9 @@
 // 최종 결과물 HTML 문서 생성 pure 함수 (spec 8.1~8.9 순서 준수)
 import type { StartupSupportState } from "@/types/startup-support";
+import {
+  buildTeamRoleReportRows,
+  formatMemberRoleShort,
+} from "@/lib/startup-support/teamMemberRole";
 
 function esc(str: string): string {
   return str
@@ -87,9 +91,9 @@ export function generateResultBodyHtml(state: StartupSupportState): string {
 
 <h2>1. 팀 정보</h2>
 <table>
-<thead><tr><th>학교</th><th>학년</th><th>이름</th></tr></thead>
+<thead><tr><th>학교</th><th>학년</th><th>이름</th><th>담당 역할</th></tr></thead>
 <tbody>
-${teamInfo.members.map((m) => `<tr><td>${esc(m.school) || "-"}</td><td>${esc(m.grade) || "-"}</td><td>${esc(m.name) || "-"}</td></tr>`).join("")}
+${teamInfo.members.map((m) => `<tr><td>${esc(m.school) || "-"}</td><td>${esc(m.grade) || "-"}</td><td>${esc(m.name) || "-"}</td><td>${esc(formatMemberRoleShort(m.characterId))}</td></tr>`).join("")}
 </tbody>
 </table>
 
@@ -171,7 +175,7 @@ ${ul(fd.growthStrategyDraft.requiredResources)}
 <table>
 <thead><tr><th>이름</th><th>역할(제안)</th><th>이유</th></tr></thead>
 <tbody>
-${fd.teamCompositionDraft.suggestedRoles.map((r) => `<tr><td>${esc(r.memberName)}</td><td>${esc(r.suggestedRole)}</td><td>${esc(r.reason)}</td></tr>`).join("")}
+${buildTeamRoleReportRows(teamInfo.members, fd.teamCompositionDraft).map((r) => `<tr><td>${esc(r.memberName)}</td><td>${esc(r.suggestedRole)}</td><td>${esc(r.reason)}</td></tr>`).join("")}
 </tbody>
 </table>
 <h3>갈등 해결 방법</h3>
@@ -244,9 +248,9 @@ tr, h2, h3 { break-inside: avoid; }
 
 <h2>1. 팀 정보</h2>
 <table>
-<thead><tr><th>학교</th><th>학년</th><th>이름</th></tr></thead>
+<thead><tr><th>학교</th><th>학년</th><th>이름</th><th>담당 역할</th></tr></thead>
 <tbody>
-${teamInfo.members.map((m) => `<tr><td>${esc(m.school) || "-"}</td><td>${esc(m.grade) || "-"}</td><td>${esc(m.name) || "-"}</td></tr>`).join("")}
+${teamInfo.members.map((m) => `<tr><td>${esc(m.school) || "-"}</td><td>${esc(m.grade) || "-"}</td><td>${esc(m.name) || "-"}</td><td>${esc(formatMemberRoleShort(m.characterId))}</td></tr>`).join("")}
 </tbody>
 </table>
 
@@ -332,7 +336,7 @@ ${ul(fd.growthStrategyDraft.requiredResources)}
 <table>
 <thead><tr><th>이름</th><th>역할(제안)</th><th>이유</th></tr></thead>
 <tbody>
-${fd.teamCompositionDraft.suggestedRoles.map((r) => `<tr><td>${esc(r.memberName)}</td><td>${esc(r.suggestedRole)}</td><td>${esc(r.reason)}</td></tr>`).join("")}
+${buildTeamRoleReportRows(teamInfo.members, fd.teamCompositionDraft).map((r) => `<tr><td>${esc(r.memberName)}</td><td>${esc(r.suggestedRole)}</td><td>${esc(r.reason)}</td></tr>`).join("")}
 </tbody>
 </table>
 <h3>갈등 해결 방법</h3>

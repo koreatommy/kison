@@ -20,9 +20,9 @@ import type {
 const INITIAL_TEAM_INFO: TeamInfo = {
   teamName: "",
   members: [
-    { id: crypto.randomUUID(), school: "", grade: "", name: "" },
-    { id: crypto.randomUUID(), school: "", grade: "", name: "" },
-    { id: crypto.randomUUID(), school: "", grade: "", name: "" },
+    { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
+    { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
+    { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
   ],
 };
 
@@ -106,9 +106,9 @@ export const useStartupSupportStore = create<StartupSupportState & Actions>()(
         teamInfo: {
           teamName: "",
           members: [
-            { id: crypto.randomUUID(), school: "", grade: "", name: "" },
-            { id: crypto.randomUUID(), school: "", grade: "", name: "" },
-            { id: crypto.randomUUID(), school: "", grade: "", name: "" },
+            { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
+            { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
+            { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
           ],
         },
       }),
@@ -121,7 +121,7 @@ export const useStartupSupportStore = create<StartupSupportState & Actions>()(
           ...s.teamInfo,
           members: [
             ...s.teamInfo.members,
-            { id: crypto.randomUUID(), school: "", grade: "", name: "" },
+            { id: crypto.randomUUID(), school: "", grade: "", name: "", characterId: "" },
           ],
         },
       })),

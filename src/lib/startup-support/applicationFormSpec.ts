@@ -20,7 +20,13 @@ export const APPLICATION_FORM_SPEC = {
     {
       id: "team-info",
       title: "동아리 현황 일부",
-      requiredFields: ["팀명", "구성원 학교", "구성원 학년", "구성원 이름"],
+      requiredFields: [
+        "팀명",
+        "구성원 학교",
+        "구성원 학년",
+        "구성원 이름",
+        "구성원 담당 역할(창업 캐릭터)",
+      ],
       excludedFields: ["연락처", "이메일", "주소"],
     },
     {

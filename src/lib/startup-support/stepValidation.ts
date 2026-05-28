@@ -18,10 +18,17 @@ export function getStepValidation(state: StartupSupportState): StepValidationRes
       return { canProceed: false, message: "팀명을 입력해야 다음 단계로 이동할 수 있어요." };
     }
     const hasAtLeastOneCompleteMember = state.teamInfo.members.some(
-      (member) => isFilled(member.school) && isFilled(member.grade) && isFilled(member.name),
+      (member) =>
+        isFilled(member.school) &&
+        isFilled(member.grade) &&
+        isFilled(member.name) &&
+        isFilled(member.characterId),
     );
     if (!hasAtLeastOneCompleteMember) {
-      return { canProceed: false, message: "구성원 1명 이상(학교, 학년, 이름)을 입력해 주세요." };
+      return {
+        canProceed: false,
+        message: "구성원 1명 이상(학교, 학년, 이름, 담당 역할)을 입력해 주세요.",
+      };
     }
   }
 

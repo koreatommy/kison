@@ -179,7 +179,9 @@ ${JSON.stringify(APPLICATION_FORM_SPEC, null, 2)}
 3. 없는 통계, 시장 규모, 기관명, 법률 근거를 생성하지 마세요.
 4. 확인되지 않은 내용은 '추후 조사 필요'로 표시하세요.
 5. 청소년 창업동아리가 실행할 수 있는 수준으로 작성하세요.
-6. 반드시 JSON 형식으로만 응답하세요.
+6. teamInfo.members에 characterId가 있으면 teamCompositionDraft.suggestedRoles에 반드시 반영하세요. suggestedRole은 해당 캐릭터의 역할·타이틀을 사용하고, memberName은 입력된 이름과 일치시키세요.
+7. 캐릭터 ID 매핑: captain_lumi=캡틴 루미(CEO), planner_dodo=플래너 도도(CPO/PM), maker_theo=메이커 테오(CTO), story_moa=스토리 모아(CMO), check_nuri=체크 누리(CFO·COO).
+8. 반드시 JSON 형식으로만 응답하세요.
 
 입력 정보:
 ${payloadStr}
