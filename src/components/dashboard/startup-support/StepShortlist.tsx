@@ -137,7 +137,7 @@ export default function StepShortlist() {
               <textarea
                 value={getReason(rank)}
                 onChange={(e) => handleReasonChange(rank, e.target.value)}
-                placeholder="이 아이템을 선택한 이유를 적어주세요."
+                placeholder="예: 우리가 관찰한 통학로 위험과 가장 잘 맞고, 학교에서 바로 시범 운영할 수 있어 실현 가능성이 높습니다. (팀 토론·멘토 피드백을 반영해 구체적으로)"
                 rows={2}
                 className="mt-3 w-full rounded-xl border-2 border-zinc-200 bg-white px-4 py-2.5 text-sm placeholder:text-zinc-300 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all resize-none"
               />

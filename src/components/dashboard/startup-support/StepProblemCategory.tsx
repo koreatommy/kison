@@ -60,13 +60,24 @@ export default function StepProblemCategory() {
       )}
 
       <div className="mt-8 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-        <label className="mb-2 block text-sm font-semibold text-zinc-700">
+        <label className="mb-1 block text-sm font-semibold text-zinc-700">
           우리 주변에서 실제로 불편하다고 느낀 상황을 적어주세요
         </label>
+        <p className="mb-3 text-xs leading-relaxed text-zinc-500">
+          <span className="font-medium text-indigo-600">
+            AI 보고서 생성에 가장 중요한 부분
+          </span>
+          입니다. 언제·어디서·누가·어떤 불편을 느꼈는지 구체적인 사례를
+          묘사해 주세요.
+          <span className="mt-1.5 block text-zinc-400">
+            멘토·지도선생님은 팀 구성원 간 브레인스토밍을 통해 사례를
+            작성하도록 지도해 주세요.
+          </span>
+        </p>
         <textarea
           value={problemInput.problemText}
           onChange={(e) => setProblemText(e.target.value)}
-          placeholder="예: 학교 앞 횡단보도에서 학생들이 스마트폰을 보며 건너는 경우가 많아 사고 위험이 있습니다."
+          placeholder="예: 평일 오전 8시, ○○중학교 앞 횡단보도. 우리 팀이 지켜본 결과 스마트폰을 보며 건너는 학생이 하루 10명 이상이었고, 보호자·교사 부재로 사고가 날까 걱정됐습니다."
           rows={4}
           className="w-full rounded-xl border-2 border-zinc-200 bg-zinc-50 px-4 py-3 text-sm placeholder:text-zinc-300 transition-colors focus:border-indigo-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-100 resize-none"
         />

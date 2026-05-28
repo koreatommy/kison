@@ -30,7 +30,7 @@ export default function StepTeamInfo() {
               type="text"
               value={teamInfo.teamName}
               onChange={(e) => setTeamName(e.target.value)}
-              placeholder="예: AI 창업동아리"
+              placeholder="예: ○○중 안전지킴이 창업팀 (보고서·신청서에 그대로 표시됩니다)"
               className={inputClass}
             />
           </InputGroup>
@@ -74,21 +74,21 @@ export default function StepTeamInfo() {
                     type="text"
                     value={m.school}
                     onChange={(e) => updateMember(m.id, "school", e.target.value)}
-                    placeholder="학교"
+                    placeholder="예: ○○중학교"
                     className={inputClass}
                   />
                   <input
                     type="text"
                     value={m.grade}
                     onChange={(e) => updateMember(m.id, "grade", e.target.value)}
-                    placeholder="학년"
+                    placeholder="예: 2학년"
                     className={inputClass}
                   />
                   <input
                     type="text"
                     value={m.name}
                     onChange={(e) => updateMember(m.id, "name", e.target.value)}
-                    placeholder="이름"
+                    placeholder="예: 홍길동"
                     className={inputClass}
                   />
                 </div>

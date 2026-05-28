@@ -158,7 +158,7 @@ export default function StepFinalSelection() {
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="이 아이템을 최종 선택한 이유를 적어주세요."
+              placeholder="예: 팀 토론·멘토 피드백 후, 사고 예방 효과·구현 난이도·지속 운영 가능성을 모두 만족한다고 판단했습니다. (최종 보고서·신청서에 들어갈 근거를 구체적으로)"
               rows={3}
               className="w-full rounded-xl border-2 border-zinc-200 bg-zinc-50 px-4 py-3 text-sm placeholder:text-zinc-300 transition-colors focus:border-indigo-400 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-100 resize-none"
             />
