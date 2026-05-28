@@ -52,16 +52,13 @@ function MissionList({
     <ol className="mt-2 space-y-1.5 sm:mt-2.5 sm:space-y-1.5 md:mt-3">
       {MISSION_STEPS.map((step, index) => {
         const isExpanded = expandedId === step.id;
-        const shouldAnimate = animateItems && index > 0;
 
         return (
           <li
             key={step.id}
-            className={
-              shouldAnimate ? "animate-mission-blind" : index === 0 || animateItems ? "opacity-100" : "opacity-0"
-            }
+            className={animateItems ? "animate-mission-blind" : "opacity-0"}
             style={
-              shouldAnimate
+              animateItems
                 ? { animationDelay: `${index * 45}ms` }
                 : undefined
             }
@@ -217,7 +214,7 @@ export default function MissionMenuLayout({
   }, [closeMenu, isOpen]);
 
   const panelHeader = (
-    <header className="sticky top-0 z-10 shrink-0 border-b border-white/10 bg-[#1c1c1e]/95 px-3 pb-3.5 pt-3.5 pr-12 backdrop-blur-md sm:px-4 sm:pb-4 sm:pt-4 sm:pr-14">
+    <header className="shrink-0 border-b border-white/10 bg-[#1c1c1e] px-3 pb-3.5 pt-3.5 pr-12 sm:px-4 sm:pb-4 sm:pt-4 sm:pr-14">
       <button
         type="button"
         onClick={closeMenu}
