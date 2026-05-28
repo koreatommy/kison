@@ -52,13 +52,16 @@ function MissionList({
     <ol className="mt-2 space-y-1.5 sm:mt-2.5 sm:space-y-1.5 md:mt-3">
       {MISSION_STEPS.map((step, index) => {
         const isExpanded = expandedId === step.id;
+        const shouldAnimate = animateItems && index > 0;
 
         return (
           <li
             key={step.id}
-            className={animateItems ? "animate-mission-blind" : "opacity-0"}
+            className={
+              shouldAnimate ? "animate-mission-blind" : animateItems ? "opacity-100" : "opacity-0"
+            }
             style={
-              animateItems
+              shouldAnimate
                 ? { animationDelay: `${index * 45}ms` }
                 : undefined
             }
