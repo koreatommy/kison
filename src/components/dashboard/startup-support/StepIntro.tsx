@@ -52,9 +52,20 @@ export default function StepIntro() {
         </div>
 
         <div className="mt-6 space-y-3">
-          <WarningBox variant="warning">
-            AI 생성을 위해 입력한 내용이 AI API로 전송될 수 있습니다.
-            입력한 내용은 본 서비스 서버에 저장되지 않습니다.
+          <WarningBox
+            variant="warning"
+            action={
+              <button
+                type="button"
+                onClick={() => setShowKeyModal(true)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100"
+              >
+                <Settings className="size-3.5" strokeWidth={2} aria-hidden />
+                AI Key 입력
+              </button>
+            }
+          >
+            본 서비스는 유료 결제 서비스 입니다. 발급 받은 Key를 입력하세요
           </WarningBox>
 
           <p className="text-center text-xs text-zinc-400">
@@ -62,22 +73,13 @@ export default function StepIntro() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col items-center gap-3">
+        <div className="mt-8 flex justify-center">
           <button
             type="button"
             onClick={goNext}
             className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 px-10 py-4 text-base font-extrabold text-white shadow-lg shadow-amber-200/40 transition-all hover:shadow-xl hover:shadow-amber-200/60 hover:scale-[1.02] active:scale-95"
           >
             시작하기
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setShowKeyModal(true)}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-400 transition hover:text-indigo-600"
-          >
-            <Settings className="size-4" strokeWidth={2} aria-hidden />
-            AI API Key 설정
           </button>
         </div>
       </div>

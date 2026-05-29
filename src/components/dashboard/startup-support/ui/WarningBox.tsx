@@ -10,6 +10,7 @@ interface WarningBoxProps {
   variant?: Variant;
   children: React.ReactNode;
   className?: string;
+  action?: React.ReactNode;
 }
 
 const icons: Record<Variant, React.ReactNode> = {
@@ -19,12 +20,13 @@ const icons: Record<Variant, React.ReactNode> = {
   success: <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-emerald-500" />,
 };
 
-export default function WarningBox({ variant = "warning", children, className = "" }: WarningBoxProps) {
+export default function WarningBox({ variant = "warning", children, className = "", action }: WarningBoxProps) {
   const s = colors.status[variant];
   return (
-    <div className={`flex gap-2 rounded-xl border ${s.border} ${s.bg} px-4 py-3 text-sm ${s.text} ${className}`}>
+    <div className={`flex items-center gap-2 rounded-xl border ${s.border} ${s.bg} px-4 py-3 text-sm ${s.text} ${className}`}>
       {icons[variant]}
       <div className="min-w-0 flex-1">{children}</div>
+      {action}
     </div>
   );
 }
