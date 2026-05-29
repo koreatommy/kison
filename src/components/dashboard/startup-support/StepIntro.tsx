@@ -53,7 +53,7 @@ export default function StepIntro() {
 
         <div className="mt-6 space-y-3">
           <WarningBox variant="warning">
-            AI 생성을 위해 입력한 내용이 Claude API로 전송될 수 있습니다.
+            AI 생성을 위해 입력한 내용이 AI API로 전송될 수 있습니다.
             입력한 내용은 본 서비스 서버에 저장되지 않습니다.
           </WarningBox>
 
@@ -77,7 +77,7 @@ export default function StepIntro() {
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-400 transition hover:text-indigo-600"
           >
             <Settings className="size-4" strokeWidth={2} aria-hidden />
-            Claude API Key 설정
+            AI API Key 설정
           </button>
         </div>
       </div>

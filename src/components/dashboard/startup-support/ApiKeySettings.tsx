@@ -1,4 +1,4 @@
-// Claude API Key 세션 전용 입력 모달
+// AI API Key 세션 전용 입력 모달
 "use client";
 
 import { useState } from "react";
@@ -33,7 +33,7 @@ export default function ApiKeySettings({ onClose }: ApiKeySettingsProps) {
 
         <div className="flex items-center gap-2 text-indigo-600">
           <Key className="size-5" strokeWidth={2} />
-          <h2 className="text-lg font-bold">Claude API Key 설정</h2>
+          <h2 className="text-lg font-bold">AI API Key 설정</h2>
         </div>
 
         <p className="mt-3 text-sm leading-relaxed text-zinc-600">
@@ -47,7 +47,7 @@ export default function ApiKeySettings({ onClose }: ApiKeySettingsProps) {
             htmlFor="api-key-input"
             className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-zinc-500"
           >
-            Anthropic API Key
+            AI API Key
           </label>
           <input
             id="api-key-input"
@@ -60,7 +60,7 @@ export default function ApiKeySettings({ onClose }: ApiKeySettingsProps) {
         </div>
 
         <div className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-700">
-          AI 생성을 위해 입력한 내용이 Claude API로 전송될 수 있습니다.
+          AI 생성을 위해 입력한 내용이 AI API로 전송될 수 있습니다.
           입력한 내용은 본 서비스 서버에 저장되지 않습니다.
         </div>
 
