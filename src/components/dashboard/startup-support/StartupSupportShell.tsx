@@ -17,6 +17,7 @@ import StepShortlist from "./StepShortlist";
 import StepFinalSelection from "./StepFinalSelection";
 import StepFinalDocument from "./StepFinalDocument";
 import ResumeOrRestartModal from "./ResumeOrRestartModal";
+import FloatingMentor from "./FloatingMentor";
 import { getStepValidation } from "@/lib/startup-support/stepValidation";
 
 function getStepContent(step: number) {
@@ -154,6 +155,7 @@ export default function StartupSupportShell() {
           nextDisabledReason={nextDisabledReason}
         />
       )}
+      <FloatingMentor />
     </div>
   );
 }
