@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>찐이랑 함께하는 1박2일 | Episode 1. 강원도편</title>
+  <meta name="description" content="엄수현, 이유진, 찐이가 함께하는 강원도 1박2일 여행 일정표. 경기도 광주 오전 10시 출발, 바다, 숲, 숙소, 맛집, 동선 지도 포함." />
+  <style>
+    :root{
+      --bg:#f5f2eb;
+      --paper:#fffaf2;
+      --ink:#1e2a25;
+      --muted:#66736c;
+      --green:#2d5a45;
+      --green2:#446b55;
+      --sea:#2f6f88;
+      --sand:#d8b879;
+      --line:#e4dccb;
+      --danger:#9a3e2f;
+      --soft:#edf3ed;
+      --shadow:0 16px 38px rgba(38,42,36,.12);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(47,111,136,.18), transparent 34rem),
+        radial-gradient(circle at 85% 10%, rgba(216,184,121,.24), transparent 28rem),
+        var(--bg);
+      line-height:1.62;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1180px, calc(100% - 36px)); margin:0 auto;}
+    .hero{
+      min-height:560px;
+      background:
+        linear-gradient(115deg, rgba(15,34,27,.82), rgba(15,34,27,.34) 54%, rgba(15,34,27,.08)),
+        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80') center/cover;
+      color:white;
+      border-bottom-left-radius:42px;
+      border-bottom-right-radius:42px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:auto 0 0 0; height:180px;
+      background:linear-gradient(transparent, rgba(0,0,0,.36));
+      pointer-events:none;
+    }
+    .nav{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:24px 0;
+      position:relative; z-index:2;
+    }
+    .brand{font-weight:800; letter-spacing:-.02em; font-size:18px;}
+    .navlinks{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .navlinks a, .chip{
+      padding:8px 13px; border:1px solid rgba(255,255,255,.34);
+      border-radius:999px; background:rgba(255,255,255,.12); backdrop-filter:blur(8px);
+      font-size:13px;
+    }
+    .heroBody{position:relative; z-index:2; padding:70px 0 72px; max-width:850px;}
+    h1{font-size:clamp(38px, 6vw, 72px); line-height:1.04; letter-spacing:-.06em; margin:0 0 18px;}
+    .subtitle{font-size:clamp(17px,2.3vw,23px); color:rgba(255,255,255,.9); max-width:720px; margin:0 0 30px;}
+    .episode{display:inline-block; font-size:.48em; letter-spacing:-.03em; color:rgba(255,255,255,.88); margin-top:12px;}
+    .crew{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 28px;}
+    .crew span{padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.26); font-size:14px; font-weight:800; backdrop-filter:blur(8px);}
+    .heroGrid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:900px;}
+    .stat{
+      padding:15px 16px; border-radius:18px;
+      background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+      backdrop-filter:blur(12px);
+    }
+    .stat b{display:block; font-size:20px; line-height:1.1;}
+    .stat span{display:block; font-size:12px; color:rgba(255,255,255,.78); margin-top:5px;}
+    .section{padding:52px 0 0;}
+    .sectionHead{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:22px;}
+    h2{font-size:clamp(26px,3.4vw,42px); line-height:1.15; margin:0; letter-spacing:-.045em;}
+    h3{font-size:22px; margin:0 0 10px; letter-spacing:-.035em;}
+    p{margin:0 0 12px;}
+    .muted{color:var(--muted)}
+    .grid2{display:grid; grid-template-columns:1.08fr .92fr; gap:22px;}
+    .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+    .card{
+      background:rgba(255,250,242,.92);
+      border:1px solid rgba(228,220,203,.85);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .cardBody{padding:22px;}
+    .notice{border-left:6px solid var(--danger); background:#fff5ed;}
+    .notice strong{color:var(--danger)}
+    .img{
+      height:220px;
+      background:#ddd center/cover;
+      position:relative;
+    }
+    .img.small{height:160px;}
+    .caption{
+      position:absolute; left:12px; bottom:12px;
+      background:rgba(0,0,0,.45); color:white; border-radius:999px;
+      padding:6px 10px; font-size:12px; backdrop-filter:blur(8px);
+    }
+    .badges{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;}
+    .badge{padding:6px 10px; border-radius:999px; background:var(--soft); color:var(--green); font-size:12px; font-weight:700;}
+    .badge.warn{background:#fbefe8;color:var(--danger)}
+    .mapBox{padding:24px;}
+    .routeSvg{width:100%; height:auto; display:block; background:linear-gradient(160deg,#eef6f6,#fbf2dd); border-radius:20px; border:1px solid var(--line);}
+    .routeBtnRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:7px;
+      border-radius:14px; padding:10px 14px; font-weight:800; font-size:14px;
+      background:var(--green); color:white; border:0;
+    }
+    .btn.secondary{background:#fff; color:var(--green); border:1px solid var(--line);}
+    .timeline{display:grid; gap:14px;}
+    .timeItem{
+      display:grid; grid-template-columns:120px 1fr;
+      gap:16px; padding:18px;
+      border:1px solid var(--line); border-radius:18px; background:#fffdf8;
+    }
+    .time{font-size:18px; font-weight:900; color:var(--sea); white-space:nowrap;}
+    .timeTitle{font-size:18px; font-weight:900; margin-bottom:4px;}
+    .tableWrap{overflow:auto; border-radius:18px; border:1px solid var(--line); background:white;}
+    table{width:100%; border-collapse:collapse; min-width:820px;}
+    th,td{padding:14px 16px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top;}
+    th{background:#edf3ed; color:var(--green); font-size:13px;}
+    tr:last-child td{border-bottom:0}
+    .placeGrid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+    .placeCard{background:#fffdf8; border:1px solid var(--line); border-radius:20px; overflow:hidden; box-shadow:0 10px 28px rgba(38,42,36,.08);}
+    .placeCard .cardBody{padding:16px;}
+    .placeCard h4{margin:0 0 6px; font-size:17px; letter-spacing:-.03em;}
+    .tagLine{font-size:13px; color:var(--muted);}
+    .checklist{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+    .check{padding:16px; border-radius:18px; border:1px solid var(--line); background:#fffdf8;}
+    .check b{display:block; margin-bottom:4px;}
+    .sourceList{font-size:13px; color:var(--muted);}
+    .sourceList a{color:var(--sea); text-decoration:underline; word-break:break-all;}
+    .print{position:fixed; right:18px; bottom:18px; z-index:10; box-shadow:var(--shadow);}
+    @media(max-width:960px){
+      .heroGrid,.grid3,.grid2,.placeGrid,.checklist{grid-template-columns:1fr 1fr;}
+      .sectionHead{display:block;}
+      .nav{align-items:flex-start; gap:14px; flex-direction:column;}
+    }
+    @media(max-width:640px){
+      .wrap{width:min(100% - 24px,1180px)}
+      .hero{min-height:620px; border-radius:0 0 26px 26px;}
+      .heroGrid,.grid3,.grid2,.placeGrid,.checklist{grid-template-columns:1fr;}
+      .timeItem{grid-template-columns:1fr; gap:4px;}
+      h1{font-size:42px;}
+      .navlinks{display:none;}
+    }
+    @media print{
+      body{background:white;}
+      .hero{min-height:430px; box-shadow:none; border-radius:0;}
+      .card,.placeCard{box-shadow:none;}
+      .print,.navlinks{display:none !important;}
+      .section{break-inside:avoid;}
+      a{text-decoration:none;color:inherit;}
+    }
+  </style>
+</head>
+<body>
+  <a class="btn print" href="#" onclick="window.print();return false;">인쇄 / PDF 저장</a>
+
+  <header class="hero">
+    <div class="wrap">
+      <nav class="nav">
+        <div class="brand">찐이랑 함께하는 1박2일</div>
+        <div class="navlinks">
+          <a href="#route">동선 지도</a>
+          <a href="#schedule">타임테이블</a>
+          <a href="#stay">숙소</a>
+          <a href="#food">맛집</a>
+          <a href="#tips">체크리스트</a>
+        </div>
+      </nav>
+      <div class="heroBody">
+        <div class="chip">Episode 1. 강원도편 · 경기도 광주 오전 10:00 출발</div>
+        <h1>찐이랑 함께하는 1박2일<br><span class="episode">Episode 1. 강원도편</span></h1>
+        <p class="subtitle">엄수현, 이유진, 찐이가 함께하는 바다와 숲 중심의 강원도 강릉·양양 여행 일정입니다.</p>
+        <div class="crew"><span>엄수현</span><span>이유진</span><span>찐이</span></div>
+        <div class="heroGrid">
+          <div class="stat"><b>1박 2일</b><span>강릉 숙박 기준</span></div>
+          <div class="stat"><b>10:00</b><span>경기도 광주 출발</span></div>
+          <div class="stat"><b>바다 + 숲</b><span>해변·송림·해안도로</span></div>
+          <div class="stat"><b>엄수현 · 이유진</b><span>찐이와 함께</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="section">
+      <div class="grid2">
+        <div class="card notice">
+          <div class="cardBody">
+            <h3>핵심 수정 안내</h3>
+            <p><strong>국립대관령자연휴양림은 일반 반려동물 동반 입장이 제한</strong>됩니다. 따라서 기존 일정의 ‘대관령 자연휴양림’은 코스명으로만 보존하고, 실제 반려견 동반 방문은 <b>대관령 바우길/선자령 입구 산책 또는 경포해변 송림 산책</b>으로 대체하는 구성이 안전합니다.</p>
+            <p class="muted">숙소·식당·해변의 반려견 동반 규정은 계절, 객실, 좌석, 견종, 체중 기준에 따라 바뀔 수 있으므로 예약 전 전화 확인이 필요합니다.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="cardBody">
+            <h3>추천 운영 방식</h3>
+            <p><b>여행 멤버:</b> 엄수현 · 이유진 · 찐이</p>
+            <p><b>Day 1:</b> 경기도 광주 → 대관령권 숲 산책 대체 → 강릉 맛집 → 경포·강문권 → 향호해변 노을 → 강릉 숙박</p>
+            <p><b>Day 2:</b> 안목해변 → 주문진·남애항 해안도로 → 서피비치 → 정암해변 → 경기도 광주 복귀</p>
+            <div class="badges"><span class="badge">소형견 적합</span><span class="badge">무리한 등산 제외</span><span class="badge">오션뷰 중심</span><span class="badge warn">방문 전 확인 필수</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="route" class="section">
+      <div class="sectionHead">
+        <div>
+          <h2>동선 지도</h2>
+          <p class="muted">실제 지도 API 없이 HTML에서 바로 볼 수 있도록 만든 요약 동선도입니다. 버튼을 누르면 지도앱에서 경로를 확인할 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="card mapBox">
+        <svg class="routeSvg" viewBox="0 0 1100 560" role="img" aria-label="경기도 광주에서 강릉과 양양을 거쳐 복귀하는 동선 지도">
+          <defs>
+            <linearGradient id="sea" x1="0" x2="1"><stop offset="0" stop-color="#dff0ef"/><stop offset="1" stop-color="#b8dbe5"/></linearGradient>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#1b3128" flood-opacity=".18"/></filter>
+          </defs>
+          <rect x="0" y="0" width="1100" height="560" fill="url(#sea)"/>
+          <path d="M715 0 C760 90 755 172 806 250 C850 316 832 412 878 560 L1100 560 L1100 0 Z" fill="#8fbfd1" opacity=".72"/>
+          <path d="M745 0 C772 108 776 178 822 250 C856 302 850 408 910 560" stroke="#2f6f88" stroke-width="7" fill="none" opacity=".55"/>
+          <path d="M188 425 C260 355 372 340 468 310 C565 280 600 205 670 176 C724 153 764 176 806 207" stroke="#2d5a45" stroke-width="8" stroke-linecap="round" fill="none" filter="url(#shadow)"/>
+          <path d="M806 207 C826 238 830 278 820 318 C810 358 830 386 856 414" stroke="#2d5a45" stroke-width="8" stroke-linecap="round" fill="none" filter="url(#shadow)"/>
+          <path d="M856 414 C760 445 610 455 470 450 C345 446 250 438 188 425" stroke="#9b7951" stroke-width="5" stroke-dasharray="12 10" stroke-linecap="round" fill="none" opacity=".8"/>
+          <g font-family="Noto Sans KR, Arial" font-size="15" fill="#1e2a25">
+            <g transform="translate(188 425)"><circle r="16" fill="#fff" stroke="#2d5a45" stroke-width="5"/><text x="25" y="5" font-weight="800">경기도 광주</text><text x="25" y="25" fill="#66736c" font-size="13">10:00 출발</text></g>
+            <g transform="translate(468 310)"><circle r="16" fill="#fff" stroke="#2d5a45" stroke-width="5"/><text x="25" y="5" font-weight="800">대관령권 숲 산책</text><text x="25" y="25" fill="#66736c" font-size="13">휴양림은 반려견 제한</text></g>
+            <g transform="translate(670 176)"><circle r="16" fill="#fff" stroke="#2d5a45" stroke-width="5"/><text x="25" y="5" font-weight="800">강릉 초당·강문</text><text x="25" y="25" fill="#66736c" font-size="13">점심·경포·강문해변</text></g>
+            <g transform="translate(806 207)"><circle r="16" fill="#fff" stroke="#2f6f88" stroke-width="5"/><text x="25" y="5" font-weight="800">향호해변</text><text x="25" y="25" fill="#66736c" font-size="13">노을·송림·바다</text></g>
+            <g transform="translate(820 318)"><circle r="16" fill="#fff" stroke="#2f6f88" stroke-width="5"/><text x="25" y="5" font-weight="800">안목해변</text><text x="25" y="25" fill="#66736c" font-size="13">모닝 산책</text></g>
+            <g transform="translate(856 414)"><circle r="16" fill="#fff" stroke="#2f6f88" stroke-width="5"/><text x="25" y="5" font-weight="800">남애항·서피비치·정암해변</text><text x="25" y="25" fill="#66736c" font-size="13">양양 해안도로</text></g>
+          </g>
+          <text x="46" y="64" font-size="28" font-weight="900" fill="#1e2a25">Route Overview</text>
+          <text x="46" y="95" font-size="15" fill="#66736c">광주 → 대관령권 → 강릉 → 주문진·양양 → 광주</text>
+        </svg>
+        <div class="routeBtnRow">
+          <a class="btn" target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EA%B4%91%EC%A3%BC%EC%8B%9C&destination=%EA%B2%BD%EA%B8%B0%EB%8F%84%20%EA%B4%91%EC%A3%BC%EC%8B%9C&travelmode=driving&waypoints=%EB%8C%80%EA%B4%80%EB%A0%B9%20%EC%84%A0%EC%9E%90%EB%A0%B9%7C%EA%B0%95%EB%A6%89%20%EA%B0%95%EB%AC%B8%ED%95%B4%EB%B3%80%7C%ED%96%A5%ED%98%B8%ED%95%B4%EB%B3%80%7C%EA%B0%95%EB%A6%89%20%EC%84%B8%EC%9D%B8%ED%8A%B8%EC%A1%B4%EC%8A%A4%ED%98%B8%ED%85%94%7C%EC%95%88%EB%AA%A9%ED%95%B4%EB%B3%80%7C%EB%82%A8%EC%95%A0%ED%95%AD%7C%EC%84%9C%ED%94%BC%EB%B9%84%EC%B9%98%7C%EC%A0%95%EC%95%94%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5">Google Maps 전체 경로 열기</a>
+          <a class="btn secondary" target="_blank" href="https://map.naver.com/p/search/%EA%B0%95%EB%A6%89%20%EA%B0%95%EB%AC%B8%ED%95%B4%EB%B3%80">네이버 지도에서 강문해변 보기</a>
+          <a class="btn secondary" target="_blank" href="https://map.kakao.com/?q=%EC%A0%95%EC%95%94%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5">카카오맵에서 정암해변 보기</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="schedule" class="section">
+      <div class="sectionHead">
+        <div>
+          <h2>타임테이블</h2>
+          <p class="muted">오전 10시 출발 기준입니다. 주말·성수기에는 각 구간에 20~40분 여유를 두는 것이 좋습니다.</p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="cardBody">
+            <h3>Day 1 — 경기도 광주 → 강릉</h3>
+            <div class="timeline">
+              <div class="timeItem"><div class="time">10:00</div><div><div class="timeTitle">경기도 광주 출발</div><p class="muted">영동고속도로 이동. 반려견 배변·급수용 휴게소 1회 권장.</p></div></div>
+              <div class="timeItem"><div class="time">12:30</div><div><div class="timeTitle">대관령권 도착</div><p class="muted">국립대관령자연휴양림은 반려견 제한. 실제 산책은 선자령 입구·바우길 계열 짧은 구간 또는 주변 전망 포인트로 대체.</p></div></div>
+              <div class="timeItem"><div class="time">13:40</div><div><div class="timeTitle">강릉 이동</div><p class="muted">강릉 초당·강문권으로 이동.</p></div></div>
+              <div class="timeItem"><div class="time">14:20</div><div><div class="timeTitle">늦은 점심 — 고씨네동해막국수&순두부칼국수 후보</div><p class="muted">강문해변 인근. 반려견 동반 가능 정보가 있으나 좌석·시간대 확인 필요.</p></div></div>
+              <div class="timeItem"><div class="time">15:40</div><div><div class="timeTitle">경포·강문해변 산책</div><p class="muted">경포호 전체 산책보다 해변 송림·강문해변 쪽이 반려견 산책 동선으로 안전합니다.</p></div></div>
+              <div class="timeItem"><div class="time">17:20</div><div><div class="timeTitle">향호해변 노을</div><p class="muted">바다와 송림 분위기를 같이 볼 수 있는 Day 1 핵심 포인트.</p></div></div>
+              <div class="timeItem"><div class="time">18:50</div><div><div class="timeTitle">숙소 체크인</div><p class="muted">세인트존스호텔 펫 객실 또는 강릉·양양 애견동반 펜션.</p></div></div>
+              <div class="timeItem"><div class="time">19:40</div><div><div class="timeTitle">저녁</div><p class="muted">반려견 동반 식당 예약 또는 포장 후 숙소 식사. 해산물·막국수·순두부 계열 추천.</p></div></div>
+              <div class="timeItem"><div class="time">21:00</div><div><div class="timeTitle">밤바다 짧은 산책</div><p class="muted">강문·경포·사천진 중 숙소와 가까운 해변. 목줄 짧게 유지.</p></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="cardBody">
+            <h3>Day 2 — 강릉 → 양양 → 복귀</h3>
+            <div class="timeline">
+              <div class="timeItem"><div class="time">08:00</div><div><div class="timeTitle">기상·체크아웃 준비</div><p class="muted">반려견 배변·급수·객실 정리.</p></div></div>
+              <div class="timeItem"><div class="time">08:40</div><div><div class="timeTitle">안목해변 커피거리</div><p class="muted">바다 앞 모닝 산책. 카페는 반려견 동반 좌석 여부 확인.</p></div></div>
+              <div class="timeItem"><div class="time">10:00</div><div><div class="timeTitle">해안도로 드라이브</div><p class="muted">강릉 → 주문진 → 남애항 → 인구해변 → 하조대.</p></div></div>
+              <div class="timeItem"><div class="time">10:50</div><div><div class="timeTitle">남애항·남애해변</div><p class="muted">한적한 항구와 해변 사진 촬영.</p></div></div>
+              <div class="timeItem"><div class="time">12:10</div><div><div class="timeTitle">양양 점심 — 라이즈 또는 소풍 후보</div><p class="muted">반려견 동반 가능 정보가 있는 양양 식당 후보. 예약·운영시간 확인.</p></div></div>
+              <div class="timeItem"><div class="time">13:40</div><div><div class="timeTitle">서피비치</div><p class="muted">서핑 해변 분위기와 카페 감성. 반려견 출입 구역·운영 규정 확인.</p></div></div>
+              <div class="timeItem"><div class="time">15:10</div><div><div class="timeTitle">정암해수욕장</div><p class="muted">마지막 바다 산책. 정암148카페 등 주변 카페 후보 검토.</p></div></div>
+              <div class="timeItem"><div class="time">16:10</div><div><div class="timeTitle">경기도 광주로 출발</div><p class="muted">주말에는 정체 가능성이 높아 16시 전후 출발 권장.</p></div></div>
+              <div class="timeItem"><div class="time">19:30</div><div><div class="timeTitle">경기도 광주 도착 예상</div><p class="muted">교통 상황에 따라 30~60분 이상 변동 가능.</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead"><h2>주요 포인트 사진 카드</h2><p class="muted">아래 이미지는 정확한 현장 사진이 아닌 여행 분위기 참고용 이미지입니다.</p></div>
+      <div class="placeGrid">
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=80')"><span class="caption">숲</span></div><div class="cardBody"><h4>대관령권 숲 산책</h4><div class="tagLine">휴양림 입장 제한 → 바우길·선자령 입구 대체</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80')"><span class="caption">바다</span></div><div class="cardBody"><h4>경포·강문해변</h4><div class="tagLine">송림과 백사장 산책</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80')"><span class="caption">노을</span></div><div class="cardBody"><h4>향호해변</h4><div class="tagLine">강릉 북쪽 노을 포인트</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=900&q=80')"><span class="caption">숙소</span></div><div class="cardBody"><h4>오션뷰 숙소</h4><div class="tagLine">펫 객실·펜션 사전 예약</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1494475673543-6a6a27143b18?auto=format&fit=crop&w=900&q=80')"><span class="caption">모닝 산책</span></div><div class="cardBody"><h4>안목해변</h4><div class="tagLine">커피거리와 바다 산책</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1515859005217-8a1f08870f59?auto=format&fit=crop&w=900&q=80')"><span class="caption">해안도로</span></div><div class="cardBody"><h4>남애항</h4><div class="tagLine">양양 드라이브 중간 정차</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80')"><span class="caption">서핑 해변</span></div><div class="cardBody"><h4>서피비치</h4><div class="tagLine">젊은 분위기·사진 촬영</div></div></div>
+        <div class="placeCard"><div class="img small" style="background-image:url('https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=900&q=80')"><span class="caption">마지막 바다</span></div><div class="cardBody"><h4>정암해수욕장</h4><div class="tagLine">한적한 마무리 산책</div></div></div>
+      </div>
+    </section>
+
+    <section id="stay" class="section">
+      <div class="sectionHead"><h2>추천 숙소</h2><p class="muted">예약 전 반려견 객실 여부, 체중 기준, 추가 요금, 예방접종 증빙 필요 여부를 확인하십시오.</p></div>
+      <div class="tableWrap">
+        <table>
+          <thead><tr><th>우선순위</th><th>숙소</th><th>지역</th><th>추천 이유</th><th>확인 사항</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><b>세인트존스호텔 강릉</b></td><td>강문·경포권</td><td>공식 사이트 객실 카테고리에 펫 객실이 있으며, 강문해변 접근성이 좋음.</td><td>펫 객실로 예약해야 함. 일반 객실 동반 불가 가능성. 공용공간 이동 규정 확인.</td></tr>
+            <tr><td>2</td><td><b>강릉 스테이123</b></td><td>강릉</td><td>애견동반 사전 문의 안내가 있는 숙박 후보. 독립형 숙소를 선호할 때 검토 가능.</td><td>동반 가능 객실, 체중별 요금, 배변용품 직접 준비 여부 확인.</td></tr>
+            <tr><td>3</td><td><b>양양 해뜨는창문 애견동반 오션뷰 펜션</b></td><td>정암해변 앞</td><td>정암해변 앞 오션뷰 펜션 후보. Day 2를 양양 중심으로 잡고 싶을 때 적합.</td><td>강릉 숙박 대신 양양 숙박으로 동선 수정 필요.</td></tr>
+            <tr><td>4</td><td><b>강릉·양양 독채 애견펜션</b></td><td>사천·주문진·양양</td><td>닥스훈트와 조용히 쉬기 좋음. 숙소 식사·포장 식사에 유리.</td><td>울타리, 계단, 미끄럼 바닥 여부 확인. 닥스훈트 허리 보호 필요.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="food" class="section">
+      <div class="sectionHead"><h2>추천 맛집·카페</h2><p class="muted">반려견 동반 식당은 당일 운영 규정이 자주 바뀝니다. 전화 확인 후 방문하는 전제로 정리했습니다.</p></div>
+      <div class="grid3">
+        <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1552611052-33e04de081de?auto=format&fit=crop&w=900&q=80')"><span class="caption">점심 후보</span></div><div class="cardBody"><h3>고씨네동해막국수&순두부칼국수</h3><p>강문해변 도보권. 막국수·메밀김밥·순두부칼국수 계열로 강릉 식사 동선에 잘 맞습니다.</p><div class="badges"><span class="badge">강문해변 인근</span><span class="badge">반려견 동반 후보</span></div></div></div>
+        <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=900&q=80')"><span class="caption">순두부</span></div><div class="cardBody"><h3>초당순두부마을 후보</h3><p>강릉 대표 로컬 식사권입니다. 캐리어 조건으로 동반 가능한 사례가 있으나 최신 규정은 반드시 확인해야 합니다.</p><div class="badges"><span class="badge">강릉 대표 메뉴</span><span class="badge warn">캐리어 조건 확인</span></div></div></div>
+        <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=900&q=80')"><span class="caption">양양 점심</span></div><div class="cardBody"><h3>라이즈 양양</h3><p>양양 인구해변권 식당·카페 후보. 오므라이스·파스타 등 양식 계열로 Day 2 점심에 적합합니다.</p><div class="badges"><span class="badge">인구해변권</span><span class="badge">반려견 동반 후보</span></div></div></div>
+        <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1514517220037-5d4a78ac80ba?auto=format&fit=crop&w=900&q=80')"><span class="caption">한식 후보</span></div><div class="cardBody"><h3>소풍 양양</h3><p>양양 애견동반 식당 후보. 예약제로 운영된다는 정보가 있으므로 사전 예약 확인이 필요합니다.</p><div class="badges"><span class="badge">한식 후보</span><span class="badge warn">예약 확인</span></div></div></div>
+        <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=900&q=80')"><span class="caption">카페</span></div><div class="cardBody"><h3>안목해변 커피거리</h3><p>Day 2 아침 산책과 커피 동선. 실내 동반 여부보다 야외·테라스 좌석 중심으로 확인하는 것이 안전합니다.</p><div class="badges"><span class="badge">모닝 산책</span><span class="badge">오션뷰</span></div></div></div>
+        <div class="card"><div class="img" style="background-image:url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80')"><span class="caption">정암 카페</span></div><div class="cardBody"><h3>정암해변 카페 후보</h3><p>정암148카페 등 정암해변권 카페를 마지막 휴식 장소로 검토할 수 있습니다.</p><div class="badges"><span class="badge">복귀 전 휴식</span><span class="badge">카페 후보</span></div></div></div>
+      </div>
+    </section>
+
+    <section id="tips" class="section">
+      <div class="sectionHead"><h2>반려견 동반 체크리스트</h2><p class="muted">닥스훈트 기준으로 허리 부담과 장거리 이동 피로를 줄이는 준비 항목입니다.</p></div>
+      <div class="checklist">
+        <div class="check"><b>이동</b><span class="muted">카시트·하네스·짧은 목줄·이동장</span></div>
+        <div class="check"><b>위생</b><span class="muted">배변봉투·물티슈·타월·탈취제</span></div>
+        <div class="check"><b>식사</b><span class="muted">평소 사료·간식·휴대 물병·접이식 식기</span></div>
+        <div class="check"><b>숙소</b><span class="muted">미끄럼 방지 매트·담요·배변패드</span></div>
+        <div class="check"><b>건강</b><span class="muted">예방접종 증빙·상비약·진드기 예방</span></div>
+        <div class="check"><b>닥스훈트 주의</b><span class="muted">계단·높은 침대 점프 금지. 짧게 자주 산책</span></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-bottom:70px;">
+      <div class="card">
+        <div class="cardBody sourceList">
+          <h3>참고·확인 출처</h3>
+          <p>국립대관령자연휴양림 이용객 준수사항: <a target="_blank" href="https://www.foresttrip.go.kr/pot/rm/ug/selectFcltUseGdncView.do?hmpgId=0111&menuId=004002008&ruleId=208">foresttrip.go.kr</a></p>
+          <p>세인트존스호텔 공식 사이트: <a target="_blank" href="https://new.stjohns.co.kr/">new.stjohns.co.kr</a></p>
+          <p>강릉 바우길 반려견 동반 걷기 코스 소개: <a target="_blank" href="https://korean.visitkorea.or.kr/detail/rem_detail.do?cotid=3ac72d8d-7e05-44d3-aad3-2fa122fab00a">visitkorea.or.kr</a></p>
+          <p>강릉 스테이123 애견 입실 안내: <a target="_blank" href="https://www.yeogi.com/domestic-accommodations/80911">yeogi.com</a></p>
+          <p>양양 해뜨는창문 애견동반 오션뷰 펜션: <a target="_blank" href="https://sunrisewindow.kr/special4.html">sunrisewindow.kr</a></p>
+          <p>고씨네동해막국수&순두부칼국수 정보: <a target="_blank" href="https://www.ban-life.com/store/view?id=21311&type=s">ban-life.com</a></p>
+          <p>양양 라이즈·소풍 등 애견동반 식당 정보: <a target="_blank" href="https://www.telltrip.com/hotel-food/food/%EB%8C%95%EB%8C%95%EC%9D%B4-%EB%AA%A8%EB%91%90-%EB%AA%A8%EC%97%AC%EB%9D%BC-%EA%B0%95%EC%95%84%EC%A7%80%EC%99%80-%ED%95%A8%EA%BB%98%ED%95%98%EB%8A%94-%EC%96%91%EC%96%91-%EC%9D%B8/">telltrip.com</a>, <a target="_blank" href="https://ban-life.com/content/view?id=4134">ban-life.com</a></p>
+          <p>이미지: Unsplash 공개 이미지 사용. 일부 이미지는 실제 장소 사진이 아닌 분위기 참고용입니다.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
