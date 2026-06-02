@@ -1,8 +1,8 @@
-// trip 히어로 배경 이미지 제공
+// trip 한식 카드 목업 이미지 제공
 import { serveTourPng } from "@/lib/tour/serveTourPng";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return serveTourPng("hero_img1.png");
+  return serveTourPng("food_hansik_mock.png");
 }
