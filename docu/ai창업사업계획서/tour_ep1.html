@@ -378,5 +378,28 @@
       </div>
     </section>
   </main>
+  <script>
+    // Android TMAP은 iOS와 다른 URL 파라미터(goalx/goaly/goalname)를 사용합니다.
+    (function () {
+      if (!/Android/i.test(navigator.userAgent)) return;
+
+      document.querySelectorAll('.routeBtnRow a[href^="tmap://route"]').forEach(function (link) {
+        var query = link.href.split('?')[1];
+        if (!query) return;
+        var params = new URLSearchParams(query);
+        var name = params.get('rGoName');
+        var lng = params.get('rGoX');
+        var lat = params.get('rGoY');
+        if (!name || !lng || !lat) return;
+
+        link.href =
+          'tmap://route?referrer=com.skt.Tmap' +
+          '&goalx=' + encodeURIComponent(lng) +
+          '&goaly=' + encodeURIComponent(lat) +
+          '&goalname=' + encodeURIComponent(name) +
+          '&reqCoordType=WGS84&resCoordType=WGS84';
+      });
+    })();
+  </script>
 </body>
 </html>
