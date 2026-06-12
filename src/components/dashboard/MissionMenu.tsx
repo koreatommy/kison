@@ -17,6 +17,7 @@ import { hasStartupSupportProgress } from "@/lib/startup-support/hasProgress";
 import { useStartupSupportStore } from "@/store/useStartupSupportStore";
 
 const STARTUP_SUPPORT_PATH = "/dashboard/startup-support";
+const PORTFOLIO_PATH = "/dashboard/portfolio";
 
 const AUTO_OPEN_DELAY_MS = 400;
 const TABLET_BREAKPOINT = 640;
@@ -175,18 +176,31 @@ function MissionList({
                   />
                 </button>
                 {step.id === 10 ? (
-                  <Link
-                    href={STARTUP_SUPPORT_PATH}
-                    onClick={handleStartupSupportClick}
-                    className="group mt-1.5 block rounded-xl border border-amber-400/30 bg-gradient-to-r from-amber-500/15 to-orange-500/10 px-3 py-2.5 transition-all duration-300 hover:border-amber-300/80 hover:shadow-[0_0_20px_rgba(251,191,36,0.45),0_0_36px_rgba(251,146,60,0.22)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/70"
-                  >
-                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-amber-300 transition-colors duration-300 group-hover:text-amber-100 sm:text-xs">
-                      AI 창업지원 플랫폼
-                    </p>
-                    <p className="mt-1 text-[11px] leading-snug text-zinc-200 transition-colors duration-300 group-hover:text-zinc-50 sm:text-xs">
-                      발표 자료부터 피칭 스크립트까지 AI로 빠르게 준비하세요.
-                    </p>
-                  </Link>
+                  <>
+                    <Link
+                      href={STARTUP_SUPPORT_PATH}
+                      onClick={handleStartupSupportClick}
+                      className="group mt-1.5 block rounded-xl border border-amber-400/30 bg-gradient-to-r from-amber-500/15 to-orange-500/10 px-3 py-2.5 transition-all duration-300 hover:border-amber-300/80 hover:shadow-[0_0_20px_rgba(251,191,36,0.45),0_0_36px_rgba(251,146,60,0.22)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/70"
+                    >
+                      <p className="text-[11px] font-black uppercase tracking-[0.14em] text-amber-300 transition-colors duration-300 group-hover:text-amber-100 sm:text-xs">
+                        AI 창업지원 플랫폼
+                      </p>
+                      <p className="mt-1 text-[11px] leading-snug text-zinc-200 transition-colors duration-300 group-hover:text-zinc-50 sm:text-xs">
+                        발표 자료부터 피칭 스크립트까지 AI로 빠르게 준비하세요.
+                      </p>
+                    </Link>
+                    <Link
+                      href={PORTFOLIO_PATH}
+                      className="group mt-1.5 block rounded-xl border border-violet-400/30 bg-gradient-to-r from-violet-500/15 to-indigo-500/10 px-3 py-2.5 transition-all duration-300 hover:border-violet-300/80 hover:shadow-[0_0_20px_rgba(167,139,250,0.45),0_0_36px_rgba(129,140,248,0.22)] focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/70"
+                    >
+                      <p className="text-[11px] font-black uppercase tracking-[0.14em] text-violet-300 transition-colors duration-300 group-hover:text-violet-100 sm:text-xs">
+                        포트폴리오
+                      </p>
+                      <p className="mt-1 text-[11px] leading-snug text-zinc-200 transition-colors duration-300 group-hover:text-zinc-50 sm:text-xs">
+                        창업 활동과 성과를 한곳에 모아보세요.
+                      </p>
+                    </Link>
+                  </>
                 ) : null}
               </>
             )}
