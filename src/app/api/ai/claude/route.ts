@@ -7,7 +7,7 @@ import type { ClaudeTask, TokenUsage } from "@/types/startup-support";
 export const runtime = "nodejs";
 
 /** 임시: false면 화면 입력(x-user-anthropic-key)만 사용, 서버 ANTHROPIC_API_KEY fallback 없음 */
-const ALLOW_SERVER_API_KEY_FALLBACK = false;
+const ALLOW_SERVER_API_KEY_FALLBACK = true;
 
 const VALID_TASKS: ClaudeTask[] = [
   "generate_problem_questions",
