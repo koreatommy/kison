@@ -18,7 +18,7 @@ const MEMBERS = [
   { name: "추서현", initial: "C", eng: "Courage", kor: "용기", color: "courage" as const },
   { name: "안정우", initial: "A", eng: "Adventure", kor: "모험", color: "adventure" as const },
   { name: "이예준", initial: "L", eng: "Light", kor: "빛", color: "light" as const },
-  { name: "박예슬", initial: "P", eng: "Peace", kor: "평화", color: "peace" as const },
+  { name: "박윤슬", initial: "P", eng: "Peace", kor: "평화", color: "peace" as const },
 ];
 
 const fadeUp = {

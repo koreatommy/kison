@@ -1,0 +1,438 @@
+/* IM 창업아이템 선정 결과 보고서 — 전용 스타일 */
+
+/* ── 기본 타이포그래피 ── */
+.report {
+  color: #18181b;
+  line-height: 1.85;
+  font-size: 0.9375rem;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ── 표지 ── */
+.report :global(.cover) {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  margin-bottom: 2.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+  border: 1px solid #a5b4fc;
+}
+
+.report :global(.cover h1) {
+  font-size: 1.625rem;
+  font-weight: 900;
+  color: #312e81;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+@media (min-width: 640px) {
+  .report :global(.cover h1) {
+    font-size: 2rem;
+  }
+}
+
+.report :global(.cover p) {
+  margin: 0.35rem 0;
+  color: #3730a3;
+  font-size: 0.9375rem;
+}
+
+.report :global(.cover p strong) {
+  color: #312e81;
+}
+
+/* ── page-break 숨김 ── */
+.report :global(.page-break) {
+  display: none;
+}
+
+/* ── 섹션 제목 h2 ── */
+.report :global(h2) {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  margin: 2.5rem 0 1rem;
+  padding: 0.625rem 1rem;
+  background: linear-gradient(90deg, #e0e7ff, transparent);
+  border-left: 4px solid #4f46e5;
+  border-radius: 0 0.5rem 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 640px) {
+  .report :global(h2) {
+    font-size: 1.125rem;
+  }
+}
+
+/* ── 소제목 h3 ── */
+.report :global(h3) {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #3730a3;
+  margin: 1.75rem 0 0.625rem;
+  letter-spacing: -0.01em;
+}
+
+/* ── report-field ── */
+.report :global(.report-field) {
+  margin-bottom: 1.5rem;
+}
+
+/* report-field 안의 라벨 h3만 소형 uppercase로 */
+.report :global(.report-field h3) {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #4f46e5;
+  margin: 0 0 0.5rem;
+}
+
+.report :global(.report-value) {
+  font-size: 0.9375rem;
+  color: #27272a;
+  line-height: 1.85;
+  background: #eef2ff;
+  border-left: 3px solid #818cf8;
+  padding: 0.75rem 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.report :global(.report-subsection) {
+  margin-top: 1.75rem;
+}
+
+/* ── QA 리스트 ── */
+.report :global(.report-qa-list) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.report :global(.report-qa-item) {
+  border: 1px solid #e0e7ff;
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: #eef2ff;
+  transition: box-shadow 0.15s;
+}
+
+.report :global(.report-qa-item:hover) {
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.08);
+}
+
+.report :global(.report-qa-question) {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #312e81;
+  margin: 0 0 0.5rem;
+  line-height: 1.6;
+}
+
+.report :global(.report-qa-answer) {
+  font-size: 0.9375rem;
+  color: #27272a;
+  line-height: 1.8;
+  padding-left: 0.875rem;
+  border-left: 2px solid #a5b4fc;
+}
+
+/* ── 테이블 공통 ── */
+.report :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75rem 0 1.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #e0e7ff;
+}
+
+.report :global(th),
+.report :global(td) {
+  border: 1px solid #e0e7ff;
+  padding: 0.75rem 0.875rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+.report :global(th) {
+  background: #e0e7ff;
+  font-weight: 700;
+  color: #312e81;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.report :global(td) {
+  background: #ffffff;
+  color: #3f3f46;
+  line-height: 1.75;
+}
+
+.report :global(tbody tr:hover td) {
+  background: #eef2ff;
+}
+
+/* ── 세로 key-value 테이블 (5번 섹션) ── */
+.report :global(table tbody tr th) {
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  width: 7rem;
+}
+
+/* ── 리스트 ── */
+.report :global(ul) {
+  padding-left: 1.375rem;
+  margin: 0.5rem 0;
+}
+
+.report :global(li) {
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  color: #3f3f46;
+  line-height: 1.75;
+}
+
+.report :global(li::marker) {
+  color: #4f46e5;
+}
+
+/* ── 번호 목록 (단계·순서) ── */
+.report :global(ol.report-steps) {
+  padding-left: 0;
+  margin: 0.5rem 0;
+  list-style: none;
+  counter-reset: report-step;
+}
+
+.report :global(ol.report-steps > li) {
+  counter-increment: report-step;
+  position: relative;
+  padding: 0.625rem 0.75rem 0.625rem 2.25rem;
+  margin-bottom: 0.4rem;
+  background: #eef2ff;
+  border: 1px solid #e0e7ff;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  color: #3f3f46;
+  line-height: 1.7;
+}
+
+.report :global(ol.report-steps > li::before) {
+  content: counter(report-step);
+  position: absolute;
+  left: 0.625rem;
+  top: 0.625rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  border-radius: 9999px;
+}
+
+.report :global(ol.report-steps > li strong) {
+  color: #312e81;
+  font-weight: 700;
+}
+
+/* ── 그룹 목록 (카테고리 + 하위 항목) ── */
+.report :global(ul.report-grouped) {
+  padding-left: 0;
+  margin: 0.5rem 0;
+  list-style: none;
+}
+
+.report :global(ul.report-grouped > li) {
+  margin-bottom: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  background: #eef2ff;
+  border-left: 3px solid #818cf8;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.report :global(ul.report-grouped > li > strong) {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #3730a3;
+  margin-bottom: 0.35rem;
+}
+
+.report :global(ul.report-grouped ul) {
+  padding-left: 1rem;
+  margin: 0;
+}
+
+.report :global(ul.report-grouped ul li) {
+  font-size: 0.875rem;
+  color: #3f3f46;
+  margin-bottom: 0.25rem;
+  line-height: 1.65;
+}
+
+.report :global(ul.report-grouped ul li::marker) {
+  color: #a5b4fc;
+}
+
+/* ── 체크리스트 (다음 단계) ── */
+.report :global(ol.report-checklist) {
+  padding-left: 0;
+  margin: 0.5rem 0;
+  list-style: none;
+}
+
+.report :global(ol.report-checklist > li) {
+  position: relative;
+  padding: 0.5rem 0.75rem 0.5rem 1.75rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  color: #3f3f46;
+  line-height: 1.65;
+  border-bottom: 1px dashed #e0e7ff;
+}
+
+.report :global(ol.report-checklist > li::before) {
+  content: "□";
+  position: absolute;
+  left: 0.25rem;
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+.report :global(ol.report-checklist > li:last-child) {
+  border-bottom: none;
+}
+
+.report :global(em) {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+/* ── 본문 p ── */
+.report :global(p) {
+  font-size: 0.9375rem;
+  margin: 0.5rem 0;
+  color: #3f3f46;
+  line-height: 1.85;
+}
+
+.report :global(p strong) {
+  color: #1e1b4b;
+  font-weight: 700;
+}
+
+/* ── AI 평가 기준 박스 ── */
+.report :global(.eval-criteria-box) {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.25rem;
+  background: #eef2ff;
+  border: 1px solid #a5b4fc;
+  border-radius: 0.875rem;
+}
+
+.report :global(.eval-criteria-title) {
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  color: #3730a3 !important;
+  margin: 0 0 0.875rem !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── 바 그래프 레이아웃 ── */
+.report :global(.eval-criteria-bars) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.report :global(.eval-bar-row) {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr 2.5rem;
+  grid-template-rows: auto auto;
+  column-gap: 0.75rem;
+  row-gap: 0.2rem;
+  align-items: center;
+}
+
+.report :global(.eval-bar-label) {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #312e81;
+  white-space: nowrap;
+}
+
+.report :global(.eval-bar-track) {
+  grid-column: 2;
+  grid-row: 1;
+  height: 0.5rem;
+  background: #c7d2fe;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.report :global(.eval-bar-fill) {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 9999px;
+}
+
+.report :global(.eval-bar-fill--sm) {
+  background: linear-gradient(90deg, #818cf8, #a5b4fc);
+}
+
+.report :global(.eval-bar-score) {
+  grid-column: 3;
+  grid-row: 1;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #4f46e5;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.report :global(.eval-bar-desc) {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  font-size: 0.6875rem;
+  color: #71717a;
+  line-height: 1.4;
+}
+
+/* ── 모바일: 가로 스크롤 테이블 ── */
+@media (max-width: 640px) {
+  .tableWrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+
+  .report :global(table) {
+    min-width: 480px;
+  }
+
+  .report :global(.cover h1) {
+    font-size: 1.375rem;
+  }
+}
