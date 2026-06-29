@@ -12,7 +12,7 @@ const COLORS = {
 
 const MEMBERS = [
   { name: "윤이준", school: "신장초", grade: "5학년", short: "이준" },
-  { name: "이현서", school: "감일초", grade: "5학년", short: "현서" },
+  { name: "이현서", school: "감일초등학교", grade: "5학년", short: "현서" },
   { name: "이로이", school: "위례숲초", grade: "6학년", short: "로이" },
   { name: "이로운", school: "위례숲초", grade: "4학년", short: "로운" },
 ];

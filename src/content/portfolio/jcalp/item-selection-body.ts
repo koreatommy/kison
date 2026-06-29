@@ -11,7 +11,7 @@ export const JCALP_ITEM_SELECTION_BODY_HTML = `<div class="cover">
 <table>
 <thead><tr><th>학교</th><th>학년</th><th>이름</th><th>담당 역할</th></tr></thead>
 <tbody>
-<tr><td>한홀초</td><td>4</td><td>조하린</td><td>메이커 테오 (CTO)</td></tr><tr><td>신우초</td><td>4</td><td>박윤슬</td><td>체크 누리 (CFO·COO)</td></tr><tr><td>신평초</td><td>4</td><td>추서현</td><td>캡틴 루미 (CEO)</td></tr><tr><td>동우초</td><td>4</td><td>이예준</td><td>플래너 도도 (CPO / PM)</td></tr><tr><td>동부초</td><td>4</td><td>안정우</td><td>플래너 도도 (CPO / PM)</td></tr>
+<tr><td>한홀초</td><td>4</td><td>조하린</td><td>메이커 테오 (CTO)</td></tr><tr><td>신우초</td><td>4</td><td>박윤슬</td><td>체크 누리 (CFO·COO)</td></tr><tr><td>신평초</td><td>4</td><td>추서현</td><td>캡틴 루미 (CEO)</td></tr><tr><td>동부초</td><td>4</td><td>이예준</td><td>플래너 도도 (CPO / PM)</td></tr><tr><td>동부초</td><td>4</td><td>안정우</td><td>플래너 도도 (CPO / PM)</td></tr>
 </tbody>
 </table>
 

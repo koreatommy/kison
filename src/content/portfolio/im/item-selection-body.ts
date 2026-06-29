@@ -11,7 +11,7 @@ export const IM_ITEM_SELECTION_BODY_HTML = `<div class="cover">
 <table>
 <thead><tr><th>학교</th><th>학년</th><th>이름</th><th>담당 역할</th></tr></thead>
 <tbody>
-<tr><td>신장초등학교</td><td>5학년</td><td>윤이준</td><td>캡틴 루미 (CEO)</td></tr><tr><td>위례숲초등학교</td><td>6학년</td><td>이로이</td><td>스토리 모아 (CMO)</td></tr><tr><td>위례숲초등학교</td><td>4학년</td><td>이로운</td><td>캡틴 루미 (CEO)</td></tr><tr><td>-</td><td>4학년</td><td>이현서</td><td>체크 누리 (CFO·COO)</td></tr>
+<tr><td>신장초등학교</td><td>5학년</td><td>윤이준</td><td>캡틴 루미 (CEO)</td></tr><tr><td>위례숲초등학교</td><td>6학년</td><td>이로이</td><td>스토리 모아 (CMO)</td></tr><tr><td>위례숲초등학교</td><td>4학년</td><td>이로운</td><td>캡틴 루미 (CEO)</td></tr><tr><td>감일초등학교</td><td>4학년</td><td>이현서</td><td>체크 누리 (CFO·COO)</td></tr>
 </tbody>
 </table>
 

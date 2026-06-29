@@ -17,7 +17,7 @@ const MEMBERS = [
   { name: "조하린", school: "한홀초", grade: "4학년", initial: "J", eng: "Joy", kor: "기쁨", color: "joy" as const },
   { name: "추서현", school: "신평초", grade: "4학년", initial: "C", eng: "Courage", kor: "용기", color: "courage" as const },
   { name: "안정우", school: "동부초", grade: "4학년", initial: "A", eng: "Adventure", kor: "모험", color: "adventure" as const },
-  { name: "이예준", school: "동우초", grade: "4학년", initial: "L", eng: "Light", kor: "빛", color: "light" as const },
+  { name: "이예준", school: "동부초", grade: "4학년", initial: "L", eng: "Light", kor: "빛", color: "light" as const },
   { name: "박윤슬", school: "신우초", grade: "4학년", initial: "P", eng: "Peace", kor: "평화", color: "peace" as const },
 ];
 

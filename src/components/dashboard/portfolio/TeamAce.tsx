@@ -14,7 +14,7 @@ const COLORS = {
 const MEMBERS = [
   { name: "이상윤", school: "미사강변중", grade: "3학년", initial: "A", eng: "Achieving", kor: "달성하는", color: "achieving" as const },
   { name: "한은빈", school: "감일중", grade: "1학년", initial: "C", eng: "Creative", kor: "창의적인", color: "creative" as const },
-  { name: "김민찬", school: "운촌중", grade: "2학년", initial: "E", eng: "Excellence", kor: "탁월함", color: "excellence" as const },
+  { name: "김민찬", school: "윤슬중", grade: "2학년", initial: "E", eng: "Excellence", kor: "탁월함", color: "excellence" as const },
 ];
 
 const VALUES = [
