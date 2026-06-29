@@ -8,7 +8,9 @@ import {
   useEffect,
   useId,
   useState,
+  useSyncExternalStore,
 } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Lock, Menu, X } from "lucide-react";
@@ -39,6 +41,65 @@ const subItemLinkClass = `${subItemClass} text-zinc-400 hover:bg-white/[0.06] ho
 
 const subItemStaticClass = `${subItemClass} cursor-default text-zinc-600`;
 
+const LOCKED_MISSION_MESSAGE = "수업 시간에만 확인할 수 있습니다";
+
+function MissionLockedNotice({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const titleId = useId();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/55 p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] backdrop-blur-[2px] sm:items-center sm:pb-8"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="w-full max-w-sm animate-[intro-toast-in_0.32s_ease-out] rounded-2xl border border-white/15 bg-zinc-950/95 px-5 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-6 sm:py-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p
+          id={titleId}
+          className="text-center text-base font-bold leading-relaxed text-white sm:text-lg"
+        >
+          {LOCKED_MISSION_MESSAGE}
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-5 w-full rounded-xl bg-[#facc15] px-4 py-3 text-sm font-black text-zinc-900 shadow-lg transition hover:brightness-105 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 sm:text-base"
+        >
+          확인
+        </button>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 function MissionList({
   animateItems,
 }: {
@@ -47,12 +108,18 @@ function MissionList({
   const pathname = usePathname();
   const router = useRouter();
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [lockedNoticeOpen, setLockedNoticeOpen] = useState(false);
 
   const toggleExpand = (id: number) => {
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
   const closeExpand = () => setExpandedId(null);
+
+  const handleLockedMissionClick = () => {
+    closeExpand();
+    setLockedNoticeOpen(true);
+  };
 
   function handleStartupSupportClick(e: React.MouseEvent<HTMLAnchorElement>) {
     const state = useStartupSupportStore.getState();
@@ -153,7 +220,7 @@ function MissionList({
                 <button
                   type="button"
                   className={itemClass}
-                  onClick={closeExpand}
+                  onClick={handleLockedMissionClick}
                 >
                   <span
                     className="shrink-0 self-start pt-0.5 text-xs font-bold tabular-nums sm:text-sm"
@@ -207,6 +274,10 @@ function MissionList({
           </li>
         );
       })}
+      <MissionLockedNotice
+        open={lockedNoticeOpen}
+        onClose={() => setLockedNoticeOpen(false)}
+      />
     </ol>
   );
 }
