@@ -30,13 +30,20 @@ export function useClaudeTask<T>() {
       setError(null);
       let isSuccess = false;
 
+      const trimmedKey = apiKey?.trim() ?? "";
+      if (!trimmedKey) {
+        setError(
+          "Claude API Key가 설정되지 않았습니다. 시작 화면에서 AI Key를 입력해 주세요.",
+        );
+        setLoading(false);
+        return null;
+      }
+
       try {
         const headers: Record<string, string> = {
           "Content-Type": "application/json",
+          "x-user-anthropic-key": trimmedKey,
         };
-        if (apiKey) {
-          headers["x-user-anthropic-key"] = apiKey;
-        }
 
         const res = await fetch("/api/ai/claude", {
           method: "POST",

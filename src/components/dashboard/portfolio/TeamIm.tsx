@@ -11,10 +11,10 @@ const COLORS = {
 };
 
 const MEMBERS = [
-  { name: "이현서", short: "현서" },
-  { name: "윤이준", short: "이준" },
-  { name: "이로이", short: "로이" },
-  { name: "이로운", short: "로운" },
+  { name: "윤이준", school: "신장초", grade: "5학년", short: "이준" },
+  { name: "이현서", school: "감일초", grade: "5학년", short: "현서" },
+  { name: "이로이", school: "위례숲초", grade: "6학년", short: "로이" },
+  { name: "이로운", school: "위례숲초", grade: "4학년", short: "로운" },
 ];
 
 const fadeUp = {
@@ -177,7 +177,12 @@ export default function TeamIm() {
               >
                 {m.short}
               </span>
-              <span className="text-sm font-semibold text-zinc-700 sm:text-base">{m.name}</span>
+              <div className="flex flex-col leading-tight">
+                <span className="text-sm font-semibold text-zinc-700 sm:text-base">{m.name}</span>
+                <span className="whitespace-nowrap text-[11px] font-medium text-zinc-500 sm:text-xs">
+                  {m.school} {m.grade}
+                </span>
+              </div>
             </div>
           ))}
         </motion.div>
@@ -275,7 +280,8 @@ export default function TeamIm() {
 
         <motion.div {...fadeUp} className="space-y-4 text-sm leading-loose text-zinc-700 sm:text-base sm:leading-loose">
           <p>
-            IM은 4명의 초등부 팀원 — 이현서, 윤이준, 이로이, 이로운 — 이 함께 만든 팀명입니다. 두 글자 안에{" "}
+            IM은 4명의 초등부 팀원 —{" "}
+            {MEMBERS.map((m) => `${m.name} (${m.school} ${m.grade})`).join(", ")} — 이 함께 만든 팀명입니다. 두 글자 안에{" "}
             <span className="font-bold" style={{ color: COLORS.idea }}>Idea(아이디어)</span>와{" "}
             <span className="font-bold" style={{ color: COLORS.maker }}>Maker(만드는 사람)</span>라는 창업의 핵심 가치를 담았습니다.
           </p>

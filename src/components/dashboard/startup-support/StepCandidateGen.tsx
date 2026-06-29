@@ -2,11 +2,12 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Sparkles, RefreshCw } from "lucide-react";
+import { ChevronDown, ChevronUp, Key, Sparkles, RefreshCw } from "lucide-react";
 import { useStartupSupportStore } from "@/store/useStartupSupportStore";
 import { useClaudeTask } from "@/lib/startup-support/useClaudeTask";
 import type { StartupItemCandidate } from "@/types/startup-support";
 import AiStepNotice from "./AiStepNotice";
+import ApiKeySettings from "./ApiKeySettings";
 import { StepHeader, ComparisonTable, WarningBox } from "./ui";
 
 function CandidateCard({ c, index }: { c: StartupItemCandidate; index: number }) {
@@ -109,6 +110,7 @@ export default function StepCandidateGen() {
   const problemInput = useStartupSupportStore((s) => s.problemInput);
   const problemAnswers = useStartupSupportStore((s) => s.problemAnswers);
   const apiKey = useStartupSupportStore((s) => s.apiKey);
+  const [showKeyModal, setShowKeyModal] = useState(false);
 
   const { run, loading, error, lastElapsedMs } = useClaudeTask<{
     candidates: StartupItemCandidate[];
@@ -163,6 +165,28 @@ export default function StepCandidateGen() {
         isRunning={loading}
       />
 
+      {(!apiKey.trim() || error?.includes("AI Key")) && (
+        <div className="mt-4">
+          <WarningBox
+            variant="warning"
+            action={
+              <button
+                type="button"
+                onClick={() => setShowKeyModal(true)}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-semibold text-amber-800 transition hover:bg-amber-100"
+              >
+                <Key className="size-3.5" strokeWidth={2} aria-hidden />
+                AI Key {apiKey.trim() ? "다시 입력" : "입력"}
+              </button>
+            }
+          >
+            {apiKey.trim()
+              ? "입력한 AI Key가 거부되었습니다. Anthropic Console에서 키가 활성 상태인지 확인해 주세요."
+              : "AI Key가 설정되지 않았습니다. 시작 화면에서 입력했더라도 새로고침하면 사라집니다."}
+          </WarningBox>
+        </div>
+      )}
+
       {error && (
         <div className="mt-4">
           <WarningBox variant="error">{error}</WarningBox>
@@ -188,6 +212,8 @@ export default function StepCandidateGen() {
           </div>
         </div>
       )}
+
+      {showKeyModal && <ApiKeySettings onClose={() => setShowKeyModal(false)} />}
     </div>
   );
 }

@@ -1,5 +1,8 @@
 // 단일 Claude API Route — task별 분기 + API Key 처리
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic, {
+  AuthenticationError,
+  RateLimitError,
+} from "@anthropic-ai/sdk";
 import { COMMON_SYSTEM_PROMPT, buildUserPrompt, getMaxTokens, getTemperature } from "@/lib/startup-support/prompts";
 import { extractJson } from "@/lib/startup-support/jsonParser";
 import type { ClaudeTask, TokenUsage } from "@/types/startup-support";
@@ -101,6 +104,28 @@ export async function POST(req: Request) {
     const elapsedSec = ((Date.now() - startedAt) / 1000).toFixed(1);
     const errorMessage = err instanceof Error ? err.message : "알 수 없는 오류";
     console.error(`[AI][${taskLabel}] failed ${elapsedSec}s - ${errorMessage}`);
+
+    if (err instanceof AuthenticationError) {
+      return Response.json(
+        {
+          success: false,
+          error:
+            "입력한 AI Key가 유효하지 않습니다. Anthropic Console에서 키 상태를 확인한 뒤 다시 입력해 주세요.",
+        },
+        { status: 401 },
+      );
+    }
+
+    if (err instanceof RateLimitError) {
+      return Response.json(
+        {
+          success: false,
+          error: "요청이 많아 지연되고 있어요. 잠시 후 다시 시도해 주세요.",
+        },
+        { status: 429 },
+      );
+    }
+
     return Response.json(
       { success: false, error: "AI 응답 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요." },
       { status: 500 },

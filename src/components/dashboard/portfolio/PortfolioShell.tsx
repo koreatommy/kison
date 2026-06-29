@@ -9,6 +9,7 @@ import TeamAce from "./TeamAce";
 import PortfolioPlaceholder from "./PortfolioPlaceholder";
 import AceItemSelection from "./ace/AceItemSelection";
 import ImItemSelection from "./im/ImItemSelection";
+import JcalpItemSelection from "./jcalp/JcalpItemSelection";
 
 type TeamId = "jcalp" | "im" | "ace";
 type SubSection = "intro" | "item-selection" | "club-activity";
@@ -65,6 +66,9 @@ function getTeamContent(team: TeamId, subsection: SubSection) {
     }
     if (team === "im") {
       return ImItemSelection;
+    }
+    if (team === "jcalp") {
+      return JcalpItemSelection;
     }
     return () => <PortfolioPlaceholder title="창업아이템 선정" />;
   }

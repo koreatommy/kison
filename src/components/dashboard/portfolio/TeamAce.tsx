@@ -12,9 +12,9 @@ const COLORS = {
 };
 
 const MEMBERS = [
-  { name: "이상윤", initial: "A", eng: "Achieving", kor: "달성하는", color: "achieving" as const },
-  { name: "한은빈", initial: "C", eng: "Creative", kor: "창의적인", color: "creative" as const },
-  { name: "김민찬", initial: "E", eng: "Excellence", kor: "탁월함", color: "excellence" as const },
+  { name: "이상윤", school: "미사강변중", grade: "3학년", initial: "A", eng: "Achieving", kor: "달성하는", color: "achieving" as const },
+  { name: "한은빈", school: "감일중", grade: "1학년", initial: "C", eng: "Creative", kor: "창의적인", color: "creative" as const },
+  { name: "김민찬", school: "운촌중", grade: "2학년", initial: "E", eng: "Excellence", kor: "탁월함", color: "excellence" as const },
 ];
 
 const VALUES = [
@@ -160,6 +160,9 @@ export default function TeamAce() {
                 {m.initial}
               </div>
               <p className="text-lg font-bold text-zinc-800 sm:text-xl">{m.name}</p>
+              <p className="mt-0.5 whitespace-nowrap text-xs font-medium text-zinc-500 sm:text-sm">
+                {m.school} {m.grade}
+              </p>
               <p className="mt-1 text-sm font-bold sm:text-base" style={{ color: COLORS[m.color] }}>
                 {m.eng}
               </p>
@@ -279,7 +282,8 @@ export default function TeamAce() {
 
         <motion.div {...fadeUp} className="space-y-4 text-sm leading-loose text-zinc-700 sm:text-base sm:leading-loose">
           <p>
-            ACE는 3명의 중등부 팀원 — 이상윤, 한은빈, 김민찬 — 이 함께 만든 팀명입니다. 각 알파벳에는 우리 팀이 창업 활동을 통해 추구하고 싶은{" "}
+            ACE는 3명의 중등부 팀원 —{" "}
+            {MEMBERS.map((m) => `${m.name} (${m.school} ${m.grade})`).join(", ")} — 이 함께 만든 팀명입니다. 각 알파벳에는 우리 팀이 창업 활동을 통해 추구하고 싶은{" "}
             <span className="font-bold" style={{ color: COLORS.achieving }}>목표 달성의 태도</span>,{" "}
             <span className="font-bold" style={{ color: COLORS.creative }}>창의적 사고</span>,{" "}
             <span className="font-bold" style={{ color: COLORS.excellence }}>탁월함을 향한 노력</span>이 담겨 있습니다.
