@@ -11,10 +11,15 @@ import type { CharacterId } from "@/types/result";
 type Props = {
   /** 현재 팀에서 선택된 캐릭터 ID (강조 표시용) */
   selectedCharacterIds?: CharacterId[];
+  /** 상단 "창업 캐릭터 5종" 안내 문구 표시 여부 */
+  showHeader?: boolean;
+  className?: string;
 };
 
 export default function CharacterRoleGallery({
   selectedCharacterIds = [],
+  showHeader = true,
+  className = "mt-5 border-t border-zinc-100 pt-5",
 }: Props) {
   const selectedSet = new Set(selectedCharacterIds);
   const [previewId, setPreviewId] = useState<CharacterId | null>(null);
@@ -96,13 +101,15 @@ export default function CharacterRoleGallery({
 
   return (
     <>
-      <div className="mt-5 border-t border-zinc-100 pt-5">
-        <div className="mb-4">
-          <p className="text-sm font-semibold text-zinc-700">창업 캐릭터 5종</p>
-          <p className="mt-0.5 text-xs text-zinc-400">
-            각 구성원에게 맞는 역할을 골라 보세요. 이미지를 누르면 크게 볼 수 있습니다.
-          </p>
-        </div>
+      <div className={className}>
+        {showHeader ? (
+          <div className="mb-4">
+            <p className="text-sm font-semibold text-zinc-700">창업 캐릭터 5종</p>
+            <p className="mt-0.5 text-xs text-zinc-400">
+              각 구성원에게 맞는 역할을 골라 보세요. 이미지를 누르면 크게 볼 수 있습니다.
+            </p>
+          </div>
+        ) : null}
 
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {characters.map((char) => {

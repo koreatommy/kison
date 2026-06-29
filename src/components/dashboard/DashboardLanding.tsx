@@ -2,6 +2,7 @@
 // 대시보드 메인 랜딩페이지 — 모든 섹션을 스크롤 가능한 노란 캔버스 위에 조합
 import HeroSection from "@/components/dashboard/landing/HeroSection";
 import FeatureCards from "@/components/dashboard/landing/FeatureCards";
+import CharacterStorySection from "@/components/dashboard/landing/CharacterStorySection";
 import CurriculumTimeline from "@/components/dashboard/landing/CurriculumTimeline";
 import CompetencyCards from "@/components/dashboard/landing/CompetencyCards";
 import ActionFlow from "@/components/dashboard/landing/ActionFlow";
@@ -12,6 +13,7 @@ export default function DashboardLanding() {
     <div className="h-full overflow-y-auto bg-[#facc15]">
       <HeroSection />
       <FeatureCards />
+      <CharacterStorySection />
       <CurriculumTimeline />
       <CompetencyCards />
       <ActionFlow />
