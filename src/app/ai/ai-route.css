@@ -1,0 +1,6 @@
+/* /ai 라우트 — 루트 블랙 배경을 라이트로 덮어씀 */
+html:has(.ai-landing),
+html:has(.ai-landing) body,
+html:has(.ai-landing) body > main {
+  background: #f3f7f5 !important;
+}

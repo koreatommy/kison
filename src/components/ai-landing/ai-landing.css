@@ -1,0 +1,52 @@
+/* /ai 진로로드맵 랜딩 전용 토큰 */
+.ai-landing {
+  --ai-bg: #f3f7f5;
+  --ai-ink: #14241f;
+  --ai-ink-soft: #243832;
+  --ai-teal: #0f766e;
+  --ai-teal-deep: #0d5f59;
+  --ai-teal-bright: #5eead4;
+  color: var(--ai-ink);
+  background: var(--ai-bg);
+  font-family: "Nunito", system-ui, sans-serif;
+}
+
+.ai-landing * {
+  box-sizing: border-box;
+}
+
+@keyframes ai-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-hero-copy > * {
+  animation: ai-hero-in 0.5s ease-out both;
+}
+
+.ai-hero-copy > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.ai-hero-copy > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.ai-hero-copy > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.ai-hero-copy > *:nth-child(4) {
+  animation-delay: 0.28s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-landing *,
+  .ai-hero-copy > * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
