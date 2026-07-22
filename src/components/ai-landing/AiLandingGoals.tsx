@@ -33,7 +33,7 @@ export default function AiLandingGoals() {
 
         <div className="mt-16">
           <h3 className="text-lg font-black tracking-[-0.02em] text-[var(--ai-ink)] sm:text-xl">
-            초등 4~6학년, 이 다섯 가지만 관리하면 충분합니다
+            초등 5~6학년·중학 1~3학년, 이 다섯 가지만 관리하면 충분합니다
           </h3>
           <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-5">
             {manageAxes.map((axis) => (

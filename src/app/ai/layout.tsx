@@ -5,7 +5,7 @@ import "./ai-route.css";
 export const metadata: Metadata = {
   title: "우리 아이 진로 로드맵 | AI 학부모 실습 교안",
   description:
-    "AI를 활용한 우리 아이 진로 로드맵 만들기 — Lovable로 만드는 초등 4~6학년 진로·진학 관리 대시보드 학부모 실습 교안",
+    "AI를 활용한 우리 아이 진로 로드맵 만들기 — Lovable로 만드는 초등 5~6학년·중학 1~3학년 진로·진학 관리 대시보드 학부모 실습 교안",
   alternates: {
     canonical: "/ai",
   },
