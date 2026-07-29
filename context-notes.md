@@ -59,3 +59,28 @@
 
 - **결정**: 대상을 초등 4~6학년에서 **초등 5~6학년, 중학 1~3학년**으로 변경.
 - **반영**: 메타·학습목표·핵심메시지·일정·Lovable 프롬프트·운영팁·메타데이터 description.
+
+## 2026-07-29: /shotform 숏폼 클래스 랜딩 서빙
+
+- **목표**: `src/app/shortform`의 정적 HTML/CSS/JS 랜딩을 `/shotform`에서 서빙.
+- **결정**: React 변환 대신 `public/shotform` + rewrite 방식 채택.
+- **사유**: 기존 HTML/CSS/JS(IntersectionObserver, lab step 전환)를 그대로 유지하는 게 최소 변경. App Router의 `page.tsx`로 옮기면 인터랙션·스타일 재작업이 큼.
+- **URL**: 요청대로 `/shotform`(shortform 아님) 사용.
+- **경로**: CSS/JS/이미지 모두 `/shotform/...` 절대경로로 맞춤.
+
+## 2026-07-29: /shortform 타임라인 섹션 재배치
+
+- **결정**: `100 MINUTES` 타임라인을 `MEDIA LITERACY` 질문 섹션 위로 이동.
+- **사유**: 수업 개요(01 THE CLASS) 직후 진행 순서를 먼저 보여 주고, 미디어 리터러시 질문으로 이어지는 흐름이 더 자연스러움.
+- **번호 재정렬**: 01 THE CLASS → 02 100 MINUTES → 03 MEDIA LITERACY → 04 FORMAT → 05 GOOD SHORT → 06 LAB → 07 CREATE → 08 RESULT → 09 LEARNING.
+
+## 2026-07-29: /shortform React 랜딩 이식 (생성형 AI 확장 대비)
+
+- **목표**: 정적 `public/shotform`을 `/ai` 패턴과 동일한 App Router React 랜딩(`/shortform`)으로 재구축. 향후 이미지 생성·영상 생성·갤러리 기능 추가를 염두에 둠.
+- **URL 변경**: `/shotform` → `/shortform`으로 확정(폴더명·브랜드와 일치). 기존 `next.config.ts`의 `/shotform` rewrite 제거, `public/shotform/` 삭제.
+- **구조**: `src/app/shortform/{page,layout,shortform-route.css}` + `src/components/shortform-landing/*` + `src/data/shortformCurriculum.ts` — `/ai`(`ai-landing` + `aiCareerCurriculum.ts`) 구조를 그대로 미러링.
+- **CSS**: 원본 `styles.css`(태그/클래스 전역 선택자)를 `.sf-landing` 스코프 아래로 전부 이식(`shortform-landing.css`). CSS 변수도 `--ink`→`--sf-ink` 등으로 접두사 부여해 다른 라우트와 충돌 방지. 루트 블랙 배경 오버라이드는 `/ai`의 `html:has()` 패턴을 재사용(`shortform-route.css`).
+- **폰트**: 정적 HTML의 Google Fonts `<link>` 대신 `next/font/google`(DM Mono·Manrope·Noto Sans KR)로 전환 — Next.js 폰트 최적화(레이아웃 시프트 방지, self-host) 활용.
+- **인터랙션**: 원본 `script.js`의 IntersectionObserver reveal 애니메이션을 `ShortformRevealObserver`(client) 컴포넌트로, Lab 스텝 전환/프롬프트 다듬기 버튼을 `ShortformLandingLab`(client, `useState`)으로 이식.
+- **향후 확장 자리**: `src/components/shortform-landing/lab/`에 Lab을 두어, 이후 `generate/`(이미지 생성형 AI), `video/`(영상 생성형 AI), `gallery/`(결과물 갤러리)를 형제 폴더로 추가할 수 있게 함. 이번 작업에서는 스텁 폴더나 빈 barrel을 만들지 않고, `shortformCurriculum.ts`의 `futureModules` 주석에만 관례를 기록.
+- **이미지 자산**: `public/images/shortform/{hero-rabbit,image-cta,video-cta}.png` — 다른 페이지 이미지(`public/images/...`) 규칙과 일치시킴.

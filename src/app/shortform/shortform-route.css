@@ -1,0 +1,9 @@
+/* /shortform 라우트 — 루트 블랙 배경을 라이트로 덮어씀 + 스무스 스크롤 */
+html:has(.sf-landing) {
+  scroll-behavior: smooth;
+}
+html:has(.sf-landing),
+html:has(.sf-landing) body,
+html:has(.sf-landing) body > main {
+  background: #f8f9fb !important;
+}

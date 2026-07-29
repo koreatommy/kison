@@ -77,3 +77,26 @@
 - [x] 프롬프트 복사 인터랙션
 - [x] 모바일·데스크톱 반응형
 - [x] `npm run build` 통과
+
+## 2026-07-29: /shotform 숏폼 클래스 랜딩
+- [x] `src/app/shortform` 정적 파일을 `public/shotform`으로 이동
+- [x] HTML/JS 자산 경로를 `/shotform/...` 절대경로로 수정
+- [x] `next.config.ts`에 `/shotform` rewrite 추가
+- [x] `http://localhost:3000/shotform` 서빙 확인
+- [x] `npm run build` 통과
+
+## 2026-07-29: /shortform React 랜딩 이식
+- [x] `shortformCurriculum.ts` 데이터 분리 + `public/images/shortform` 자산 이동
+- [x] `src/app/shortform` page/layout/route.css + 전용 폰트(DM Mono·Manrope·Noto Sans KR)
+- [x] `shortform-landing` 섹션 컴포넌트 13종 + `.sf-landing` 스코프 CSS
+- [x] Lab 스텝 전환 인터랙션(client) — 향후 generate/video/gallery 형제 폴더 자리
+- [x] 스크롤 reveal 애니메이션(client, IntersectionObserver)
+- [x] `next.config.ts`의 `/shotform` rewrite 제거
+- [x] `public/shotform/` 삭제
+- [x] `http://localhost:3000/shortform` 서빙 확인 (`/shotform`은 404)
+- [x] `npm run build` 통과
+
+## 2026-07-29: /shortform 타임라인 섹션 재배치
+- [x] Timeline을 Questions 위로 이동
+- [x] 섹션 번호 01~09 순차 재정렬
+- [x] `npm run build` 통과
