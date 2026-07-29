@@ -7,9 +7,12 @@ import TeamJcalp from "./TeamJcalp";
 import TeamIm from "./TeamIm";
 import TeamAce from "./TeamAce";
 import PortfolioPlaceholder from "./PortfolioPlaceholder";
+import FinalBusinessPlanViewer from "./FinalBusinessPlanViewer";
+import FinalPlanPasswordModal from "./FinalPlanPasswordModal";
 import AceItemSelection from "./ace/AceItemSelection";
 import ImItemSelection from "./im/ImItemSelection";
 import JcalpItemSelection from "./jcalp/JcalpItemSelection";
+import { PORTFOLIO_FINAL_PLAN_PDFS } from "./portfolio-pdfs";
 
 type TeamId = "jcalp" | "im" | "ace";
 type SubSection = "intro" | "item-selection" | "club-activity";
@@ -17,7 +20,7 @@ type SubSection = "intro" | "item-selection" | "club-activity";
 const SUBSECTIONS: { id: SubSection; label: string }[] = [
   { id: "intro", label: "팀 소개" },
   { id: "item-selection", label: "창업아이템 선정" },
-  { id: "club-activity", label: "창업동아리 활동" },
+  { id: "club-activity", label: "최종사업계획서" },
 ];
 
 const TEAMS: {
@@ -72,26 +75,51 @@ function getTeamContent(team: TeamId, subsection: SubSection) {
     }
     return () => <PortfolioPlaceholder title="창업아이템 선정" />;
   }
-  return () => <PortfolioPlaceholder title="창업동아리 활동" />;
+  const plan = PORTFOLIO_FINAL_PLAN_PDFS[team];
+  return () => <FinalBusinessPlanViewer {...plan} />;
 }
 
 export default function PortfolioShell() {
   const [activeTeam, setActiveTeam] = useState<TeamId>("jcalp");
   const [activeSubSection, setActiveSubSection] = useState<SubSection>("intro");
   const [hoveredTeam, setHoveredTeam] = useState<TeamId | null>(null);
+  const [pendingFinalPlanTeam, setPendingFinalPlanTeam] = useState<TeamId | null>(null);
+  const [isFinalPlanUnlocked, setIsFinalPlanUnlocked] = useState(false);
 
   const ActiveComponent = getTeamContent(activeTeam, activeSubSection);
   const contentKey = `${activeTeam}-${activeSubSection}`;
+  const pendingTeamMeta = pendingFinalPlanTeam
+    ? TEAMS.find((team) => team.id === pendingFinalPlanTeam)
+    : null;
 
   const handleTeamClick = (teamId: TeamId) => {
     setActiveTeam(teamId);
     setActiveSubSection("intro");
   };
 
+  const openFinalPlan = (teamId: TeamId) => {
+    setActiveTeam(teamId);
+    setActiveSubSection("club-activity");
+    setHoveredTeam(null);
+    setPendingFinalPlanTeam(null);
+  };
+
   const handleSubSectionClick = (teamId: TeamId, sectionId: SubSection) => {
+    if (sectionId === "club-activity" && !isFinalPlanUnlocked) {
+      setPendingFinalPlanTeam(teamId);
+      setHoveredTeam(null);
+      return;
+    }
+
     setActiveTeam(teamId);
     setActiveSubSection(sectionId);
     setHoveredTeam(null);
+  };
+
+  const handlePasswordSuccess = () => {
+    if (!pendingFinalPlanTeam) return;
+    setIsFinalPlanUnlocked(true);
+    openFinalPlan(pendingFinalPlanTeam);
   };
 
   return (
@@ -175,8 +203,8 @@ export default function PortfolioShell() {
         </div>
       </header>
 
-      {/* 콘텐츠 영역 */}
-      <div className="relative min-h-0 flex-1 overflow-y-auto">
+      {/* 콘텐츠 영역 — PDF 뷰어는 h-full 내부 스크롤, 일반 섹션은 영역 스크롤 */}
+      <div className="relative min-h-0 flex-1 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={contentKey}
@@ -184,12 +212,22 @@ export default function PortfolioShell() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="min-h-full"
+            className={
+              activeSubSection === "club-activity" ? "h-full overflow-hidden" : "h-full overflow-y-auto"
+            }
           >
             <ActiveComponent />
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {pendingFinalPlanTeam && pendingTeamMeta && (
+        <FinalPlanPasswordModal
+          teamLabel={pendingTeamMeta.sublabel}
+          onSuccess={handlePasswordSuccess}
+          onClose={() => setPendingFinalPlanTeam(null)}
+        />
+      )}
     </div>
   );
 }
