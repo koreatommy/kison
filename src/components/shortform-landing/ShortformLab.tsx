@@ -3,7 +3,16 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Check, ChevronRight, Lightbulb, Volume2, Share2 } from "lucide-react";
+import {
+  Sparkles,
+  Check,
+  ChevronRight,
+  Lightbulb,
+  Volume2,
+  Share2,
+  Pause,
+  Play,
+} from "lucide-react";
 import { labSteps } from "@/data/shortformCurriculum";
 
 type GenerationStatus = "idle" | "analyzing" | "generating" | "complete";
@@ -21,6 +30,7 @@ export default function ShortformLab() {
   const [progress, setProgress] = useState(0);
   const [improved, setImproved] = useState(false);
   const [needsTapToPlay, setNeedsTapToPlay] = useState(false);
+  const [isVideoPaused, setIsVideoPaused] = useState(false);
   const [shareFeedback, setShareFeedback] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -86,6 +96,21 @@ export default function ShortformLab() {
     setProgress(0);
     setImproved(false);
     setNeedsTapToPlay(false);
+    setIsVideoPaused(false);
+  };
+
+  const toggleVideoPlayback = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      await playWithSound(video);
+      setIsVideoPaused(false);
+      return;
+    }
+
+    video.pause();
+    setIsVideoPaused(true);
   };
 
   useEffect(() => {
@@ -105,6 +130,7 @@ export default function ShortformLab() {
       setProgress(0);
       setImproved(false);
       setNeedsTapToPlay(false);
+      setIsVideoPaused(false);
     }, 900);
 
     return () => clearTimeout(timer);
@@ -324,9 +350,22 @@ export default function ShortformLab() {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.35 }}
                       onLoadedData={(e) => {
+                        setIsVideoPaused(false);
                         void playWithSound(e.currentTarget);
                       }}
                     />
+                    <button
+                      type="button"
+                      onClick={() => void toggleVideoPlayback()}
+                      className="absolute right-3 bottom-8 z-10 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-2.5 py-1.5 text-[10px] font-bold text-white backdrop-blur-sm transition hover:bg-black/70"
+                    >
+                      {isVideoPaused ? (
+                        <Play className="size-3.5" strokeWidth={2.5} />
+                      ) : (
+                        <Pause className="size-3.5" strokeWidth={2.5} />
+                      )}
+                      {isVideoPaused ? "재생" : "정지"}
+                    </button>
                     {needsTapToPlay && (
                       <button
                         type="button"

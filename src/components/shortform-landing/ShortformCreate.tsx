@@ -40,7 +40,30 @@ const resultVideos = [
   },
 ] as const;
 
+type IOSVideoElement = HTMLVideoElement & {
+  webkitEnterFullscreen?: () => void;
+};
+
 export default function ShortformCreate() {
+  const openFullscreenOnMobile = (video: HTMLVideoElement) => {
+    if (typeof window === "undefined") return;
+
+    const isMobileOrTablet = window.matchMedia("(max-width: 1024px)").matches;
+    if (!isMobileOrTablet) return;
+
+    if (document.fullscreenElement) return;
+
+    if (typeof video.requestFullscreen === "function") {
+      void video.requestFullscreen().catch(() => {});
+      return;
+    }
+
+    const iosVideo = video as IOSVideoElement;
+    if (typeof iosVideo.webkitEnterFullscreen === "function") {
+      iosVideo.webkitEnterFullscreen();
+    }
+  };
+
   return (
     <section className="scroll-mt-20 border-t border-[var(--sf-ink)]/8 bg-[var(--sf-bg)]">
       <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-24">
@@ -156,6 +179,9 @@ export default function ShortformCreate() {
                       playsInline
                       preload="metadata"
                       className="aspect-[9/16] w-full object-cover"
+                      onPlay={(e) => {
+                        openFullscreenOnMobile(e.currentTarget);
+                      }}
                     />
                   </div>
                   <figcaption className="text-sm font-bold text-[var(--sf-ink)]/55">
