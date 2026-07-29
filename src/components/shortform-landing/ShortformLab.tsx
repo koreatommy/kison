@@ -1,9 +1,9 @@
 // /shortform 랜딩 — AI Creator Lab (생성형 AI 플랫폼 스타일 인터랙티브 UI)
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Check, ChevronRight, Lightbulb } from "lucide-react";
+import { Sparkles, Check, ChevronRight, Lightbulb, Volume2, Share2 } from "lucide-react";
 import { labSteps } from "@/data/shortformCurriculum";
 
 type GenerationStatus = "idle" | "analyzing" | "generating" | "complete";
@@ -20,9 +20,49 @@ export default function ShortformLab() {
   const [status, setStatus] = useState<GenerationStatus>("idle");
   const [progress, setProgress] = useState(0);
   const [improved, setImproved] = useState(false);
+  const [needsTapToPlay, setNeedsTapToPlay] = useState(false);
+  const [shareFeedback, setShareFeedback] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const current = labSteps[activeStep];
   const totalSteps = labSteps.length;
+  const isResultStep = Boolean(current.video);
+
+  const playWithSound = async (video: HTMLVideoElement) => {
+    video.muted = false;
+    video.volume = 1;
+    try {
+      await video.play();
+      setNeedsTapToPlay(false);
+    } catch {
+      setNeedsTapToPlay(true);
+    }
+  };
+
+  const handleShare = async () => {
+    const shareUrl = current.video
+      ? `${window.location.origin}${current.video}`
+      : window.location.href;
+    const shareData = {
+      title: "나만의 AI 숏폼",
+      text: "AI로 만든 나만의 숏폼을 확인해보세요!",
+      url: shareUrl,
+    };
+
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(shareUrl);
+      setShareFeedback("링크가 복사되었어요");
+      setTimeout(() => setShareFeedback(null), 2000);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      setShareFeedback("공유에 실패했어요");
+      setTimeout(() => setShareFeedback(null), 2000);
+    }
+  };
 
   const handleGenerate = () => {
     setStatus("analyzing");
@@ -35,9 +75,6 @@ export default function ShortformLab() {
           setStatus("complete");
           return 100;
         }
-        if (prev >= 60 && status === "analyzing") {
-          setStatus("generating");
-        }
         return prev + 2;
       });
     }, 50);
@@ -48,6 +85,7 @@ export default function ShortformLab() {
     setStatus("idle");
     setProgress(0);
     setImproved(false);
+    setNeedsTapToPlay(false);
   };
 
   useEffect(() => {
@@ -55,6 +93,22 @@ export default function ShortformLab() {
       setStatus("generating");
     }
   }, [progress, status]);
+
+  // 생성 완료 후 다음 단계로 이동 (영상 완료 시 → 결과 확인)
+  useEffect(() => {
+    if (status !== "complete") return;
+    if (activeStep >= totalSteps - 1) return;
+
+    const timer = setTimeout(() => {
+      setActiveStep((prev) => prev + 1);
+      setStatus("idle");
+      setProgress(0);
+      setImproved(false);
+      setNeedsTapToPlay(false);
+    }, 900);
+
+    return () => clearTimeout(timer);
+  }, [status, activeStep, totalSteps]);
 
   return (
     <section
@@ -68,8 +122,7 @@ export default function ShortformLab() {
             AI Creator Lab
           </p>
           <h2 className="mt-3 text-2xl font-black tracking-[-0.025em] text-white sm:text-3xl">
-            상상을 현실로 만드는{" "}
-            <span className="text-[var(--sf-blue-bright)]">3단계</span>
+            <span className="text-[var(--sf-blue-bright)]">3단계</span> 데모 버전
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-base font-semibold text-white/60">
             학생이 먼저 생각하고, AI가 표현을 도와줍니다.
@@ -164,7 +217,7 @@ export default function ShortformLab() {
                     </div>
 
                     <div className="relative">
-                      <div className="min-h-[120px] rounded-xl border border-white/10 bg-white/5 p-4 font-mono text-sm text-white/70">
+                      <div className="sf-prompt-scroll h-[120px] whitespace-pre-wrap rounded-xl border border-white/10 bg-white/5 p-4 pb-8 font-mono text-sm leading-relaxed text-white/70">
                         {improved ? (
                           <span className="text-[var(--sf-cyan)]">
                             {current.placeholder?.replace("예: ", "")}
@@ -179,8 +232,8 @@ export default function ShortformLab() {
                         )}
                       </div>
                       {current.placeholder && (
-                        <span className="absolute bottom-3 right-3 text-xs text-white/30">
-                          {current.placeholder.length}/200
+                        <span className="pointer-events-none absolute right-5 bottom-3 text-xs text-white/30">
+                          {current.placeholder.length}/800
                         </span>
                       )}
                     </div>
@@ -215,14 +268,25 @@ export default function ShortformLab() {
                       {improved ? "다듬기 완료 ✓" : "AI가 프롬프트 다듬기"}
                     </button>
                   )}
-                  <button
-                    type="button"
-                    onClick={handleGenerate}
-                    disabled={status !== "idle" && status !== "complete"}
-                    className="inline-flex items-center gap-2 rounded-lg bg-[var(--sf-blue)] px-5 py-2.5 text-sm font-bold text-white transition-all duration-150 hover:bg-[var(--sf-blue-soft)] active:scale-[0.98] disabled:opacity-50"
-                  >
-                    {status === "complete" ? "다시 생성하기" : "생성하기 →"}
-                  </button>
+                  {isResultStep ? (
+                    <button
+                      type="button"
+                      onClick={() => void handleShare()}
+                      className="inline-flex items-center gap-2 rounded-lg bg-[var(--sf-blue)] px-5 py-2.5 text-sm font-bold text-white transition-all duration-150 hover:bg-[var(--sf-blue-soft)] active:scale-[0.98]"
+                    >
+                      <Share2 className="size-4" />
+                      {shareFeedback ?? "공유하기"}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleGenerate}
+                      disabled={status !== "idle" && status !== "complete"}
+                      className="inline-flex items-center gap-2 rounded-lg bg-[var(--sf-blue)] px-5 py-2.5 text-sm font-bold text-white transition-all duration-150 hover:bg-[var(--sf-blue-soft)] active:scale-[0.98] disabled:opacity-50"
+                    >
+                      {status === "complete" ? "다시 생성하기" : "생성하기 →"}
+                    </button>
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -238,32 +302,55 @@ export default function ShortformLab() {
               </div>
 
               <AnimatePresence mode="wait">
-                {status === "complete" ? (
-                  <motion.img
-                    key="result"
-                    src={current.image}
-                    alt="AI 생성 이미지"
-                    className="size-full object-cover"
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4 }}
-                  />
-                ) : status !== "idle" ? (
+                {status !== "idle" && status !== "complete" ? (
                   <motion.div
                     key="loading"
                     className="sf-shimmer absolute inset-0"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                   />
+                ) : current.video ? (
+                  <>
+                    <motion.video
+                      key={`video-${activeStep}`}
+                      ref={videoRef}
+                      src={current.video}
+                      poster={current.image}
+                      className="size-full object-cover"
+                      autoPlay
+                      loop
+                      playsInline
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.35 }}
+                      onLoadedData={(e) => {
+                        void playWithSound(e.currentTarget);
+                      }}
+                    />
+                    {needsTapToPlay && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const video = videoRef.current;
+                          if (video) void playWithSound(video);
+                        }}
+                        className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/45 text-white"
+                      >
+                        <Volume2 className="size-8" strokeWidth={2} />
+                        <span className="text-xs font-bold">탭하여 소리 켜기</span>
+                      </button>
+                    )}
+                  </>
                 ) : (
-                  <motion.div
-                    key="placeholder"
-                    className="flex size-full items-center justify-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                  >
-                    <Sparkles className="size-8 text-white/20" />
-                  </motion.div>
+                  <motion.img
+                    key={`result-${activeStep}`}
+                    src={current.image}
+                    alt="AI 생성 이미지"
+                    className="size-full object-cover"
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.35 }}
+                  />
                 )}
               </AnimatePresence>
 
@@ -291,7 +378,11 @@ export default function ShortformLab() {
                 </div>
               )}
               <p className="text-center text-xs font-semibold text-white/50">
-                {statusMessages[status]}
+                {status === "complete" && activeStep < totalSteps - 1
+                  ? activeStep === totalSteps - 2
+                    ? "생성 완료! 결과 확인으로 이동 중..."
+                    : "생성 완료! 다음 단계로 이동 중..."
+                  : statusMessages[status]}
               </p>
             </div>
           </div>

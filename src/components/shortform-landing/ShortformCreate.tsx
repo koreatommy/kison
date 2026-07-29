@@ -2,7 +2,43 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { createFlow, resultCards } from "@/data/shortformCurriculum";
+import { createFlow } from "@/data/shortformCurriculum";
+
+const resultThumbnails = [
+  {
+    src: "/images/shortform/thumbnail-school.png",
+    alt: "우리 학교 최고예요! AI 숏폼 썸네일",
+    label: "학교 홍보",
+  },
+  {
+    src: "/images/shortform/thumbnail-lunch.png",
+    alt: "맛있는 급식! AI 숏폼 썸네일",
+    label: "급식 맛집",
+  },
+  {
+    src: "/images/shortform/thumbnail-volcano.png",
+    alt: "집에서 화산 폭발 실험! AI 숏폼 썸네일",
+    label: "화산 실험",
+  },
+] as const;
+
+const resultVideos = [
+  {
+    src: "/images/shortform/result-school.mp4",
+    poster: "/images/shortform/thumbnail-school.png",
+    label: "학교 홍보",
+  },
+  {
+    src: "/images/shortform/result-lunch.mp4",
+    poster: "/images/shortform/thumbnail-lunch.png",
+    label: "급식 맛집",
+  },
+  {
+    src: "/images/shortform/result-volcano.mp4",
+    poster: "/images/shortform/thumbnail-volcano.png",
+    label: "화산 실험",
+  },
+] as const;
 
 export default function ShortformCreate() {
   return (
@@ -48,7 +84,7 @@ export default function ShortformCreate() {
           ))}
         </div>
 
-        {/* 결과물 카드 */}
+        {/* 학생별 결과물 갤러리 */}
         <div className="mt-20">
           <p className="text-center text-xs font-bold tracking-[0.12em] text-[var(--sf-blue)] uppercase">
             My Result
@@ -56,42 +92,78 @@ export default function ShortformCreate() {
           <h3 className="mt-3 text-center text-xl font-black tracking-[-0.025em] text-[var(--sf-ink)] sm:text-2xl">
             학생별 개별 결과물
           </h3>
+          <p className="mx-auto mt-3 max-w-lg text-center text-base font-semibold text-[var(--sf-ink)]/65">
+            각자 상상한 장면을 AI로 만들어 나만의 숏폼 썸네일을 완성합니다.
+          </p>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {resultCards.map((card, i) => (
-              <motion.article
-                key={card.number}
-                initial={{ opacity: 0, y: 20 }}
+          <div className="mt-10 flex flex-wrap items-end justify-center gap-6 sm:gap-10">
+            {resultThumbnails.map((thumb, index) => (
+              <motion.figure
+                key={thumb.src}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.4, delay: i * 0.15, ease: "easeOut" }}
-                className="overflow-hidden rounded-2xl border border-[var(--sf-ink)]/10 bg-white shadow-sm"
+                transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.1 }}
+                className="flex w-[min(42vw,220px)] flex-col items-center gap-3 sm:w-[240px]"
               >
-                <div className="flex items-center justify-between border-b border-[var(--sf-ink)]/5 px-5 py-3">
-                  <span className="text-xs font-bold tracking-[0.1em] text-[var(--sf-ink)]/40 uppercase">
-                    {card.meta}
-                  </span>
-                  <span className="text-lg font-black text-[var(--sf-blue)]/30">
-                    {card.number}
-                  </span>
-                </div>
-                <div className="aspect-[4/3] bg-gradient-to-br from-[var(--sf-ink)]/5 to-[var(--sf-ink)]/10">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  className="overflow-hidden rounded-[1.75rem] border-[3px] border-[var(--sf-ink)]/10 bg-[var(--sf-ink)] shadow-xl shadow-[var(--sf-ink)]/10"
+                >
                   <img
-                    src={card.image}
-                    alt={card.highlight}
-                    className="size-full object-cover"
+                    src={thumb.src}
+                    alt={thumb.alt}
+                    className="aspect-[9/16] w-full object-cover"
                   />
-                </div>
-                <div className="px-5 py-4">
-                  <p className="text-sm font-semibold text-[var(--sf-ink)]/60">
-                    {card.title}
-                  </p>
-                  <p className="mt-1 text-lg font-black tracking-[-0.02em] text-[var(--sf-blue)]">
-                    {card.highlight}
-                  </p>
-                </div>
-              </motion.article>
+                </motion.div>
+                <figcaption className="text-sm font-bold text-[var(--sf-ink)]/55">
+                  {thumb.label}
+                </figcaption>
+              </motion.figure>
             ))}
+          </div>
+
+          {/* 숏폼 완성본 플레이어 */}
+          <div className="mt-16">
+            <p className="text-center text-xs font-bold tracking-[0.12em] text-[var(--sf-blue)] uppercase">
+              Final Shorts
+            </p>
+            <h4 className="mt-3 text-center text-lg font-black tracking-[-0.025em] text-[var(--sf-ink)] sm:text-xl">
+              숏폼 완성본
+            </h4>
+            <p className="mx-auto mt-2 max-w-md text-center text-sm font-semibold text-[var(--sf-ink)]/55">
+              재생 버튼을 눌러 완성된 AI 숏폼을 확인해보세요.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-end justify-center gap-6 sm:gap-10">
+              {resultVideos.map((video, index) => (
+                <motion.figure
+                  key={video.src}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.1 }}
+                  className="flex w-[min(42vw,220px)] flex-col items-center gap-3 sm:w-[240px]"
+                >
+                  <div className="overflow-hidden rounded-[1.75rem] border-[3px] border-[var(--sf-ink)]/10 bg-[var(--sf-ink)] shadow-xl shadow-[var(--sf-ink)]/10">
+                    <video
+                      src={video.src}
+                      poster={video.poster}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="aspect-[9/16] w-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="text-sm font-bold text-[var(--sf-ink)]/55">
+                    {video.label}
+                  </figcaption>
+                </motion.figure>
+              ))}
+            </div>
           </div>
         </div>
       </div>
