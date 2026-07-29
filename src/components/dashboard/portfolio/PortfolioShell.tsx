@@ -124,16 +124,17 @@ export default function PortfolioShell() {
 
   return (
     <div className="flex h-full flex-col bg-zinc-100">
-      {/* 탭 메뉴 — 미션 햄버거와 겹치지 않도록 --mission-hamburger-gutter 사용 */}
-      <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-4xl items-center gap-1 overflow-x-auto overflow-y-visible py-2 pr-3 pl-[max(0.75rem,var(--mission-hamburger-gutter,4.5rem))] sm:gap-2 sm:py-3 sm:pr-4">
+      {/* 탭 메뉴 — 미션 햄버거와 겹치지 않도록 --mission-hamburger-gutter 사용.
+          overflow-x-auto는 overflow-y를 강제로 잘라 드롭다운이 가려지므로 사용하지 않음. */}
+      <header className="sticky top-0 z-50 overflow-visible border-b border-zinc-200 bg-white/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-4xl items-center gap-1 overflow-visible py-2 pr-3 pl-[max(0.75rem,var(--mission-hamburger-gutter,4.5rem))] sm:gap-2 sm:py-3 sm:pr-4">
           {TEAMS.map((team) => {
             const isActive = activeTeam === team.id;
             const isHovered = hoveredTeam === team.id;
             return (
               <div
                 key={team.id}
-                className="relative"
+                className="relative z-50"
                 onMouseEnter={() => setHoveredTeam(team.id)}
                 onMouseLeave={() => setHoveredTeam(null)}
               >
@@ -164,7 +165,7 @@ export default function PortfolioShell() {
                   )}
                 </button>
 
-                {/* 드롭다운 서브 메뉴 */}
+                {/* 드롭다운 서브 메뉴 — 헤더 밖으로 넘어가므로 콘텐츠(z-0) 위에 그려야 함 */}
                 <AnimatePresence>
                   {isHovered && (
                     <motion.div
@@ -172,7 +173,7 @@ export default function PortfolioShell() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -6, scale: 0.96 }}
                       transition={{ duration: 0.15, ease: "easeOut" }}
-                      className="absolute left-0 top-full z-40 mt-2 min-w-[148px] overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-xl shadow-zinc-200/60"
+                      className="absolute left-0 top-full z-[60] mt-2 min-w-[148px] overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-xl shadow-zinc-200/60"
                     >
                       {SUBSECTIONS.map((section, idx) => {
                         const isSubActive =
@@ -204,7 +205,7 @@ export default function PortfolioShell() {
       </header>
 
       {/* 콘텐츠 영역 — PDF 뷰어는 h-full 내부 스크롤, 일반 섹션은 영역 스크롤 */}
-      <div className="relative min-h-0 flex-1 overflow-hidden">
+      <div className="relative z-0 min-h-0 flex-1 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={contentKey}
