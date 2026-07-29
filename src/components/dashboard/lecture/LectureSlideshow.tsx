@@ -19,6 +19,64 @@ type Props = {
   pdfUrl: string;
 };
 
+type FullscreenDocument = globalThis.Document & {
+  webkitFullscreenElement?: Element | null;
+  webkitExitFullscreen?: () => Promise<void> | void;
+};
+
+type FullscreenElement = HTMLElement & {
+  webkitRequestFullscreen?: () => Promise<void> | void;
+  mozRequestFullScreen?: () => Promise<void> | void;
+  msRequestFullscreen?: () => Promise<void> | void;
+};
+
+function getNativeFullscreenElement(): Element | null {
+  const doc = document as FullscreenDocument;
+  return document.fullscreenElement ?? doc.webkitFullscreenElement ?? null;
+}
+
+async function requestNativeFullscreen(el: HTMLElement): Promise<boolean> {
+  const node = el as FullscreenElement;
+  try {
+    if (typeof node.requestFullscreen === "function") {
+      await node.requestFullscreen();
+      return !!getNativeFullscreenElement();
+    }
+    if (typeof node.webkitRequestFullscreen === "function") {
+      await node.webkitRequestFullscreen();
+      return !!getNativeFullscreenElement();
+    }
+    if (typeof node.mozRequestFullScreen === "function") {
+      await node.mozRequestFullScreen();
+      return !!getNativeFullscreenElement();
+    }
+    if (typeof node.msRequestFullscreen === "function") {
+      await node.msRequestFullscreen();
+      return !!getNativeFullscreenElement();
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
+async function exitNativeFullscreen(): Promise<void> {
+  const doc = document as FullscreenDocument;
+  try {
+    if (getNativeFullscreenElement()) {
+      if (typeof document.exitFullscreen === "function") {
+        await document.exitFullscreen();
+        return;
+      }
+      if (typeof doc.webkitExitFullscreen === "function") {
+        await doc.webkitExitFullscreen();
+      }
+    }
+  } catch {
+    // 네이티브 종료 실패 시 CSS 폴백 상태로 정리
+  }
+}
+
 export default function LectureSlideshow({ pdfUrl }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const drawingRef = useRef<SlideDrawingOverlayHandle>(null);
@@ -30,12 +88,14 @@ export default function LectureSlideshow({ pdfUrl }: Props) {
   const [containerHeight, setContainerHeight] = useState(0);
   const [activeTool, setActiveTool] = useState<DrawingTool | null>(null);
   const [isMemoOpen, setIsMemoOpen] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
+  const [isCssFullscreen, setIsCssFullscreen] = useState(false);
   const [toolbarVisible, setToolbarVisible] = useState(true);
   const [memoPages, setMemoPages] = useState<Set<number>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
 
   const drawingsCache = useRef<Record<number, string>>({});
+  const isFullscreen = isNativeFullscreen || isCssFullscreen;
 
   const refreshMemoPages = useCallback(() => setMemoPages(getPageHasMemo()), []);
 
@@ -79,21 +139,50 @@ export default function LectureSlideshow({ pdfUrl }: Props) {
     [totalPages, currentPage, saveCurrentDrawing, restoreDrawing, refreshMemoPages],
   );
 
-  const toggleFullscreen = useCallback(() => {
+  const toggleFullscreen = useCallback(async () => {
     const el = containerRef.current;
     if (!el) return;
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      el.requestFullscreen();
+
+    if (getNativeFullscreenElement()) {
+      await exitNativeFullscreen();
+      setIsCssFullscreen(false);
+      return;
     }
+
+    if (isCssFullscreen) {
+      setIsCssFullscreen(false);
+      return;
+    }
+
+    const entered = await requestNativeFullscreen(el);
+    if (!entered) {
+      // iOS Safari 등 Element Fullscreen 미지원 환경용 CSS 전체화면
+      setIsCssFullscreen(true);
+    }
+  }, [isCssFullscreen]);
+
+  useEffect(() => {
+    const handler = () => {
+      const native = !!getNativeFullscreenElement();
+      setIsNativeFullscreen(native);
+      if (native) setIsCssFullscreen(false);
+    };
+    document.addEventListener("fullscreenchange", handler);
+    document.addEventListener("webkitfullscreenchange", handler);
+    return () => {
+      document.removeEventListener("fullscreenchange", handler);
+      document.removeEventListener("webkitfullscreenchange", handler);
+    };
   }, []);
 
   useEffect(() => {
-    const handler = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", handler);
-    return () => document.removeEventListener("fullscreenchange", handler);
-  }, []);
+    if (!isCssFullscreen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isCssFullscreen]);
 
   useEffect(() => {
     if (!isFullscreen) {
@@ -127,7 +216,7 @@ export default function LectureSlideshow({ pdfUrl }: Props) {
           break;
         case "f":
         case "F":
-          toggleFullscreen();
+          void toggleFullscreen();
           break;
         case "p":
         case "P":
@@ -146,13 +235,17 @@ export default function LectureSlideshow({ pdfUrl }: Props) {
           setIsMemoOpen((v) => !v);
           break;
         case "Escape":
+          if (isCssFullscreen) {
+            setIsCssFullscreen(false);
+            break;
+          }
           if (activeTool) setActiveTool(null);
           break;
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [currentPage, activeTool, goToPage, toggleFullscreen]);
+  }, [currentPage, activeTool, goToPage, toggleFullscreen, isCssFullscreen]);
 
   const slideWidth = isMemoOpen ? containerWidth - 320 : containerWidth;
   const toolbarHeight = 48;
@@ -164,7 +257,11 @@ export default function LectureSlideshow({ pdfUrl }: Props) {
   return (
     <div
       ref={containerRef}
-      className="relative flex h-full min-h-0 w-full flex-col bg-zinc-950"
+      className={`relative flex min-h-0 w-full flex-col bg-zinc-950 ${
+        isCssFullscreen
+          ? "fixed inset-0 z-[200] h-dvh max-h-dvh"
+          : "h-full"
+      }`}
     >
       {/* PDF + 드로잉 영역 */}
       <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden">
@@ -239,7 +336,9 @@ export default function LectureSlideshow({ pdfUrl }: Props) {
               return !v;
             });
           }}
-          onToggleFullscreen={toggleFullscreen}
+          onToggleFullscreen={() => {
+            void toggleFullscreen();
+          }}
         />
       </div>
     </div>

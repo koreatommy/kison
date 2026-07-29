@@ -124,9 +124,9 @@ export default function PortfolioShell() {
 
   return (
     <div className="flex h-full flex-col bg-zinc-100">
-      {/* 탭 메뉴 */}
+      {/* 탭 메뉴 — 미션 햄버거와 겹치지 않도록 --mission-hamburger-gutter 사용 */}
       <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-4xl items-center gap-1 overflow-visible px-3 py-2 sm:gap-2 sm:px-4 sm:py-3">
+        <div className="mx-auto flex max-w-4xl items-center gap-1 overflow-x-auto overflow-y-visible py-2 pr-3 pl-[max(0.75rem,var(--mission-hamburger-gutter,4.5rem))] sm:gap-2 sm:py-3 sm:pr-4">
           {TEAMS.map((team) => {
             const isActive = activeTeam === team.id;
             const isHovered = hoveredTeam === team.id;

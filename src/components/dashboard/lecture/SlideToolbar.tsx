@@ -129,10 +129,10 @@ export default function SlideToolbar({
         </button>
         <button
           type="button"
-          className={btnBase}
+          className={`${btnBase} touch-manipulation`}
           onClick={onToggleFullscreen}
-          aria-label="전체화면 (F)"
-          title="전체화면 (F)"
+          aria-label={isFullscreen ? "전체화면 종료" : "전체화면"}
+          title={isFullscreen ? "전체화면 종료 (F)" : "전체화면 (F)"}
         >
           {isFullscreen ? (
             <Minimize className="size-4" strokeWidth={2} />

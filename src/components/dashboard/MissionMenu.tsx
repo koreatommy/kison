@@ -3,6 +3,7 @@
 // 대시보드 10단계 미션 사이드 메뉴
 // 모바일: 반투명 오버레이 슬라이드인 / 태블릿+: 콘텐츠 밀어내는 푸시 레이아웃
 import {
+  type CSSProperties,
   type ReactNode,
   useCallback,
   useEffect,
@@ -393,8 +394,17 @@ export default function MissionMenuLayout({
         </aside>
       </div>
 
-      {/* ── 메인 콘텐츠 ── */}
-      <div className="relative min-h-0 min-w-0 flex-1">
+      {/* ── 메인 콘텐츠 ──
+          --mission-hamburger-gutter: 햄버거가 보일 때 좌측 콘텐츠가 겹치지 않도록 확보하는 폭.
+          하위 페이지 sticky 헤더 등에서 pl-[var(--mission-hamburger-gutter)] 로 사용. */}
+      <div
+        className="relative min-h-0 min-w-0 flex-1"
+        style={
+          {
+            "--mission-hamburger-gutter": isOpen ? "0px" : "4.5rem",
+          } as CSSProperties
+        }
+      >
         {!isOpen ? (
           <button
             type="button"
