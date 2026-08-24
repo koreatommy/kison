@@ -1,8 +1,82 @@
 "use client";
 // 하단 최종 CTA 섹션 — 다크 카드 반전 효과
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 
+const INQUIRY_MESSAGE =
+  "한국창업융합연구원 엄수현 원장(010-2327-1730)으로 문의바랍니다.";
+
+function InquiryToast({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const titleId = useId();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open || !mounted) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/55 p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] backdrop-blur-[2px] sm:items-center sm:pb-8"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="w-full max-w-sm animate-[intro-toast-in_0.32s_ease-out] rounded-2xl border border-white/15 bg-zinc-950/95 px-5 py-5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur-md sm:px-6 sm:py-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p
+          id={titleId}
+          className="text-xs font-black uppercase tracking-[0.2em] text-amber-400"
+        >
+          교육 문의
+        </p>
+        <p className="mt-2 text-center text-base font-bold leading-relaxed text-white sm:text-lg">
+          {INQUIRY_MESSAGE}
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-5 w-full rounded-xl bg-[#facc15] px-4 py-3 text-sm font-black text-zinc-900 shadow-lg transition hover:brightness-105 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 sm:text-base"
+        >
+          확인
+        </button>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 export default function BottomCTA() {
+  const [inquiryOpen, setInquiryOpen] = useState(false);
+  const closeInquiry = useCallback(() => setInquiryOpen(false), []);
+
   return (
     <section className="px-5 py-16 sm:px-8 sm:py-20 md:py-24">
       <motion.div
@@ -34,12 +108,16 @@ export default function BottomCTA() {
           </button>
           <button
             type="button"
+            aria-haspopup="dialog"
+            aria-expanded={inquiryOpen}
+            onClick={() => setInquiryOpen(true)}
             className="rounded-full border-2 border-zinc-700 px-10 py-4 text-sm font-bold text-zinc-300 transition hover:border-zinc-500 hover:text-white active:scale-95 sm:text-base"
           >
             교육 문의하기
           </button>
         </div>
       </motion.div>
+      <InquiryToast open={inquiryOpen} onClose={closeInquiry} />
     </section>
   );
 }
