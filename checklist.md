@@ -100,3 +100,20 @@
 - [x] Timeline을 Questions 위로 이동
 - [x] 섹션 번호 01~09 순차 재정렬
 - [x] `npm run build` 통과
+
+## 2026-08-25: /bonus 노트북LM 스타일 가이드북 랜딩
+- [x] checklist/context-notes에 결정 기록
+- [x] 노션에서 49종 프롬프트·이미지 추출 → `public/images/bonus`
+- [x] `src/data/bonusStyles.ts` 데이터 고정
+- [x] `src/app/bonus` layout/page/route.css
+- [x] `bonus-landing` Hero/Nav/Index/StyleCard/CopyButton
+- [x] `/bonus` 브라우저 검증 (점프·복사·모바일)
+- [x] `tsc --noEmit` 통과
+- [x] 점프 인덱스 아래 슬라이드 생성 기본 프롬프트 안내 섹션
+- [x] 주제·장수 입력 → 전체 프롬프트 미리보기·복사
+- [x] 브라우저에서 입력·복사 동작 확인
+- [x] 프롬프트 안내 위에 슬라이드 제작 워크플로우 6단계
+- [x] 워크플로우 스크린샷 public/images/bonus/workflow 배치
+- [x] 브라우저에서 워크플로우 섹션 확인
+- [x] 워크플로우 2열 + 스크롤 등장 애니메이션(화살표 포함)
+- [x] 슬라이드 자료 입력 프롬프트 섹션 (주제·스타일 입력 + 전체 복사)

@@ -1,0 +1,10 @@
+/* /bonus 라우트 — 루트 블랙 배경을 종이 톤으로 덮어씀 */
+html:has(.bonus-landing) {
+  scroll-behavior: smooth;
+}
+
+html:has(.bonus-landing),
+html:has(.bonus-landing) body,
+html:has(.bonus-landing) body > main {
+  background: #f3eee6 !important;
+}

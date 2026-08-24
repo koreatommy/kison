@@ -1,0 +1,60 @@
+/* /bonus 노트북LM 스타일 가이드북 랜딩 전용 토큰 */
+.bonus-landing {
+  --bonus-bg: #f3eee6;
+  --bonus-ink: #1c1916;
+  --bonus-ink-soft: #3f3a34;
+  --bonus-amber: #b45309;
+  --bonus-amber-deep: #92400e;
+  --bonus-amber-bright: #f59e0b;
+  --bonus-well: #1a1714;
+  --bonus-card: #faf7f2;
+  color: var(--bonus-ink);
+  background: var(--bonus-bg);
+  font-family: "Nunito", system-ui, sans-serif;
+}
+
+.bonus-landing * {
+  box-sizing: border-box;
+}
+
+@keyframes bonus-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bonus-hero-copy > * {
+  animation: bonus-hero-in 0.5s ease-out both;
+}
+
+.bonus-hero-copy > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.bonus-hero-copy > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.bonus-hero-copy > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.bonus-hero-copy > *:nth-child(4) {
+  animation-delay: 0.28s;
+}
+.bonus-hero-copy > *:nth-child(5) {
+  animation-delay: 0.36s;
+}
+.bonus-hero-copy > *:nth-child(6) {
+  animation-delay: 0.44s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bonus-landing *,
+  .bonus-hero-copy > * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -84,3 +84,37 @@
 - **인터랙션**: 원본 `script.js`의 IntersectionObserver reveal 애니메이션을 `ShortformRevealObserver`(client) 컴포넌트로, Lab 스텝 전환/프롬프트 다듬기 버튼을 `ShortformLandingLab`(client, `useState`)으로 이식.
 - **향후 확장 자리**: `src/components/shortform-landing/lab/`에 Lab을 두어, 이후 `generate/`(이미지 생성형 AI), `video/`(영상 생성형 AI), `gallery/`(결과물 갤러리)를 형제 폴더로 추가할 수 있게 함. 이번 작업에서는 스텁 폴더나 빈 barrel을 만들지 않고, `shortformCurriculum.ts`의 `futureModules` 주석에만 관례를 기록.
 - **이미지 자산**: `public/images/shortform/{hero-rabbit,image-cta,video-cta}.png` — 다른 페이지 이미지(`public/images/...`) 규칙과 일치시킴.
+
+## 2026-08-25: /bonus 노트북LM 스타일 가이드북 랜딩
+
+- **목표**: 노션 공개 페이지(노트북LM 슬라이드 스타일 가이드북)를 `/bonus` HTML 랜딩으로 복제.
+- **콘텐츠**: 제목은 "50종"이지만 DOM에는 **1–49**만 존재. 있는 그대로 복제(49종).
+- **구조**: Hero → Sticky Nav → 1–49 점프 인덱스 → StyleCard(이미지 2장 + 프롬프트 + 복사) → Footer. `/ai`·`/shortform` 라우트 패턴 미러링.
+- **비주얼**: 따뜻한 종이 톤 배경 `#f3eee6`, 잉크 `#1c1916`, 액센트 앰버 `#b45309`. indigo/violet 회피. 예시 이미지는 다크 프레임 16:9.
+- **이미지**: 노션 서명 URL은 만료되므로 `public/images/bonus/{id}-a.webp` / `{id}-b.webp`로 로컬 저장.
+- **데이터**: `src/data/bonusStyles.ts`에 제목·프롬프트·이미지 경로 분리.
+- **Refero**: 구독 만료로 MCP 리서치 불가. `/ai` 패턴 + lookbook craft로 진행.
+- **폭죽**: 첫 로딩 시 `BonusFireworks` 캔버스 오버레이(약 4초) 후 자동 페이드아웃. `prefers-reduced-motion`이면 짧은 글로우만.
+
+## 2026-08-25: /bonus 슬라이드 생성 기본 프롬프트 안내
+
+- **위치**: Jump to style 인덱스 바로 아래, 스타일 갤러리 위.
+- **역할**: 주제·슬라이드 장수를 사용자가 채우면 고정 템플릿과 합쳐진 전체 프롬프트를 미리보고 원클릭 복사.
+- **작성 규칙 1번**: 원문 그대로 빈 항목 유지(사용자 제공 텍스트 준수).
+- **기본값**: 주제 미입력 시 예시 문구, 장수 기본 `5`.
+- **재사용**: 기존 `BonusCopyButton`으로 복사 UX 통일.
+
+## 2026-08-25: /bonus 슬라이드 제작 워크플로우
+
+- **위치**: Jump to style 아래 → 워크플로우 → 기본 프롬프트 안내 → 스타일 갤러리.
+- **6단계**: 소스추가 → 가이드 작성 요청 → 메모에 저장 → 소스로 변환 → 슬라이드 자료 입력 → 확인·편집.
+- **자산**: `public/images/bonus/workflow/01`~`06` (사용자 첨부 스크린샷).
+- **데이터**: `src/data/bonusWorkflow.ts`에 단계 제목·설명·이미지 경로 분리.
+- **레이아웃**: sm 이상 2열(좌→우 화살표, 행 사이 ↓). 모바일은 1열 + ↓.
+- **모션**: `whileInView`로 스크롤 시 카드·화살표 점진 등장. `useReducedMotion`이면 즉시 표시.
+
+## 2026-08-25: /bonus 슬라이드 자료 입력 프롬프트
+
+- **위치**: 가이드 생성 프롬프트 안내 아래, 스타일 갤러리 위.
+- **입력**: 주제 + 스타일 영문 프롬프트(아래 스타일에서 복사해 붙여넣기).
+- **출력**: `[주제] 이 소스에…` + `슬라이드 디자인 및 스타일 : …` 전체 프롬프트 미리보기·복사.
