@@ -6,23 +6,30 @@ import BonusCopyButton from "./BonusCopyButton";
 
 const DEFAULT_TOPIC =
   "경기도 인공지능(AI) 관련 사업 및 교육 정책을 홍보";
+const DEFAULT_SLIDE_COUNT = "5";
 
 const DEFAULT_STYLE_PROMPT =
   "Hand-drawn notebook journal page, lined paper texture, ballpoint pen sketches and handwritten notes, casual margin doodles, highlighted key points, warm personal study aesthetic, authentic and relatable --ar 16:9";
 
-function buildPrompt(topic: string, stylePrompt: string): string {
+function buildPrompt(
+  topic: string,
+  slideCount: string,
+  stylePrompt: string,
+): string {
   const topicValue = topic.trim() || DEFAULT_TOPIC;
+  const countValue = slideCount.trim() || DEFAULT_SLIDE_COUNT;
   const styleValue = stylePrompt.trim() || DEFAULT_STYLE_PROMPT;
 
-  return `[${topicValue}] 이 소스에 정리된 슬라이드 작성 가이드를 엄격히 준수하여 슬라이드를 생성해
+  return `[${topicValue}] 이 소스에 정리된 슬라이드 작성 가이드를 엄격히 준수하여 ${countValue} 슬라이드를 생성해
 
 슬라이드 디자인 및 스타일 : ${styleValue}`;
 }
 
 export default function BonusSlideInputPrompt() {
   const [topic, setTopic] = useState("");
+  const [slideCount, setSlideCount] = useState(DEFAULT_SLIDE_COUNT);
   const [stylePrompt, setStylePrompt] = useState("");
-  const prompt = buildPrompt(topic, stylePrompt);
+  const prompt = buildPrompt(topic, slideCount, stylePrompt);
 
   return (
     <section
@@ -40,22 +47,37 @@ export default function BonusSlideInputPrompt() {
           슬라이드 자료 입력 프롬프트
         </h2>
         <p className="mt-2 max-w-2xl text-sm font-semibold leading-relaxed text-[var(--bonus-ink)]/60">
-          주제와 스타일 영문 프롬프트를 입력한 뒤 전체 프롬프트를 복사하세요.
+          주제, 장수, 스타일 영문 프롬프트를 입력한 뒤 전체 프롬프트를 복사하세요.
         </p>
 
         <div className="mt-6 space-y-4">
-          <label className="block min-w-0">
-            <span className="mb-1.5 block text-[11px] font-bold tracking-[0.06em] text-[var(--bonus-ink)]/50 uppercase">
-              주제
-            </span>
-            <input
-              type="text"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              placeholder={`(예) ${DEFAULT_TOPIC}`}
-              className="w-full rounded-lg border border-[var(--bonus-ink)]/12 bg-[var(--bonus-bg)] px-3.5 py-2.5 text-sm font-semibold text-[var(--bonus-ink)] outline-none transition-colors placeholder:text-[var(--bonus-ink)]/35 focus:border-[var(--bonus-amber)]/50 focus:ring-2 focus:ring-[var(--bonus-amber)]/15"
-            />
-          </label>
+          <div className="grid gap-4 sm:grid-cols-[1fr_8rem]">
+            <label className="block min-w-0">
+              <span className="mb-1.5 block text-[11px] font-bold tracking-[0.06em] text-[var(--bonus-ink)]/50 uppercase">
+                주제
+              </span>
+              <input
+                type="text"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder={`(예) ${DEFAULT_TOPIC}`}
+                className="w-full rounded-lg border border-[var(--bonus-ink)]/12 bg-[var(--bonus-bg)] px-3.5 py-2.5 text-sm font-semibold text-[var(--bonus-ink)] outline-none transition-colors placeholder:text-[var(--bonus-ink)]/35 focus:border-[var(--bonus-amber)]/50 focus:ring-2 focus:ring-[var(--bonus-amber)]/15"
+              />
+            </label>
+            <label className="block min-w-0">
+              <span className="mb-1.5 block text-[11px] font-bold tracking-[0.06em] text-[var(--bonus-ink)]/50 uppercase">
+                슬라이드 장수
+              </span>
+              <input
+                type="number"
+                min={1}
+                max={30}
+                value={slideCount}
+                onChange={(e) => setSlideCount(e.target.value)}
+                className="w-full rounded-lg border border-[var(--bonus-ink)]/12 bg-[var(--bonus-bg)] px-3.5 py-2.5 text-sm font-semibold text-[var(--bonus-ink)] outline-none transition-colors focus:border-[var(--bonus-amber)]/50 focus:ring-2 focus:ring-[var(--bonus-amber)]/15"
+              />
+            </label>
+          </div>
           <label className="block min-w-0">
             <span className="mb-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
               <span className="text-[11px] font-bold tracking-[0.06em] text-[var(--bonus-ink)]/50 uppercase">
