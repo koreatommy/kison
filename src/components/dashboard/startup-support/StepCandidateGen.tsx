@@ -165,7 +165,7 @@ export default function StepCandidateGen() {
         isRunning={loading}
       />
 
-      {(!apiKey.trim() || error?.includes("AI Key")) && (
+      {error?.includes("AI Key") && (
         <div className="mt-4">
           <WarningBox
             variant="warning"
@@ -180,9 +180,7 @@ export default function StepCandidateGen() {
               </button>
             }
           >
-            {apiKey.trim()
-              ? "입력한 AI Key가 거부되었습니다. Anthropic Console에서 키가 활성 상태인지 확인해 주세요."
-              : "AI Key가 설정되지 않았습니다. 시작 화면에서 입력했더라도 새로고침하면 사라집니다."}
+            입력한 AI Key가 거부되었습니다. Anthropic Console에서 키가 활성 상태인지 확인해 주세요.
           </WarningBox>
         </div>
       )}

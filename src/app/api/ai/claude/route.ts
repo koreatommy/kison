@@ -3,14 +3,14 @@ import Anthropic, {
   AuthenticationError,
   RateLimitError,
 } from "@anthropic-ai/sdk";
-import { COMMON_SYSTEM_PROMPT, buildUserPrompt, getMaxTokens, getTemperature } from "@/lib/startup-support/prompts";
+import { COMMON_SYSTEM_PROMPT, buildUserPrompt, getMaxTokens } from "@/lib/startup-support/prompts";
 import { extractJson } from "@/lib/startup-support/jsonParser";
 import type { ClaudeTask, TokenUsage } from "@/types/startup-support";
 
 export const runtime = "nodejs";
 
-/** 임시: false면 화면 입력(x-user-anthropic-key)만 사용, 서버 ANTHROPIC_API_KEY fallback 없음 */
-const ALLOW_SERVER_API_KEY_FALLBACK = false;
+/** true면 화면 Key 없을 때 서버 ANTHROPIC_API_KEY fallback 허용 */
+const ALLOW_SERVER_API_KEY_FALLBACK = true;
 
 const VALID_TASKS: ClaudeTask[] = [
   "generate_problem_questions",
@@ -43,8 +43,9 @@ export async function POST(req: Request) {
       return Response.json(
         {
           success: false,
-          error:
-            "Claude API Key가 설정되지 않았습니다. 시작 화면에서 AI Key를 입력해 주세요.",
+          error: ALLOW_SERVER_API_KEY_FALLBACK
+            ? "Claude API Key가 설정되지 않았습니다. 서버 ANTHROPIC_API_KEY 또는 화면 AI Key를 확인해 주세요."
+            : "Claude API Key가 설정되지 않았습니다. 시작 화면에서 AI Key를 입력해 주세요.",
         },
         { status: 400 },
       );
@@ -66,10 +67,10 @@ export async function POST(req: Request) {
     const claudeTask = task as ClaudeTask;
     const userPrompt = buildUserPrompt(claudeTask, payload);
 
+    // Sonnet 5.5+ 는 temperature 미지원(deprecated) — 전달하지 않음
     const message = await anthropic.messages.create({
       model,
       max_tokens: getMaxTokens(claudeTask),
-      temperature: getTemperature(claudeTask),
       system: COMMON_SYSTEM_PROMPT,
       messages: [{ role: "user", content: userPrompt }],
     });
