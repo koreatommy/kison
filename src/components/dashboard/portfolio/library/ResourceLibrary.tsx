@@ -1,13 +1,12 @@
 "use client";
 
-// 포트폴리오 자료실 — 이름+파일 업로드와 목록 조회
+// 포트폴리오 자료실 — 이름+파일 업로드와 공유 목록 조회
 import { useEffect, useRef, useState } from "react";
 import { Download, FileUp, Trash2, Upload } from "lucide-react";
 import {
   addResourceItem,
   deleteResourceItem,
   formatFileSize,
-  getResourceBlob,
   listResourceItems,
   type ResourceItemMeta,
 } from "@/lib/portfolio/resource-library-store";
@@ -55,33 +54,25 @@ export default function ResourceLibrary() {
       setName("");
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch {
-      setError("업로드에 실패했습니다. 다시 시도해 주세요.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "업로드에 실패했습니다. 다시 시도해 주세요.");
     } finally {
       setBusy(false);
     }
   };
 
-  const handleDownload = async (item: ResourceItemMeta) => {
-    try {
-      const blob = await getResourceBlob(item.id);
-      if (!blob) {
-        setError("파일을 찾을 수 없습니다.");
-        return;
-      }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = item.fileName;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch {
-      setError("다운로드에 실패했습니다.");
-    }
+  const handleDownload = (item: ResourceItemMeta) => {
+    const a = document.createElement("a");
+    a.href = item.publicUrl;
+    a.download = item.fileName;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.click();
   };
 
   const handleDelete = async (id: string) => {
     setBusy(true);
+    setError(null);
     try {
       await deleteResourceItem(id);
       setItems((prev) => prev.filter((item) => item.id !== id));
@@ -97,7 +88,7 @@ export default function ResourceLibrary() {
       <div className="mb-8">
         <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">자료실</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          이름을 적고 파일을 첨부하면 목록에서 확인할 수 있습니다.
+          이름을 적고 파일을 첨부하면 모든 사용자가 목록에서 확인할 수 있습니다.
         </p>
       </div>
 
@@ -201,7 +192,8 @@ export default function ResourceLibrary() {
                 <button
                   type="button"
                   onClick={() => handleDelete(item.id)}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600"
+                  disabled={busy}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                   aria-label={`${item.name} 삭제`}
                 >
                   <Trash2 className="h-4 w-4" />

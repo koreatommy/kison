@@ -7,6 +7,13 @@
 - [x] 드롭다운 없이 단독 탭으로 동작
 - [x] `npm test` / 타입·빌드 확인
 
+## 2026-10-31: 자료실 공유 저장 (Supabase)
+- [x] `portfolio_resources` 테이블 + Storage 버킷
+- [x] `/api/portfolio/resources` GET/POST, DELETE
+- [x] IndexedDB → Supabase API 클라이언트로 교체
+- [x] `.env.local` + Vercel env 등록
+- [x] `npm test` / 타입 확인
+
 ## Phase 0: 프로젝트 부트스트랩
 - [ ] Next.js 16 프로젝트 생성
 - [ ] Tailwind CSS 적용 확인

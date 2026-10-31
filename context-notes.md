@@ -8,9 +8,12 @@
 
 - **위치**: `PortfolioShell` 헤더에서 중등부(ACE) 바로 옆 4번째 탭.
 - **범위**: 이름 입력 + 파일 첨부 → 리스트로 확인/다운로드/삭제. 댓글·권한·카테고리 없음.
-- **저장**: Supabase 미도입 상태라 **IndexedDB(브라우저 로컬)** 로 메타+Blob 저장. 기기/브라우저 간 공유 안 됨.
+- **저장(최종)**: Supabase `kicon_db` — 테이블 `portfolio_resources` + Storage 버킷 `portfolio-resources`(public). 전원 공유.
+- **참고**: 사업계획서 PDF는 DB가 아니라 `public/portfolio/*.pdf` 정적 파일.
+- **API**: `/api/portfolio/resources` (목록·업로드), `/api/portfolio/resources/[id]` (삭제).
+- **보안**: 교실용으로 anon RLS open(select/insert/delete). 추후 로그인·역할 제한 가능.
 - **탭 UX**: 팀 드롭다운(`SUBSECTIONS`) 없음. `TabId = TeamId | "library"` 로 분리.
-- **파일**: `src/lib/portfolio/resource-library-store.ts`, `src/components/dashboard/portfolio/library/ResourceLibrary.tsx`.
+- **파일**: `src/lib/supabase/server.ts`, `src/lib/portfolio/resource-library-store.ts`, `src/components/dashboard/portfolio/library/ResourceLibrary.tsx`.
 
 ## 2026-05-12: 스택 버전 확정
 

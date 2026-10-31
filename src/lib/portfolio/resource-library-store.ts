@@ -1,111 +1,67 @@
-// 자료실 게시물(이름·파일)을 IndexedDB에 저장·조회·삭제하는 유틸
+// 자료실 게시물 API 클라이언트 (Supabase 공유 저장)
 
-const DB_NAME = "kison-resource-library";
-const DB_VERSION = 1;
-const STORE_NAME = "items";
-
-export type ResourceItem = {
+export type ResourceItemMeta = {
   id: string;
   name: string;
   fileName: string;
   fileType: string;
   fileSize: number;
-  blob: Blob;
+  publicUrl: string;
   createdAt: number;
 };
 
-export type ResourceItemMeta = Omit<ResourceItem, "blob">;
+type ApiResource = {
+  id: string;
+  name: string;
+  fileName: string;
+  fileType: string;
+  fileSize: number;
+  publicUrl: string;
+  createdAt: string;
+};
 
-function openDb(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
-        store.createIndex("createdAt", "createdAt", { unique: false });
-      }
-    };
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error ?? new Error("IndexedDB open failed"));
-  });
-}
-
-function toMeta(item: ResourceItem): ResourceItemMeta {
+function toMeta(item: ApiResource): ResourceItemMeta {
   return {
     id: item.id,
     name: item.name,
     fileName: item.fileName,
     fileType: item.fileType,
     fileSize: item.fileSize,
-    createdAt: item.createdAt,
+    publicUrl: item.publicUrl,
+    createdAt: new Date(item.createdAt).getTime(),
   };
 }
 
 export async function listResourceItems(): Promise<ResourceItemMeta[]> {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const store = tx.objectStore(STORE_NAME);
-    const request = store.getAll();
-
-    request.onsuccess = () => {
-      const items = (request.result as ResourceItem[])
-        .map(toMeta)
-        .sort((a, b) => b.createdAt - a.createdAt);
-      resolve(items);
-    };
-    request.onerror = () => reject(request.error ?? new Error("list failed"));
-  });
+  const res = await fetch("/api/portfolio/resources", { cache: "no-store" });
+  if (!res.ok) throw new Error("list failed");
+  const data = (await res.json()) as { items: ApiResource[] };
+  return data.items.map(toMeta);
 }
 
 export async function addResourceItem(input: {
   name: string;
   file: File;
 }): Promise<ResourceItemMeta> {
-  const item: ResourceItem = {
-    id: crypto.randomUUID(),
-    name: input.name.trim(),
-    fileName: input.file.name,
-    fileType: input.file.type || "application/octet-stream",
-    fileSize: input.file.size,
-    blob: input.file,
-    createdAt: Date.now(),
-  };
+  const form = new FormData();
+  form.set("name", input.name.trim());
+  form.set("file", input.file);
 
-  const db = await openDb();
-  await new Promise<void>((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).add(item);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error ?? new Error("add failed"));
+  const res = await fetch("/api/portfolio/resources", {
+    method: "POST",
+    body: form,
   });
-
-  return toMeta(item);
-}
-
-export async function getResourceBlob(id: string): Promise<Blob | null> {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const request = db.transaction(STORE_NAME, "readonly").objectStore(STORE_NAME).get(id);
-    request.onsuccess = () => {
-      const item = request.result as ResourceItem | undefined;
-      resolve(item?.blob ?? null);
-    };
-    request.onerror = () => reject(request.error ?? new Error("get failed"));
-  });
+  if (!res.ok) {
+    const body = (await res.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(body?.error ?? "upload failed");
+  }
+  const data = (await res.json()) as { item: ApiResource };
+  return toMeta(data.item);
 }
 
 export async function deleteResourceItem(id: string): Promise<void> {
-  const db = await openDb();
-  await new Promise<void>((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    tx.objectStore(STORE_NAME).delete(id);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error ?? new Error("delete failed"));
-  });
+  const res = await fetch(`/api/portfolio/resources/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("delete failed");
 }
 
 export function formatFileSize(bytes: number): string {
