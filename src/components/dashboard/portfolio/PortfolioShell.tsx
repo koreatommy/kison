@@ -1,6 +1,6 @@
 "use client";
 
-// 포트폴리오 팀 소개 — 3개 팀(초등부 A, 초등부 B, 중등부) 탭 메뉴 + 콘텐츠 전환
+// 포트폴리오 팀 소개 — 3개 팀 + 자료실 탭 메뉴와 콘텐츠 전환
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TeamJcalp from "./TeamJcalp";
@@ -12,9 +12,11 @@ import FinalPlanPasswordModal from "./FinalPlanPasswordModal";
 import AceItemSelection from "./ace/AceItemSelection";
 import ImItemSelection from "./im/ImItemSelection";
 import JcalpItemSelection from "./jcalp/JcalpItemSelection";
+import ResourceLibrary from "./library/ResourceLibrary";
 import { PORTFOLIO_FINAL_PLAN_PDFS } from "./portfolio-pdfs";
 
 type TeamId = "jcalp" | "im" | "ace";
+type TabId = TeamId | "library";
 type SubSection = "intro" | "item-selection" | "club-activity";
 
 const SUBSECTIONS: { id: SubSection; label: string }[] = [
@@ -53,11 +55,22 @@ const TEAMS: {
   },
 ];
 
+const LIBRARY_TAB = {
+  id: "library" as const,
+  label: "자료실",
+  sublabel: "FILES",
+  color: "#0D9488",
+};
+
 const TEAM_COMPONENTS: Record<TeamId, React.ComponentType> = {
   jcalp: TeamJcalp,
   im: TeamIm,
   ace: TeamAce,
 };
+
+function isTeamId(tab: TabId): tab is TeamId {
+  return tab !== "library";
+}
 
 function getTeamContent(team: TeamId, subsection: SubSection) {
   if (subsection === "intro") {
@@ -80,25 +93,33 @@ function getTeamContent(team: TeamId, subsection: SubSection) {
 }
 
 export default function PortfolioShell() {
-  const [activeTeam, setActiveTeam] = useState<TeamId>("jcalp");
+  const [activeTab, setActiveTab] = useState<TabId>("jcalp");
   const [activeSubSection, setActiveSubSection] = useState<SubSection>("intro");
   const [hoveredTeam, setHoveredTeam] = useState<TeamId | null>(null);
   const [pendingFinalPlanTeam, setPendingFinalPlanTeam] = useState<TeamId | null>(null);
   const [isFinalPlanUnlocked, setIsFinalPlanUnlocked] = useState(false);
 
-  const ActiveComponent = getTeamContent(activeTeam, activeSubSection);
-  const contentKey = `${activeTeam}-${activeSubSection}`;
+  const isLibrary = activeTab === "library";
+  const ActiveComponent = isLibrary
+    ? ResourceLibrary
+    : getTeamContent(activeTab, activeSubSection);
+  const contentKey = isLibrary ? "library" : `${activeTab}-${activeSubSection}`;
   const pendingTeamMeta = pendingFinalPlanTeam
     ? TEAMS.find((team) => team.id === pendingFinalPlanTeam)
     : null;
 
   const handleTeamClick = (teamId: TeamId) => {
-    setActiveTeam(teamId);
+    setActiveTab(teamId);
     setActiveSubSection("intro");
   };
 
+  const handleLibraryClick = () => {
+    setActiveTab("library");
+    setHoveredTeam(null);
+  };
+
   const openFinalPlan = (teamId: TeamId) => {
-    setActiveTeam(teamId);
+    setActiveTab(teamId);
     setActiveSubSection("club-activity");
     setHoveredTeam(null);
     setPendingFinalPlanTeam(null);
@@ -111,7 +132,7 @@ export default function PortfolioShell() {
       return;
     }
 
-    setActiveTeam(teamId);
+    setActiveTab(teamId);
     setActiveSubSection(sectionId);
     setHoveredTeam(null);
   };
@@ -129,7 +150,7 @@ export default function PortfolioShell() {
       <header className="sticky top-0 z-50 overflow-visible border-b border-zinc-200 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-4xl items-center gap-1 overflow-visible py-2 pr-3 pl-[max(0.75rem,var(--mission-hamburger-gutter,4.5rem))] sm:gap-2 sm:py-3 sm:pr-4">
           {TEAMS.map((team) => {
-            const isActive = activeTeam === team.id;
+            const isActive = activeTab === team.id;
             const isHovered = hoveredTeam === team.id;
             return (
               <div
@@ -177,7 +198,9 @@ export default function PortfolioShell() {
                     >
                       {SUBSECTIONS.map((section, idx) => {
                         const isSubActive =
-                          activeTeam === team.id && activeSubSection === section.id;
+                          isTeamId(activeTab) &&
+                          activeTab === team.id &&
+                          activeSubSection === section.id;
                         return (
                           <button
                             key={section.id}
@@ -201,6 +224,35 @@ export default function PortfolioShell() {
               </div>
             );
           })}
+
+          <div className="relative z-50">
+            <button
+              type="button"
+              onClick={handleLibraryClick}
+              className={`relative flex shrink-0 flex-col items-center rounded-xl px-4 py-2 transition-all duration-200 sm:px-5 sm:py-2.5 ${
+                isLibrary
+                  ? "bg-zinc-900 text-white shadow-lg"
+                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+              }`}
+            >
+              <span className="text-xs font-bold sm:text-sm">{LIBRARY_TAB.label}</span>
+              <span
+                className={`mt-0.5 text-[10px] font-semibold tracking-wider sm:text-xs ${
+                  isLibrary ? "text-zinc-300" : "text-zinc-400"
+                }`}
+              >
+                {LIBRARY_TAB.sublabel}
+              </span>
+              {isLibrary && (
+                <motion.div
+                  layoutId="tab-indicator"
+                  className="absolute -bottom-2 left-1/2 h-1 w-8 -translate-x-1/2 rounded-full sm:-bottom-2.5 sm:w-10"
+                  style={{ backgroundColor: LIBRARY_TAB.color }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -214,7 +266,9 @@ export default function PortfolioShell() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             className={
-              activeSubSection === "club-activity" ? "h-full overflow-hidden" : "h-full overflow-y-auto"
+              !isLibrary && activeSubSection === "club-activity"
+                ? "h-full overflow-hidden"
+                : "h-full overflow-y-auto"
             }
           >
             <ActiveComponent />

@@ -1,5 +1,12 @@
 # KISON 프로젝트 체크리스트
 
+## 2026-10-31: 포트폴리오 자료실 게시판
+- [x] IndexedDB 저장 유틸 (`resource-library-store.ts`)
+- [x] ResourceLibrary UI (이름+파일 업로드, 리스트)
+- [x] PortfolioShell에 중등부 옆 「자료실」 탭 추가
+- [x] 드롭다운 없이 단독 탭으로 동작
+- [x] `npm test` / 타입·빌드 확인
+
 ## Phase 0: 프로젝트 부트스트랩
 - [ ] Next.js 16 프로젝트 생성
 - [ ] Tailwind CSS 적용 확인

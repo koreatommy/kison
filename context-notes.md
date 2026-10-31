@@ -4,6 +4,14 @@
 
 ---
 
+## 2026-10-31: 포트폴리오 「자료실」 탭
+
+- **위치**: `PortfolioShell` 헤더에서 중등부(ACE) 바로 옆 4번째 탭.
+- **범위**: 이름 입력 + 파일 첨부 → 리스트로 확인/다운로드/삭제. 댓글·권한·카테고리 없음.
+- **저장**: Supabase 미도입 상태라 **IndexedDB(브라우저 로컬)** 로 메타+Blob 저장. 기기/브라우저 간 공유 안 됨.
+- **탭 UX**: 팀 드롭다운(`SUBSECTIONS`) 없음. `TabId = TeamId | "library"` 로 분리.
+- **파일**: `src/lib/portfolio/resource-library-store.ts`, `src/components/dashboard/portfolio/library/ResourceLibrary.tsx`.
+
 ## 2026-05-12: 스택 버전 확정
 
 - **Next.js 16.2.6** (2026-05-07 릴리스, 최신 안정판)
