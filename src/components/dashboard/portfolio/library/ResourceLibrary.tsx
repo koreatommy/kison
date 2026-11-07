@@ -1,8 +1,8 @@
 "use client";
 
-// 포트폴리오 자료실 — 이름+파일 업로드와 공유 목록 조회
+// 포트폴리오 자료실 — 제목·작성자·파일 업로드와 공유 목록 조회
 import { useEffect, useRef, useState } from "react";
-import { Download, FileUp, Trash2, Upload } from "lucide-react";
+import { Download, FileText, FileUp, Image as ImageIcon, Trash2, Upload } from "lucide-react";
 import {
   addResourceItem,
   deleteResourceItem,
@@ -11,9 +11,35 @@ import {
   type ResourceItemMeta,
 } from "@/lib/portfolio/resource-library-store";
 
+const IMAGE_EXT = /\.(png|jpe?g|gif|webp|bmp|svg|heic|heif|avif|tiff?)$/i;
+
+function isImageResource(item: Pick<ResourceItemMeta, "fileType" | "fileName">): boolean {
+  if (item.fileType.startsWith("image/")) return true;
+  return IMAGE_EXT.test(item.fileName);
+}
+
+function ResourceTypeIcon({ item }: { item: ResourceItemMeta }) {
+  const isImage = isImageResource(item);
+  const Icon = isImage ? ImageIcon : FileText;
+  const label = isImage ? "사진" : "문서";
+
+  return (
+    <span
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+        isImage ? "bg-sky-50 text-sky-600" : "bg-amber-50 text-amber-700"
+      }`}
+      aria-label={label}
+      title={label}
+    >
+      <Icon className="h-4 w-4" />
+    </span>
+  );
+}
+
 export default function ResourceLibrary() {
   const [items, setItems] = useState<ResourceItemMeta[]>([]);
   const [name, setName] = useState("");
+  const [author, setAuthor] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,21 +63,27 @@ export default function ResourceLibrary() {
     };
   }, []);
 
-  const canSubmit = name.trim().length > 0 && file !== null && !busy;
+  const canSubmit =
+    name.trim().length > 0 && author.trim().length > 0 && file !== null && !busy;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !name.trim()) {
-      setError("이름과 파일을 모두 입력해 주세요.");
+    if (!file || !name.trim() || !author.trim()) {
+      setError("자료 제목, 작성자, 파일을 모두 입력해 주세요.");
       return;
     }
 
     setError(null);
     setBusy(true);
     try {
-      const created = await addResourceItem({ name: name.trim(), file });
+      const created = await addResourceItem({
+        name: name.trim(),
+        author: author.trim(),
+        file,
+      });
       setItems((prev) => [created, ...prev]);
       setName("");
+      setAuthor("");
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err) {
@@ -88,7 +120,8 @@ export default function ResourceLibrary() {
       <div className="mb-8">
         <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">자료실</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          이름을 적고 파일을 첨부하면 모든 사용자가 목록에서 확인할 수 있습니다.
+          제목과 작성자를 적고 파일을 첨부하면 모든 사용자가 목록에서 확인할 수 있습니다. 파일은
+          20MB까지 업로드할 수 있습니다.
         </p>
       </div>
 
@@ -96,18 +129,39 @@ export default function ResourceLibrary() {
         onSubmit={handleSubmit}
         className="mb-8 space-y-4 rounded-2xl border border-zinc-200 bg-white p-4 sm:p-5"
       >
-        <div>
-          <label htmlFor="resource-name" className="mb-1.5 block text-sm font-medium text-zinc-700">
-            이름
-          </label>
-          <input
-            id="resource-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="자료 이름을 입력하세요"
-            className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:bg-white"
-          />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label
+              htmlFor="resource-name"
+              className="mb-1.5 block text-sm font-medium text-zinc-700"
+            >
+              자료 제목
+            </label>
+            <input
+              id="resource-name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="자료 제목을 입력하세요"
+              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:bg-white"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="resource-author"
+              className="mb-1.5 block text-sm font-medium text-zinc-700"
+            >
+              작성자
+            </label>
+            <input
+              id="resource-author"
+              type="text"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              placeholder="작성자 이름을 입력하세요"
+              className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 text-sm text-zinc-900 outline-none transition focus:border-zinc-400 focus:bg-white"
+            />
+          </div>
         </div>
 
         <div>
@@ -168,39 +222,58 @@ export default function ResourceLibrary() {
             아직 업로드된 자료가 없습니다.
           </p>
         ) : (
-          <ul className="divide-y divide-zinc-100 overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="flex items-center gap-3 px-4 py-3.5 sm:gap-4 sm:px-5"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-zinc-900">{item.name}</p>
-                  <p className="mt-0.5 truncate text-xs text-zinc-500">
-                    {item.fileName} · {formatFileSize(item.fileSize)} ·{" "}
-                    {new Date(item.createdAt).toLocaleDateString("ko-KR")}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleDownload(item)}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-800"
-                  aria-label={`${item.name} 다운로드`}
+          <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+            <div className="grid grid-cols-[2.5rem_minmax(0,1fr)_5.5rem_4.5rem] items-center gap-2 border-b border-zinc-100 bg-zinc-50 px-3 py-2.5 text-xs font-medium text-zinc-500 sm:grid-cols-[3rem_2.5rem_minmax(0,1fr)_7rem_5rem] sm:gap-3 sm:px-4">
+              <span className="text-center">순번</span>
+              <span className="hidden sm:block" aria-hidden />
+              <span>자료 제목</span>
+              <span>작성자</span>
+              <span className="sr-only">관리</span>
+            </div>
+            <ul className="divide-y divide-zinc-100">
+              {items.map((item, index) => (
+                <li
+                  key={item.id}
+                  className="grid grid-cols-[2.5rem_minmax(0,1fr)_5.5rem_4.5rem] items-center gap-2 px-3 py-3 sm:grid-cols-[3rem_2.5rem_minmax(0,1fr)_7rem_5rem] sm:gap-3 sm:px-4"
                 >
-                  <Download className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item.id)}
-                  disabled={busy}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
-                  aria-label={`${item.name} 삭제`}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </li>
-            ))}
-          </ul>
+                  <span className="text-center text-sm tabular-nums text-zinc-500">
+                    {index + 1}
+                  </span>
+                  <span className="hidden sm:flex sm:justify-center">
+                    <ResourceTypeIcon item={item} />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="flex min-w-0 items-center gap-2 sm:block">
+                      <span className="sm:hidden">
+                        <ResourceTypeIcon item={item} />
+                      </span>
+                      <p className="truncate text-sm font-semibold text-zinc-900">{item.name}</p>
+                    </div>
+                  </div>
+                  <p className="truncate text-sm text-zinc-600">{item.author || "-"}</p>
+                  <div className="flex items-center justify-end gap-0.5">
+                    <button
+                      type="button"
+                      onClick={() => handleDownload(item)}
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-800"
+                      aria-label={`${item.name} 다운로드`}
+                    >
+                      <Download className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(item.id)}
+                      disabled={busy}
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                      aria-label={`${item.name} 삭제`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </section>
     </div>

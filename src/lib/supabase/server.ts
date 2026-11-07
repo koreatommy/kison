@@ -1,4 +1,4 @@
-// 서버 전용 Supabase 클라이언트 (자료실 API용)
+// 서버 전용 Supabase 클라이언트 (자료실 메타 DB용)
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 let cached: SupabaseClient | null = null;
@@ -18,5 +18,3 @@ export function getSupabaseServerClient(): SupabaseClient {
   });
   return cached;
 }
-
-export const PORTFOLIO_RESOURCES_BUCKET = "portfolio-resources";

@@ -4,6 +4,25 @@
 
 ---
 
+## 2026-11-07: 자료실 외부 스토리지 전환 (Vercel Blob)
+
+- **목표**: Supabase Storage 용량·트래픽 사용량을 줄인다. DB는 메타(URL)만 유지.
+- **선택**: 옵션 2 — 외부 스토리지. 프로바이더는 **Vercel Blob** (이미 Vercel 배포, 추가 계정 최소).
+- **스토어**: `kison-portfolio-resources` (`store_rC7DvK0aYEJW1svj`, public, iad1). 프로젝트 env에 `BLOB_READ_WRITE_TOKEN` 연결.
+- **흐름**: 브라우저 → Blob 직접 업로드(`upload` + `/api/portfolio/resources/upload` handleUpload) → `/api/portfolio/resources`에 JSON 메타 등록(Supabase).
+- **삭제**: Blob `del`(URL이 vercel blob일 때만) + DB row 삭제. 예전 Supabase Storage URL은 메타만 삭제.
+- **한도**: 20MB. 4MB 초과는 multipart 업로드.
+- **제거**: 브라우저 Supabase Storage 업로드, `src/lib/supabase/client.ts`.
+- **비선택**: 링크 등록형(1번), Cloudflare R2/S3(설정 비용 더 큼).
+
+## 2026-11-02: 자료실 업로드 실패 원인·수정
+
+- **증상**: 7MB PDF에서 `upload failed`. 목록 0건처럼 보이기도 함.
+- **DB 점검(`kicon_db`)**: `portfolio_resources` 테이블/RLS(select·insert·delete public) 정상. 버킷 `portfolio-resources` public. 과거 7MB 메타만 남고 Storage 객체는 없는 고아 행이 있었음(이후 삭제됨).
+- **실원인**: Vercel 서버리스 요청 본문 한도(~4.5MB). 프로덕션에서 5MB/7MB POST가 `413 FUNCTION_PAYLOAD_TOO_LARGE`. 앱 코드 한도(당시 50MB)나 DB가 원인은 아님.
+- **수정**: 브라우저가 Supabase Storage로 직접 업로드 → API는 JSON 메타데이터만 저장. 한도 20MB(앱 + 버킷 `file_size_limit`).
+- **파일**: `src/lib/supabase/client.ts`, `src/lib/portfolio/resource-limits.ts`, `resource-library-store.ts`, `api/portfolio/resources/route.ts`.
+
 ## 2026-10-31: 포트폴리오 「자료실」 탭
 
 - **위치**: `PortfolioShell` 헤더에서 중등부(ACE) 바로 옆 4번째 탭.

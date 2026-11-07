@@ -1,9 +1,8 @@
-// 포트폴리오 자료실 단건 삭제 API
+// 포트폴리오 자료실 단건 삭제 API (Blob + DB 메타)
 import { NextResponse } from "next/server";
-import {
-  getSupabaseServerClient,
-  PORTFOLIO_RESOURCES_BUCKET,
-} from "@/lib/supabase/server";
+import { del } from "@vercel/blob";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { isVercelBlobPublicUrl } from "@/lib/portfolio/resource-limits";
 
 export const runtime = "nodejs";
 
@@ -21,7 +20,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
     const supabase = getSupabaseServerClient();
     const { data: row, error: fetchError } = await supabase
       .from("portfolio_resources")
-      .select("id, storage_path")
+      .select("id, public_url")
       .eq("id", id)
       .maybeSingle();
 
@@ -32,12 +31,14 @@ export async function DELETE(_request: Request, context: RouteContext) {
       return NextResponse.json({ error: "자료를 찾을 수 없습니다." }, { status: 404 });
     }
 
-    const { error: storageError } = await supabase.storage
-      .from(PORTFOLIO_RESOURCES_BUCKET)
-      .remove([row.storage_path as string]);
-
-    if (storageError) {
-      return NextResponse.json({ error: storageError.message }, { status: 500 });
+    const publicUrl = String(row.public_url ?? "");
+    if (isVercelBlobPublicUrl(publicUrl)) {
+      try {
+        await del(publicUrl);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Blob 삭제 실패";
+        return NextResponse.json({ error: message }, { status: 500 });
+      }
     }
 
     const { error: deleteError } = await supabase

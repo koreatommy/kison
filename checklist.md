@@ -14,6 +14,28 @@
 - [x] `.env.local` + Vercel env 등록
 - [x] `npm test` / 타입 확인
 
+## 2026-11-02: 자료실 대용량 업로드 수정
+- [x] 원인 확인: Vercel `FUNCTION_PAYLOAD_TOO_LARGE`(약 4.5MB)
+- [x] 브라우저 → Supabase Storage 직접 업로드로 전환
+- [x] API는 JSON 메타데이터 등록만 담당
+- [x] 앱/버킷 한도 20MB로 맞춤
+- [ ] 배포 후 7MB PDF 업로드 재확인
+
+## 2026-11-07: 자료실 제목·작성자 필드
+- [x] 라벨 「이름」→「자료 제목」
+- [x] 작성자 필드 옆 배치 + DB `author` 컬럼
+- [x] 목록에 작성자 표시
+
+## 2026-11-07: 자료실 → Vercel Blob (Supabase 사용량 절감)
+- [x] Plan/체크리스트/컨텍스트 기록
+- [x] `@vercel/blob` 설치 + `BLOB_READ_WRITE_TOKEN` env (로컬·prod/preview/dev)
+- [x] Blob store `kison-portfolio-resources` 생성·프로젝트 연결
+- [x] 클라이언트 직접 업로드용 token API (`/api/portfolio/resources/upload`)
+- [x] 업로드/삭제를 Blob으로 전환, Supabase는 메타 DB만
+- [x] UI 안내·`.env.example` 정리
+- [x] `npm test` / Blob put·del 스모크 확인
+- [ ] 배포 후 7MB 업로드 재확인
+
 ## Phase 0: 프로젝트 부트스트랩
 - [ ] Next.js 16 프로젝트 생성
 - [ ] Tailwind CSS 적용 확인
